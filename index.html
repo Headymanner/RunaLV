@@ -418,7 +418,7 @@ function rmWave(){ var w=document.getElementById('wave'); if(w) w.remove(); }
 // ── GEMINI CHAT ───────────────────────────────
 function buildSys(){
   var s = 'Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
-    +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'.\nATBILDI ĪSI: maksimums 2 īsi teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.\n';
+    +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'.\nAtbildi dabīgi un interesanti kā īsts skolotājs: komentē atbildi, pamāci, uzdod jautājumu. 3-4 teikumi.. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.\n';
   if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (paskaidrojums)\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
   return s;
