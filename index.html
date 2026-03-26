@@ -432,7 +432,7 @@ function callGemini(txt, cb){
     body:JSON.stringify({
       system_instruction:{parts:[{text:buildSys()}]},
       contents:chatHist,
-      generationConfig:{temperature:0.8,maxOutputTokens:512}
+      generationConfig:{temperature:0.8,maxOutputTokens:1024,thinkingConfig:{thinkingBudget:0}}
     })
   })
   .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error((d.error&&d.error.message)||'HTTP '+r.status); return d; }); })
@@ -503,7 +503,7 @@ function greet(t){
   var fb={'ģimene':'Sveiki! Pastāsti man — cik cilvēku ir tavā ģimenē?','ceļošana':'Labdien! Kuru valsti tu visvairāk vēlies apmeklēt?','darbs':'Sveiki! Stāsti — ko tu dari savā darbā?','sports':'Sveiki! Kāds ir tavs iecienītākais sporta veids?','ēdiens':'Labdien! Kāds ir tavs iecienītākais ēdiens?','latvija':'Sveiki! Ko tu zini par Latviju un tās kultūru?','daba':'Labdien! Kāds ir tavs iecienītākais gadalaiks?','ikdiena':'Sveiki! Kā izskatās tava tipiskā diena?'};
   fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({system_instruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu "'+t+'". Uzraksti VIENU pilnīgu teikumu — sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:200}})
+    body:JSON.stringify({system_instruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu "'+t+'". Uzraksti VIENU pilnīgu teikumu — sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:1024,thinkingConfig:{thinkingBudget:0}}})
   })
   .then(function(r){return r.json();})
   .then(function(d){
