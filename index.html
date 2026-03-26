@@ -513,7 +513,7 @@ function greet(t){
     chatHist=[{role:'model',parts:[{text:txt}]}];
     var pr=parseResp(txt);
     addMsg('b',esc(pr.reply||txt));
-    if(voiceOn) speak(pr.reply||txt);
+    if(voiceOn){ var ttsText2=(pr.reply||txt).split(/(?<=[.?!])\s+/).slice(0,2).join(" "); speak(ttsText2); };
   })
   .catch(function(e){
     rmTyping();
@@ -536,7 +536,7 @@ function sendMsg(){
     if(err){addMsg('b','❌ '+esc(err));return;}
     var p=parseResp(text);
     addMsg('b',esc(p.reply||text),buildFb(p));
-    if(voiceOn) speak(p.reply||text);
+    if(voiceOn){ var ttsText=(p.reply||text).split(/(?<=[.?!])\s+/).slice(0,2).join(" "); speak(ttsText); }
   });
 }
 
