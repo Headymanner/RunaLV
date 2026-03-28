@@ -342,7 +342,7 @@ function callGemini(txt,cb){
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:1200}})
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:1200,thinkingConfig:{thinkingBudget:0}}
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
   .then(function(d){
@@ -414,7 +414,7 @@ function greet(t){
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:greetPrompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:500}})
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:greetPrompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:500,thinkingConfig:{thinkingBudget:0}}
   })
   .then(function(r){return r.json();})
   .then(function(d){
