@@ -14,18 +14,13 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:#060d1a;color:#f0ead8;height:100vh;height:100dvh;overflow:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(201,168,76,.07),transparent 70%);pointer-events:none;z-index:0;}
-
-/* Side decorative panels */
 .side-panel{position:fixed;top:0;bottom:0;width:calc((100vw - 480px)/2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;pointer-events:none;z-index:0;overflow:hidden;}
-.side-panel.left{left:0;}
-.side-panel.right{right:0;}
+.side-panel.left{left:0;}.side-panel.right{right:0;}
 .side-panel svg{opacity:0.07;}
 .side-quote{font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(201,168,76,.25);text-align:center;padding:0 20px;line-height:1.8;letter-spacing:.04em;}
 .side-ornament{color:rgba(201,168,76,.12);font-size:48px;line-height:1;}
 .side-flag{width:60px;height:30px;border-radius:4px;overflow:hidden;opacity:0.12;flex-shrink:0;}
-.side-flag-r{background:#9b0016;height:12px;}
-.side-flag-w{background:#f5efe0;height:6px;}
-.side-flag-r2{background:#9b0016;height:12px;}
+.side-flag-r{background:#9b0016;height:12px;}.side-flag-w{background:#f5efe0;height:6px;}.side-flag-r2{background:#9b0016;height:12px;}
 @media(max-width:600px){.side-panel{display:none;}}
 #app{position:relative;z-index:1;max-width:480px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;border-left:1px solid rgba(201,168,76,.12);border-right:1px solid rgba(201,168,76,.12);}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px;border-bottom:1px solid rgba(201,168,76,.12);background:rgba(6,13,26,.92);flex-shrink:0;}
@@ -54,8 +49,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ctitle{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;flex:1;}
 .cpts-el{font-size:12px;color:#e8b84b;background:rgba(201,168,76,.1);border-radius:12px;padding:2px 10px;}
 .msgs{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0;}
-.msg{display:flex;gap:8px;animation:fu .3s ease;}
-.msg.u{flex-direction:row-reverse;}
+.msg{display:flex;gap:8px;animation:fu .3s ease;}.msg.u{flex-direction:row-reverse;}
 @keyframes fu{from{opacity:0;transform:translateY(8px);}to{opacity:1;}}
 .av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;}
 .msg.b .av{background:linear-gradient(135deg,#c9a84c,#e8b84b);}
@@ -120,193 +114,153 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .tog.on::after{transform:translateX(20px);}
 .selw select{background:#060d1a;border:1px solid rgba(201,168,76,.2);border-radius:10px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:5px 8px;}
 .selw select option{background:#060d1a;}
-.ru-trans{margin-top:7px;padding-top:7px;border-top:1px solid rgba(201,168,76,.12);font-size:12px;color:#7a8ea8;font-style:italic;line-height:1.5;}
-.beginner-topics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.beginner-topics .tc{border-color:rgba(90,184,138,.2);}
-.section-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#5a6e88;margin-bottom:10px;margin-top:4px;}
-.ln0{background:rgba(90,184,138,.15);color:#5ab88a;}
 </style>
 </head>
 <body>
-<!-- Left decorative panel -->
 <div class="side-panel left">
-  <div class="side-ornament">✦</div>
-  <div class="side-flag"><div class="side-flag-r"></div><div class="side-flag-w"></div><div class="side-flag-r2"></div></div>
-  <div class="side-quote">Latviešu<br>valoda</div>
-  <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Latvian sun symbol -->
-    <circle cx="40" cy="30" r="12" stroke="#c9a84c" stroke-width="2" fill="none"/>
-    <line x1="40" y1="10" x2="40" y2="4" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="40" y1="50" x2="40" y2="56" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="20" y1="30" x2="14" y2="30" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="60" y1="30" x2="66" y2="30" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="26" y1="16" x2="22" y2="12" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="54" y1="44" x2="58" y2="48" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="54" y1="16" x2="58" y2="12" stroke="#c9a84c" stroke-width="2"/>
-    <line x1="26" y1="44" x2="22" y2="48" stroke="#c9a84c" stroke-width="2"/>
-    <!-- Oak branch -->
-    <path d="M20 80 Q30 70 40 75 Q50 70 60 80" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-    <ellipse cx="25" cy="73" rx="8" ry="5" fill="#c9a84c" opacity="0.6" transform="rotate(-20 25 73)"/>
-    <ellipse cx="40" cy="68" rx="8" ry="5" fill="#c9a84c" opacity="0.6"/>
-    <ellipse cx="55" cy="73" rx="8" ry="5" fill="#c9a84c" opacity="0.6" transform="rotate(20 55 73)"/>
-    <!-- Runes -->
-    <text x="30" y="115" fill="#c9a84c" font-size="18" opacity="0.5">ᚱ ᚢ ᚾ</text>
-  </svg>
-  <div class="side-ornament">✦</div>
-  <div class="side-quote">Mācies<br>ar AI</div>
-  <div class="side-ornament">✦</div>
+<div class="side-ornament">✦</div>
+<div class="side-flag"><div class="side-flag-r"></div><div class="side-flag-w"></div><div class="side-flag-r2"></div></div>
+<div class="side-quote">Latviešu<br>valoda</div>
+<svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="40" cy="30" r="12" stroke="#c9a84c" stroke-width="2" fill="none"/>
+<line x1="40" y1="10" x2="40" y2="24" stroke="#c9a84c" stroke-width="2"/><line x1="40" y1="15" x2="40" y2="25" stroke="#c9a84c" stroke-width="2"/>
+<line x1="20" y1="30" x2="14" y2="30" stroke="#c9a84c" stroke-width="2"/><line x1="60" y1="30" x2="66" y2="30" stroke="#c9a84c" stroke-width="2"/>
+<line x1="26" y1="16" x2="22" y2="12" stroke="#c9a84c" stroke-width="2"/><line x1="54" y1="44" x2="58" y2="48" stroke="#c9a84c" stroke-width="2"/>
+<line x1="54" y1="16" x2="58" y2="12" stroke="#c9a84c" stroke-width="2"/><line x1="26" y1="44" x2="22" y2="48" stroke="#c9a84c" stroke-width="2"/>
+<path d="M20 80 Q30 70 40 75 Q50 70 60 80" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+<ellipse cx="25" cy="73" rx="8" ry="5" fill="#c9a84c" opacity="0.6" transform="rotate(-20 25 73)"/>
+<ellipse cx="40" cy="68" rx="8" ry="5" fill="#c9a84c" opacity="0.6"/>
+<ellipse cx="55" cy="73" rx="8" ry="5" fill="#c9a84c" opacity="0.6" transform="rotate(20 55 73)"/>
+<text x="30" y="115" fill="#c9a84c" font-size="18" opacity="0.5">ᚱᚢᚾ</text>
+</svg>
+<div class="side-ornament">✦</div>
+<div class="side-quote">Mācies<br>ar AI</div>
+<div class="side-ornament">✦</div>
 </div>
-
-<!-- Right decorative panel -->
 <div class="side-panel right">
-  <div class="side-ornament">✦</div>
-  <div class="side-flag"><div class="side-flag-r"></div><div class="side-flag-w"></div><div class="side-flag-r2"></div></div>
-  <div class="side-quote">Runā<br>latviski</div>
-  <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Speech wave -->
-    <path d="M15 25 Q40 15 65 25 Q40 35 15 25Z" stroke="#c9a84c" stroke-width="1.5" fill="#c9a84c" opacity="0.3"/>
-    <circle cx="25" cy="45" r="3" fill="#c9a84c" opacity="0.5"/>
-    <circle cx="40" cy="40" r="5" fill="#c9a84c" opacity="0.5"/>
-    <circle cx="55" cy="45" r="3" fill="#c9a84c" opacity="0.5"/>
-    <!-- Stars arc -->
-    <text x="27" y="75" fill="#c9a84c" font-size="10" opacity="0.7">★ ★ ★</text>
-    <!-- Pine trees (Latvia) -->
-    <polygon points="40,85 32,105 48,105" fill="#c9a84c" opacity="0.4"/>
-    <polygon points="40,95 34,110 46,110" fill="#c9a84c" opacity="0.4"/>
-    <rect x="38" y="110" width="4" height="6" fill="#c9a84c" opacity="0.3"/>
-  </svg>
-  <div class="side-ornament">✦</div>
-  <div class="side-quote">Gemini<br>Live Balss</div>
-  <div class="side-ornament">✦</div>
+<div class="side-ornament">✦</div>
+<div class="side-flag"><div class="side-flag-r"></div><div class="side-flag-w"></div><div class="side-flag-r2"></div></div>
+<div class="side-quote">Runā<br>latviski</div>
+<svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 25 Q40 15 65 25 Q40 35 15 25Z" stroke="#c9a84c" stroke-width="1.5" fill="#c9a84c" opacity="0.3"/>
+<circle cx="25" cy="45" r="3" fill="#c9a84c" opacity="0.5"/>
+<circle cx="40" cy="40" r="5" fill="#c9a84c" opacity="0.5"/>
+<circle cx="55" cy="45" r="3" fill="#c9a84c" opacity="0.5"/>
+<text x="27" y="75" fill="#c9a84c" font-size="10" opacity="0.7">★ ★ ★</text>
+<polygon points="40,85 32,105 48,105" fill="#c9a84c" opacity="0.4"/>
+<polygon points="40,95 34,110 46,110" fill="#c9a84c" opacity="0.4"/>
+<rect x="38" y="110" width="4" height="6" fill="#c9a84c" opacity="0.3"/>
+</svg>
+<div class="side-ornament">✦</div>
+<div class="side-quote">Gemini<br>Live Balss</div>
+<div class="side-ornament">✦</div>
 </div>
-
 <div id="app">
-  <div class="hdr">
-    <div class="hdr-logo">
-      <div class="hdr-ic">🇱🇻</div>
-      <div><div class="hdr-t">Latviešu Skolotājs</div><div class="hdr-s">AI · Bezmaksas · Latviski</div></div>
-    </div>
-    <div class="hdr-r">
-      <div class="pts">⭐ <span id="pts">0</span></div>
-      <div class="ico-btn" id="btnSett">⚙️</div>
-    </div>
-  </div>
-
-  <div id="scr-topics">
-    <div class="s-title">Izvēlies <em>tēmu</em></div>
-    <div class="s-sub">Runā latviski ar AI skolotāju · bezmaksas</div>
-    <div class="section-label">🌱 С нуля · Iesācējiem</div>
-<div class="beginner-topics" id="tgrid-n0">
-  <div class="tc" data-topic="pamatfrāzes"><span class="te">👋</span><div class="tn">Pamatfrāzes</div><div class="td">Привет, спасибо, да, нет</div><span class="tl ln0">A0 · С нуля</span></div>
-  <div class="tc" data-topic="iepazīšanās"><span class="te">😊</span><div class="tn">Iepazīšanās</div><div class="td">Знакомство, имя, страна</div><span class="tl ln0">A0 · С нуля</span></div>
-  <div class="tc" data-topic="skaitļi"><span class="te">🔢</span><div class="tn">Skaitļi</div><div class="td">Числа от 1 до 10</div><span class="tl ln0">A0 · С нуля</span></div>
-  <div class="tc" data-topic="ģimene" data-n0="1"><span class="te">👨‍👩‍👧</span><div class="tn">Ģimene vienkārši</div><div class="td">Мама, папа, брат, сестра</div><span class="tl ln0">A0 · С нуля</span></div>
+<div class="hdr">
+<div class="hdr-logo">
+<div class="hdr-ic">🇱🇻</div>
+<div><div class="hdr-t">Latviešu Skolotājs</div><div class="hdr-s">AI · Bezmaksas · Latviski</div></div>
 </div>
-<div class="section-label">📚 Visi līmeņi · Все уровни</div>
+<div class="hdr-r">
+<div class="pts">⭐ <span id="pts">0</span></div>
+<div class="ico-btn" id="btnSett">⚙️</div>
+</div>
+</div>
+<div id="scr-topics">
+<div class="s-title">Izvēlies <em>tēmu</em></div>
+<div class="s-sub">Runā latviski ar AI skolotāju · bezmaksas</div>
 <div class="tgrid" id="tgrid">
-      <div class="tc" data-topic="ģimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par savu ģimeni</div><span class="tl la1">A1 · Viegls</span></div>
-      <div class="tc" data-topic="ceļošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2 · Pamata</span></div>
-      <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2 · Pamata</span></div>
-      <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Iecienītie sporta veidi</div><span class="tl la1">A1 · Viegls</span></div>
-      <div class="tc" data-topic="ēdiens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1 · Viegls</span></div>
-      <div class="tc" data-topic="latvija"><span class="te">🏰</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1 · Vidējs</span></div>
-      <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri, gadalaiki</div><span class="tl la2">A2 · Pamata</span></div>
-      <div class="tc" data-topic="ikdiena"><span class="te">🌅</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1 · Vidējs</span></div>
-    </div>
-    <!-- Donate -->
-    <div style="text-align:center;margin-top:28px;padding-bottom:8px;">
-      <a href="https://buymeacoffee.com/headymanner" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(255,221,0,.25);">☕ Buy me a coffee</a>
-      <div style="font-size:11px;color:#5a6e88;margin-top:8px;">Atbalsti projektu · Support the project</div>
-    </div>
-  </div>
-
-  <div id="scr-chat">
-    <div class="cbar">
-      <button class="bbtn" id="btnBack">←</button>
-      <span id="cEmoji" style="font-size:20px">🇱🇻</span>
-      <span class="ctitle" id="cTitle">—</span>
-      <span class="cpts-el" id="cPts">0 pts</span>
-    </div>
-    <div class="msgs" id="msgs"></div>
-    <div class="ibar">
-      <div class="irow">
-        <div class="mbtn" id="btnMic">🎤</div>
-        <div style="flex:1"><textarea id="txt" placeholder="Raksti latviski..." rows="1"></textarea></div>
-        <button class="sbtn" id="btnSend">➤</button>
-      </div>
-      <div class="hints" id="hints"></div>
-    </div>
-  </div>
+<div class="tc" data-topic="ģimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par savu ģimeni</div><span class="tl la1">A1 · Viegls</span></div>
+<div class="tc" data-topic="ceļošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2 · Pamata</span></div>
+<div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2 · Pamata</span></div>
+<div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Iecienītie sporta veidi</div><span class="tl la1">A1 · Viegls</span></div>
+<div class="tc" data-topic="ēdiens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1 · Viegls</span></div>
+<div class="tc" data-topic="latvija"><span class="te">🏛️</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1 · Vidējs</span></div>
+<div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri, gadalaiki</div><span class="tl la2">A2 · Pamata</span></div>
+<div class="tc" data-topic="ikdiena"><span class="te">☀️</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1 · Vidējs</span></div>
 </div>
-
+<div style="text-align:center;margin-top:28px;padding-bottom:8px;">
+<a href="https://buymeacoffee.com/headymanner" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(255,221,0,.25);">☕ Buy me a coffee</a>
+<div style="font-size:11px;color:#5a6e88;margin-top:8px;">Atbalsti projektu · Support the project</div>
+</div>
+</div>
+<div id="scr-chat">
+<div class="cbar">
+<button class="bbtn" id="btnBack">←</button>
+<span id="cEmoji" style="font-size:20px;"></span>
+<span class="ctitle" id="cTitle"></span>
+<span class="cpts-el" id="cPts">0 pts</span>
+</div>
+<div class="msgs" id="msgs"></div>
+<div class="ibar">
+<div class="irow">
+<div class="mbtn" id="btnMic">🎤</div>
+<div style="flex:1;"><textarea id="txt" placeholder="Raksti latviski..." rows="1"></textarea></div>
+<button class="sbtn" id="btnSend">➤</button>
+</div>
+<div class="hints" id="hints"></div>
+</div>
+</div>
+</div>
 <div class="modal h" id="modal">
-  <div class="mbox">
-    <div class="mi">⚙️</div>
-    <div class="mt">Worker URL</div>
-    <div class="md">Ievadi sava Cloudflare Worker adresi</div>
-    <div class="ml">CLOUDFLARE WORKER URL</div>
-    <input class="minp" type="text" id="inpKey" placeholder="https://lv-skolotajs.XXXX.workers.dev"/>
-    <button class="mbtn2" id="btnSave">Saglabāt →</button>
-    <div class="mnote"><a href="https://workers.cloudflare.com" target="_blank">workers.cloudflare.com</a> → bezmaksas</div>
-  </div>
+<div class="mbox">
+<div class="mi">🔗</div>
+<div class="mt">Worker URL</div>
+<div class="md">Ievadi sava Cloudflare Worker adresi</div>
+<div class="ml">CLOUDFLARE WORKER URL</div>
+<input class="minp" type="text" id="inpKey" placeholder="https://lv-skolotajs.XXXX.workers.dev"/>
+<button class="mbtn2" id="btnSave">Saglabāt →</button>
+<div class="mnote"><a href="https://workers.cloudflare.com" target="_blank">workers.cloudflare.com</a> → bezmaksas</div>
 </div>
-
+</div>
 <div class="sett" id="sett">
-  <div class="sh">
-    <div class="stitle">Iestatījumi</div>
-    <div class="ico-btn" id="btnCloseSett">✕</div>
-  </div>
-  <div class="sgrp">
-    <div class="sgl">Balss</div>
-    <div class="si" id="siVoice"><div class="sil"><span class="sico">🔊</span><div><div class="sname">Skolotāja balss</div><div class="sdesc">Gemini Live TTS</div></div></div><div class="tog on" id="togV"></div></div>
-    <div class="si"><div class="sil"><span class="sico">👤</span><div><div class="sname">Balss tips</div></div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede — sieviešu 👩</option><option value="Kore">Kore — mierīga 👩</option><option value="Charon">Charon — vīriešu 👨</option><option value="Fenrir">Fenrir — dziļš 👨</option><option value="Puck">Puck — dzīvespriecīgs</option></select></div></div>
-  </div>
-  <div class="sgrp">
-    <div class="sgl">Mācīšanās</div>
-    <div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div><div class="sname">Kļūdu labojumi</div></div></div><div class="tog on" id="togE"></div></div>
-    <div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div><div class="sname">Vērtējums</div></div></div><div class="tog on" id="togS"></div></div>
-    <div class="si"><div class="sil"><span class="sico">📚</span><div><div class="sname">Valodas līmenis</div></div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
-  </div>
-  <div class="sgrp">
-    <div class="sgl">API</div>
-    <div class="si" id="siKey"><div class="sil"><span class="sico">🔑</span><div><div class="sname">Mainīt API atslēgu</div><div class="sdesc" id="keyStatus">Nav iestatīta</div></div></div><span style="color:#5a6e88;font-size:18px">›</span></div>
-  </div>
+<div class="sh"><div class="stitle">Iestatījumi</div><div class="ico-btn" id="btnCloseSett">✕</div></div>
+<div class="sgrp">
+<div class="sgl">Balss</div>
+<div class="si" id="siVoice"><div class="sil"><span class="sico">🔊</span><div><div class="sname">Skolotāja balss</div><div class="sdesc">Gemini Live TTS</div></div></div><div class="tog on" id="togV"></div></div>
+<div class="si"><div class="sil"><span class="sico">🎭</span><div class="sname">Balss tips</div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede — sieviešu 👩</option><option value="Kore">Kore — mierīga 👩</option><option value="Charon">Charon — vīriešu 👨</option><option value="Fenrir">Fenrir — dziļš 👨</option><option value="Puck">Puck — dzīvespriecīgs</option></select></div></div>
 </div>
-
+<div class="sgrp">
+<div class="sgl">Mācīšanās</div>
+<div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div class="sname">Kļūdu labojumi</div></div><div class="tog on" id="togE"></div></div>
+<div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div class="sname">Vērtējums</div></div><div class="tog on" id="togS"></div></div>
+<div class="si"><div class="sil"><span class="sico">📊</span><div class="sname">Valodas līmenis</div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
+</div>
+<div class="sgrp">
+<div class="sgl">API</div>
+<div class="si" id="siKey"><div class="sil"><span class="sico">🔑</span><div><div class="sname">Mainīt API atslēgu</div><div class="sdesc" id="keyStatus">Nav iestatīta</div></div></div><span style="color:#5a6e88;font-size:18px;">›</span></div>
+</div>
+</div>
 <script>
-// ── Worker URL (замени на свой после деплоя в Cloudflare) ──
 var WORKER = 'https://runalv.treners52.workers.dev';
-var gk = ''; // Ключ спрятан в Worker, не нужен пользователям
-var savedWorker = localStorage.getItem('lv_worker'); if(savedWorker) WORKER = savedWorker;
-var voiceOn  = localStorage.getItem('lv_vo') !== 'false';
-var errorsOn = localStorage.getItem('lv_eo') !== 'false';
-var scoreOn  = localStorage.getItem('lv_so') !== 'false';
-var gVoice   = localStorage.getItem('lv_gv')||'Aoede';
-var level    = localStorage.getItem('lv_lv')||'A2';
-var totalPts = parseInt(localStorage.getItem('lv_pts')||'0');
-var sessPts  = 0;
-var topic    = '';
+var gk = '';
+var savedWorker = localStorage.getItem('lvworker');
+if(savedWorker) WORKER = savedWorker;
+var voiceOn = localStorage.getItem('lvvo') !== 'false';
+var errorsOn = localStorage.getItem('lveo') !== 'false';
+var scoreOn = localStorage.getItem('lvso') !== 'false';
+var gVoice = localStorage.getItem('lvgv') || 'Aoede';
+var level = localStorage.getItem('lvlv') || 'A2';
+var totalPts = parseInt(localStorage.getItem('lvpts')) || 0;
+var sessPts = 0;
+var topic = '';
 var chatHist = [];
-var recog    = null;
-var isRec    = false;
+var recog = null;
+var isRec = false;
 var curAudio = null;
-var chatActive = false; // Flag: prevent audio playing after chat closed
+var chatActive = false;
 
 var TOPICS = {
-  'pamatfrāzes': {e:'👋',n:'Pamatfrāzes',h:['Sveiki!','Paldies','Lūdzu','Jā / Nē']},
-  'iepazīšanās': {e:'😊',n:'Iepazīšanās',h:['Mani sauc...','Es esmu no...','Cik tev gadu?']},
-  'skaitļi':     {e:'🔢',n:'Skaitļi',    h:['Viens, divi, trīs','Man ir divi bērni','Es esmu 25']},
-  'ģimene':   {e:'👨‍👩‍👧‍👦',n:'Ģimene',  h:['Man ir liela ģimene','Mana māte ir skolotāja','Man ir divi brāļi']},
-  'ceļošana': {e:'✈️', n:'Ceļošana',h:['Es vēlos apmeklēt Rīgu','Man patīk ceļot','Es esmu bijis Igaunijā']},
-  'darbs':    {e:'💼', n:'Darbs',   h:['Es strādāju birojā','Mans darbs ir interesants','Man patīk kolektīvs']},
-  'sports':   {e:'⚽', n:'Sports',  h:['Man patīk futbols','Es spēlēju basketbolu','Esmu aktīvs cilvēks']},
-  'ēdiens':   {e:'🍽️',n:'Ēdiens',  h:['Man patīk pelēkie zirņi','Es gatavoju vakariņas','Mans iecienītākais ēdiens']},
-  'latvija':  {e:'🏰', n:'Latvija', h:['Rīga ir skaista pilsēta','Man patīk tradīcijas','Jāņi ir mani iecienītākie svētki']},
-  'daba':     {e:'🌲', n:'Daba',    h:['Latvijā ir skaisti meži','Man patīk peldēties','Ziema ir auksta']},
-  'ikdiena':  {e:'🌅', n:'Ikdiena', h:['Es ceļos septiņos','Brīvajā laikā es lasu','Man patīk rutīna']}
+  'ģimene':   {e:'👨‍👩‍👧‍👦',n:'Ģimene',   h:['Man ir liela ģimene','Mana māte ir skolotāja','Man ir divi brāļi']},
+  'ceļošana': {e:'✈️', n:'Ceļošana', h:['Es vēlos apmeklēt Rīgu','Man patīk ceļot','Es esmu bijis Igaunijā']},
+  'darbs':    {e:'💼', n:'Darbs',    h:['Es strādāju birojā','Mans darbs ir interesants','Man patīk kolektīvs']},
+  'sports':   {e:'⚽', n:'Sports',   h:['Man patīk futbols','Es spēlēju basketbolu','Esmu aktīvs cilvēks']},
+  'ēdiens':   {e:'🍽️',n:'Ēdiens',   h:['Man patīk pelēkie zirņi','Es gatavoju vakariņas','Mans iecienītākais ēdiens']},
+  'latvija':  {e:'🏛️',n:'Latvija',  h:['Rīga ir skaista pilsēta','Man patīk tradīcijas','Jāņi ir mani iecienītākie svētki']},
+  'daba':     {e:'🌲',n:'Daba',     h:['Latvijā ir skaisti meži','Man patīk peldēties','Ziema ir auksta']},
+  'ikdiena':  {e:'☀️',n:'Ikdiena',  h:['Es ceļos septiņos','Brīvajā laikā es lasu','Man patīk rutīna']}
 };
 
-// ── BIND ALL BUTTONS ──────────────────────────
 document.getElementById('btnSett').addEventListener('click', function(){ document.getElementById('sett').classList.add('open'); });
 document.getElementById('btnCloseSett').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); });
 document.getElementById('btnBack').addEventListener('click', goBack);
@@ -314,227 +268,136 @@ document.getElementById('btnSend').addEventListener('click', sendMsg);
 document.getElementById('btnMic').addEventListener('click', toggleMic);
 document.getElementById('btnSave').addEventListener('click', saveKey);
 document.getElementById('siKey').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); showModal(); });
-document.getElementById('siVoice').addEventListener('click', function(){ togSet('voiceOn','lv_vo','togV'); });
-document.getElementById('siErrors').addEventListener('click', function(){ togSet('errorsOn','lv_eo','togE'); });
-document.getElementById('siScore').addEventListener('click', function(){ togSet('scoreOn','lv_so','togS'); });
-document.getElementById('selVoice').addEventListener('change', function(){ gVoice=this.value; localStorage.setItem('lv_gv',this.value); });
-document.getElementById('selLevel').addEventListener('change', function(){ level=this.value; localStorage.setItem('lv_lv',this.value); });
+document.getElementById('siVoice').addEventListener('click', function(){ togSet('voiceOn','lvvo','togV'); });
+document.getElementById('siErrors').addEventListener('click', function(){ togSet('errorsOn','lveo','togE'); });
+document.getElementById('siScore').addEventListener('click', function(){ togSet('scoreOn','lvso','togS'); });
+document.getElementById('selVoice').addEventListener('change', function(){ gVoice=this.value; localStorage.setItem('lvgv',this.value); });
+document.getElementById('selLevel').addEventListener('change', function(){ level=this.value; localStorage.setItem('lvlv',this.value); });
 document.getElementById('txt').addEventListener('keydown', function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
 document.getElementById('txt').addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,110)+'px'; });
+document.getElementById('tgrid').addEventListener('click', function(e){ var tc=e.target.closest('.tc'); if(tc) startChat(tc.getAttribute('data-topic')); });
 
-// Topic cards
-document.getElementById('tgrid').addEventListener('click', function(e){
-  var tc = e.target.closest('.tc');
-  if (tc) startChat(tc.getAttribute('data-topic'));
-});
-document.getElementById('tgrid-n0').addEventListener('click', function(e){
-  var tc = e.target.closest('.tc');
-  if(tc){ var prev=level; level='N0'; startChat(tc.getAttribute('data-topic')); level=prev; }
-});
-
-// ── INIT ──────────────────────────────────────
 document.getElementById('togV').classList.toggle('on', voiceOn);
 document.getElementById('togE').classList.toggle('on', errorsOn);
 document.getElementById('togS').classList.toggle('on', scoreOn);
 document.getElementById('selVoice').value = gVoice;
 document.getElementById('selLevel').value = level;
 document.getElementById('pts').textContent = totalPts;
-if (gk) document.getElementById('keyStatus').textContent = 'Iestatīta ✓';
-// No API key needed - using Worker
+if(gk) document.getElementById('keyStatus').textContent = 'Iestatīta';
+else document.getElementById('keyStatus').textContent = 'Nav API key needed - using Worker';
 initSpeech();
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
 
-// ── MODAL ─────────────────────────────────────
 function showModal(){ document.getElementById('modal').classList.remove('h'); if(gk) document.getElementById('inpKey').value=gk; }
 function hideModal(){ document.getElementById('modal').classList.add('h'); }
 function saveKey(){
-  var k = document.getElementById('inpKey').value.trim();
-  if (!k){ alert('Ievadi Worker URL!'); return; }
-  WORKER = k.replace(/\/+$/, '');
-  localStorage.setItem('lv_worker', WORKER);
-  document.getElementById('keyStatus').textContent = 'Iestatīts ✓';
+  var k=document.getElementById('inpKey').value.trim();
+  if(!k){alert('Ievadi Worker URL!');return;}
+  WORKER=k.replace(/\/$/,'');
+  localStorage.setItem('lvworker',WORKER);
+  document.getElementById('keyStatus').textContent='Iestatīts';
   hideModal();
 }
 
-// ── SETTINGS ──────────────────────────────────
-function togSet(key, lsKey, elId){
-  var cur = key==='voiceOn' ? voiceOn : key==='errorsOn' ? errorsOn : scoreOn;
-  var nv = !cur;
-  if(key==='voiceOn') voiceOn=nv;
-  else if(key==='errorsOn') errorsOn=nv;
-  else scoreOn=nv;
-  localStorage.setItem(lsKey, nv);
-  document.getElementById(elId).classList.toggle('on', nv);
+function togSet(key,lsKey,elId){
+  var cur = key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn;
+  var nv=!cur;
+  if(key==='voiceOn') voiceOn=nv; else if(key==='errorsOn') errorsOn=nv; else scoreOn=nv;
+  localStorage.setItem(lsKey,nv);
+  document.getElementById(elId).classList.toggle('on',nv);
 }
 
-// ── NAVIGATION ────────────────────────────────
 function startChat(t){
-  stopAudio();
-  chatActive = true;
-  if (isRec) { try { recog.stop(); } catch(e){} stopRec(); }
-  topic = t; chatHist = []; sessPts = 0;
-  var info = TOPICS[t]||{e:'🇱🇻',n:t,h:[]};
-  document.getElementById('cEmoji').textContent = info.e;
-  document.getElementById('cTitle').textContent = info.n;
-  document.getElementById('cPts').textContent   = '0 pts';
-  document.getElementById('msgs').innerHTML     = '';
-  document.getElementById('hints').innerHTML    = info.h.map(function(h){
-    return '<div class="hint" data-hint="'+h.replace(/"/g,'&quot;')+'">'+h+'</div>';
-  }).join('');
-  document.getElementById('scr-topics').style.display = 'none';
-  document.getElementById('scr-chat').style.display   = 'flex';
+  stopAudio(); chatActive=true;
+  if(isRec){try{recog.stop();}catch(e){} stopRec();}
+  topic=t; chatHist=[]; sessPts=0;
+  var info=TOPICS[t];
+  document.getElementById('cEmoji').textContent=info.e;
+  document.getElementById('cTitle').textContent=info.n;
+  document.getElementById('cPts').textContent='0 pts';
+  document.getElementById('msgs').innerHTML='';
+  document.getElementById('hints').innerHTML=info.h.map(function(h){return '<div class="hint" data-hint="'+h+'">'+h+'</div>';}).join('');
+  document.getElementById('scr-topics').style.display='none';
+  document.getElementById('scr-chat').style.display='flex';
   greet(t);
+  document.getElementById('hints').addEventListener('click', function(e){
+    var h=e.target.closest('.hint');
+    if(h) document.getElementById('txt').value=h.getAttribute('data-hint');
+  });
 }
-
-document.getElementById('hints').addEventListener('click', function(e){
-  var h = e.target.closest('.hint');
-  if (h){ document.getElementById('txt').value = h.getAttribute('data-hint'); }
-});
 
 function goBack(){
-  chatActive = false; // Prevent any pending TTS from playing
-  // Kill all audio immediately
+  chatActive=false;
   stopAudio();
-  // Stop microphone
-  if (isRec) { try { recog.abort(); } catch(e){} stopRec(); }
-  // Clear chat state
-  chatHist = [];
-  topic = '';
-  // Hide chat, show topics
-  document.getElementById('scr-chat').style.display   = 'none';
-  document.getElementById('scr-topics').style.display = 'block';
+  if(isRec){try{recog.abort();}catch(e){} stopRec();}
+  chatHist=[]; topic='';
+  document.getElementById('scr-chat').style.display='none';
+  document.getElementById('scr-topics').style.display='block';
 }
 
-// ── MESSAGES ──────────────────────────────────
-function addMsg(role, html, fb){
-  var c = document.getElementById('msgs');
-  var now = new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
-  var d = document.createElement('div');
-  d.className = 'msg '+role;
-  d.innerHTML = '<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
-    +'<div class="mbody"><div class="bub">'+html+'</div>'+(fb||'')
-    +'<div class="mtime">'+now+'</div></div>';
-  c.appendChild(d); c.scrollTop = c.scrollHeight;
-}
-function showTyping(){
-  var c=document.getElementById('msgs'), d=document.createElement('div');
-  d.className='msg b'; d.id='typ';
-  d.innerHTML='<div class="av">🎓</div><div class="mbody"><div class="tdots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+function addMsg(role,html,fb){
+  var c=document.getElementById('msgs');
+  var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
+  var d=document.createElement('div');
+  d.className='msg '+role;
+  d.innerHTML='<div class="av">'+(role==='b'?'🇱🇻':'👤')+'</div><div class="mbody"><div class="bub">'+html+'</div>'+(fb||'')+'<div class="mtime">'+now+'</div></div>';
   c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
+function showTyping(){ var c=document.getElementById('msgs'),d=document.createElement('div'); d.className='msg b'; d.id='typ'; d.innerHTML='<div class="av">🇱🇻</div><div class="mbody"><div class="tdots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>'; c.appendChild(d); c.scrollTop=c.scrollHeight; }
 function rmTyping(){ var t=document.getElementById('typ'); if(t) t.remove(); }
-function showWave(){
-  rmWave();
-  var bs=document.querySelectorAll('.msg.b .bub');
-  if(!bs.length) return;
-  var w=document.createElement('div');
-  w.className='ww'; w.id='wave';
-  w.innerHTML='<div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>';
-  bs[bs.length-1].parentNode.insertBefore(w, bs[bs.length-1].nextSibling);
-}
+function showWave(){ rmWave(); var bs=document.querySelectorAll('.msg.b .bub'); if(!bs.length) return; var w=document.createElement('div'); w.className='ww'; w.id='wave'; w.innerHTML='<div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>'; bs[bs.length-1].parentNode.insertBefore(w,bs[bs.length-1].nextSibling); }
 function rmWave(){ var w=document.getElementById('wave'); if(w) w.remove(); }
 
-// ── GEMINI CHAT ───────────────────────────────
-function formatMsg(text){
-  var parts=(text||'').split('🇷🇺');
-  var lv=esc(parts[0].trim());
-  if(parts.length>1&&parts[1].trim()){
-    return lv+'<div class="ru-trans"><span style="font-size:10px;font-weight:600;color:#c9a84c;margin-right:3px;">RU</span>'+esc(parts[1].trim())+'</div>';
-  }
-  return lv;
-}
 function buildSys(){
-  if(level==='N0'){
-    return 'Tu esi sirsnīgs un pacietīgs latviešu valodas skolotājs, kas māca absolūtus iesācējus.\n'
-      +'Esi silts, draudzīgs, iedrošinošs — kā labākais draugs. Runā ĻOTI vienkārši.\n'
-      +'Teikumi ne garāki par 6 vārdiem. Tēma: "'+topic+'".\n'
-      +'Uzdod VIENU ļoti vienkāršu jautājumu. Atbildi TIKAI latviski.\n';
-  }
-  var s = 'Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
-    +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'.\nATBILDI ĪSI: maksimums 2 īsi teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.\n';
-  if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (paskaidrojums)\n';
-  if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
+  var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski. Tēma: '+topic+'. Lietotāja līmenis: '+level+'. Sī maksimums: 2 sīki teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.';
+  if(errorsOn) s+='\nJa kļūdas: norādi PC atbildes\nKĻŪDAS\n❌nepareizi → ✅pareizi (paskaidrojums)';
+  if(scoreOn) s+='\nTad:\nVĒRTĒJUMS\nGramatikaX/100 VārdiX/100 PlūsmaX/100 KopX/100';
+  s+='\n\nSVARĪGI: Pēc katras atbildes latviešu valodā OBLIGĀTI pievieno tulkojumu krievu valodā šādā formātā:\n🇷🇺 [krievu tulkojums šeit]';
   return s;
 }
 
-function callGemini(txt, cb){
+function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
-  fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
+  fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      system_instruction:{parts:[{text:buildSys()}]},
-      contents:chatHist,
-      generationConfig:{temperature:0.8,maxOutputTokens:512}
-    })
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:512}})
   })
-  .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error((d.error&&d.error.message)||'HTTP '+r.status); return d; }); })
+  .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status); return d;})})
   .then(function(d){
-    var t=''; try{ t=d.candidates[0].content.parts[0].text.trim(); }catch(e){}
+    var t; try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
     if(!t) throw new Error('Tukša atbilde');
     chatHist.push({role:'model',parts:[{text:t}]});
-    console.log('Gemini response length:', t.length, 'text:', t.substring(0,100));
     cb(null,t);
   })
   .catch(function(e){ cb(e.message||'Kļūda',null); });
 }
 
-function parseResp(text) {
-  var reply = text, errors = null, score = null;
-  
-  // 🇷🇺 Найти перевод
-  var ruIdx = text.indexOf('🇷🇺');
-  if (ruIdx > 0) {
-    reply = text.slice(0, ruIdx).trim();
+function parseResp(text){
+  var reply=text, errors=[], score=null, ru='';
+  // Extract Russian translation
+  var ruLines=text.split('\n'), ruLineIdx=-1;
+  for(var ri=0;ri<ruLines.length;ri++){
+    if(ruLines[ri].indexOf('🇷🇺')>-1){ruLineIdx=ri;break;}
   }
-  
-  // Ошибки (если включены)
-  if (errorsOn) {
-    var errMatch = text.match(/КД?А[СШ]\s*([^▽]+)/i);
-    if (errMatch) {
-      errors = errMatch[1].split('\n').map(l => l.trim()).filter(Boolean);
-    }
+  if(ruLineIdx>-1){
+    ru=ruLines[ruLineIdx].replace('🇷🇺','').replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
+    reply=ruLines.slice(0,ruLineIdx).join('\n').trim();
   }
-  
-  // Оценка (если включена)
-  if (scoreOn) {
-    var scoreMatch = text.match(/ВРТ?ЖУМС\s*([\d%]+)\s*([\d%]+)\s*([\d%]+)\s*([\d%]+)/i);
-    if (scoreMatch) {
-      var g = scoreMatch[1], v = scoreMatch[2], f = scoreMatch[3], tot = scoreMatch[4];
-      score = {g, v, f, tot};
-    }
-  }
-  
-  return { reply: reply.trim(), errors, score };
-}
-
+  var si=reply.search(/\n\s*KĻŪDAS|\n\s*VĒRTĒJUMS/i);
+  if(si>0) reply=reply.slice(0,si).trim();
   if(errorsOn){
-    var em = text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
+    var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
     if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
-        var p = l.replace(/[❌✅]/g,'').split('→');
+        var p=l.replace(/[❌✅]/g,'').split('→');
         if(p.length>=2){
-          var w = p[0].replace(/["""]/g,'').trim();
-          var rest = p[1].trim();
-          var pm = rest.match(/^([^(]+)\(?(.*?)\)?$/);
-          var c = pm ? pm[1].replace(/["""✅]/g,'').trim() : rest;
-          var ex = pm && pm[2] ? pm[2].trim() : '';
+          var w=p[0].replace(/["""]/g,'').trim();
+          var rest=p[1].trim();
+          var pm=rest.match(/^([^(]+)\(?(.*?)\)?$/);
+          var c=pm?pm[1].replace(/["""✅]/g,'').trim():rest;
+          var ex=pm&&pm[2]?pm[2].trim():'';
           if(w&&c) errors.push({w:w,c:c,ex:ex});
-        }
-      }
-    });
-  }
-
-  if(scoreOn){
-    var sm = text.match(/VĒRTĒJUMS[:\s]*(.*)/i);
-    if(sm){ var ns = sm[1].match(/\d+/g)||[]; if(ns.length>=3){
-      var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);
-      score={g:g,v:v,f:f,tot:tot}; 
-    }}
-  }
-
-  return {reply:reply||text, errors:errors, score:score};
-});
         }
       }
     });
@@ -544,59 +407,58 @@ function parseResp(text) {
     if(sm){ var ns=sm[1].match(/\d+/g)||[]; if(ns.length>=3){ var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3); score={g:g,v:v,f:f,tot:tot}; } }
   }
   reply=reply.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
-  return {reply:reply||text, errors:errors, score:score};
+  return {reply:reply||text, errors:errors, score:score, ru:ru};
 }
 
 function buildFb(p){
   if(!p.errors.length&&!p.score) return '';
   var h='<div class="fbc">';
   if(p.errors.length&&errorsOn){
-    h+='<div class="fbt">✏️ Kļūdu labojumi</div>';
-    p.errors.forEach(function(e){ h+='<div class="el">✗ "'+esc(e.w)+'"</div><div class="fl">✓ "'+esc(e.c)+'"'+(e.ex?' — '+esc(e.ex):'')+'</div>'; });
+    h+='<div class="fbt">Kļūdu labojumi</div>';
+    p.errors.forEach(function(e){ h+='<div class="el">❌ '+esc(e.w)+'</div><div class="fl">✅ '+esc(e.c)+(e.ex?' <em>('+esc(e.ex)+')</em>':'')+'</div>'; });
   }
   if(p.score&&scoreOn){
-    var s=p.score, cc=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
+    var s=p.score, c=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
     sessPts+=s.tot; totalPts+=Math.round(s.tot/10);
-    localStorage.setItem('lv_pts',totalPts);
+    localStorage.setItem('lvpts',totalPts);
     document.getElementById('pts').textContent=totalPts;
     document.getElementById('cPts').textContent=sessPts+' pts';
-    h+='<div class="fbt">⭐ Vērtējums</div><div class="scrs">';
-    h+='<div class="sp"><span class="sn '+cc+'">'+s.g+'</span><span class="sl">Gram.</span></div>';
-    h+='<div class="sp"><span class="sn '+cc+'">'+s.v+'</span><span class="sl">Vārdi</span></div>';
-    h+='<div class="sp"><span class="sn '+cc+'">'+s.f+'</span><span class="sl">Plūsma</span></div>';
-    h+='<div class="sp"><span class="sn '+cc+'">'+s.tot+'</span><span class="sl">Kopā</span></div></div>';
+    h+='<div class="fbt">Vērtējums</div><div class="scrs">';
+    h+='<div class="sp"><span class="sn '+c+'">'+s.g+'</span><span class="sl">Gram.</span></div>';
+    h+='<div class="sp"><span class="sn '+c+'">'+s.v+'</span><span class="sl">Vārdi</span></div>';
+    h+='<div class="sp"><span class="sn '+c+'">'+s.f+'</span><span class="sl">Plūsma</span></div>';
+    h+='<div class="sp"><span class="sn '+c+'">'+s.tot+'</span><span class="sl">Kop.</span></div></div>';
   }
   return h+'</div>';
 }
 
-// ── GREET ─────────────────────────────────────
 function greet(t){
   showTyping();
-  var fb={'ģimene':'Sveiki! Pastāsti man — cik cilvēku ir tavā ģimenē?','ceļošana':'Labdien! Kuru valsti tu visvairāk vēlies apmeklēt?','darbs':'Sveiki! Stāsti — ko tu dari savā darbā?','sports':'Sveiki! Kāds ir tavs iecienītākais sporta veids?','ēdiens':'Labdien! Kāds ir tavs iecienītākais ēdiens?','latvija':'Sveiki! Ko tu zini par Latviju un tās kultūru?','daba':'Labdien! Kāds ir tavs iecienītākais gadalaiks?','ikdiena':'Sveiki! Kā izskatās tava tipiskā diena?'};
-  fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({system_instruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu "'+t+'". Uzraksti VIENU pilnīgu teikumu — sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:500}})
+  fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu '+t+'. Uzraksti VIENU pilnīgu teikumu sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi. Pievieno 🇷🇺 tulkojumu.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:200}})
   })
   .then(function(r){return r.json();})
   .then(function(d){
     rmTyping();
-    var txt=''; try{txt=d.candidates[0].content.parts[0].text.trim();}catch(e){}
-    if(!txt) txt=fb[t]||'Sveiki! Sāksim!';
-    chatHist=[{role:'model',parts:[{text:txt}]}];
+    var txt; try{txt=d.candidates[0].content.parts[0].text.trim();}catch(e){}
+    if(!txt) txt='Sveiki! Sāksim!';
+    chatHist.push({role:'model',parts:[{text:txt}]});
     var pr=parseResp(txt);
-    addMsg('b',formatMsg(pr.reply||txt));
+    var ruHtml=pr.ru?'<div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:12px;color:#9bacc4;">🇷🇺 '+esc(pr.ru)+'</div>':'';
+    addMsg('b',esc(pr.reply||txt)+ruHtml);
     if(voiceOn) speak(pr.reply||txt);
   })
   .catch(function(e){
     rmTyping();
-    var fallback=fb[t]||'Sveiki! Sāksim sarunu!';
-    chatHist=[{role:'model',parts:[{text:fallback}]}];
+    var fallback='Sveiki! Sāksim sarunu!';
+    chatHist.push({role:'model',parts:[{text:fallback}]});
     addMsg('b',esc(fallback));
     if(voiceOn) speak(fallback);
   });
 }
 
-// ── SEND ──────────────────────────────────────
 function sendMsg(){
   var el=document.getElementById('txt'), txt=el.value.trim();
   if(!txt) return;
@@ -607,74 +469,60 @@ function sendMsg(){
     rmTyping(); document.getElementById('btnSend').disabled=false;
     if(err){addMsg('b','❌ '+esc(err));return;}
     var p=parseResp(text);
-    addMsg('b',formatMsg(p.reply||text),buildFb(p));
+    var ruHtml=p.ru?'<div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:12px;color:#9bacc4;">🇷🇺 '+esc(p.ru)+'</div>':'';
+    addMsg('b',esc(p.reply||text)+ruHtml,buildFb(p));
     if(voiceOn) speak(p.reply||text);
   });
 }
 
-// ── GEMINI TTS ────────────────────────────────
 function pcmToWav(b64){
   var bin=atob(b64),bytes=new Uint8Array(bin.length);
   for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
   var sr=24000,ch=1,bps=16,ds=bytes.length,buf=new ArrayBuffer(44+ds),v=new DataView(buf);
-  function ws(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
-  ws(0,'RIFF');v.setUint32(4,36+ds,true);ws(8,'WAVE');ws(12,'fmt ');
-  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);
-  v.setUint32(24,sr,true);v.setUint32(28,sr*ch*bps/8,true);v.setUint16(32,ch*bps/8,true);v.setUint16(34,bps,true);
-  ws(36,'data');v.setUint32(40,ds,true);
+  function ws(o,s){for(var i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i));}
+  ws(0,'RIFF'); v.setUint32(4,36+ds,true); ws(8,'WAVE'); ws(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,ch,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*ch*bps/8,true);
+  v.setUint16(32,ch*bps/8,true); v.setUint16(34,bps,true);
+  ws(36,'data'); v.setUint32(40,ds,true);
   for(var j=0;j<ds;j++) v.setUint8(44+j,bytes[j]);
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
+
 function stopAudio(){
-  if(curAudio){
-    curAudio.onended = null;
-    curAudio.onerror = null;
-    curAudio.pause();
-    curAudio.src='';
-    curAudio=null;
-  }
-  // Also stop any speech synthesis
+  if(curAudio){ curAudio.onended=null; curAudio.onerror=null; curAudio.pause(); curAudio.src=''; curAudio=null; }
   if(window.speechSynthesis) window.speechSynthesis.cancel();
   rmWave();
 }
+
 function speak(text){
   if(!chatActive||!voiceOn||!text) return;
   stopAudio(); showWave();
-  var speakSession = topic;
-
-  // Abort controller for timeout
-  var ctrl = new AbortController();
-  var ttsTimeout = setTimeout(function(){ ctrl.abort(); rmWave(); }, 12000);
-
+  var speakSession=topic;
+  var ctrl=new AbortController();
+  var ttsTimeout=setTimeout(function(){ ctrl.abort(); rmWave(); },12000);
   fetch(WORKER+'/tts',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    signal: ctrl.signal,
-    body:JSON.stringify({text:text, voice:gVoice})
+    signal:ctrl.signal,
+    body:JSON.stringify({text:text,voice:gVoice})
   })
   .then(function(r){ if(!r.ok) throw new Error('TTS '+r.status); return r.json(); })
   .then(function(d){
     clearTimeout(ttsTimeout);
-    if(!chatActive || speakSession !== topic) { rmWave(); return; }
+    if(!chatActive||speakSession!==topic){ rmWave(); return; }
     if(!d||!d.data){ rmWave(); return; }
-    var mime = d.mimeType||'';
-    var url = (mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1||!mime)
-      ? pcmToWav(d.data)
-      : 'data:'+mime+';base64,'+d.data;
+    var mime=d.mimeType;
+    var url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1)&&!mime.includes('base64') ? pcmToWav(d.data) : 'data:'+mime+';base64,'+d.data;
     showWave();
-    curAudio = new Audio(url);
-    curAudio.onended = function(){ rmWave(); if(url.startsWith('blob:')) URL.revokeObjectURL(url); };
-    curAudio.onerror = function(){ rmWave(); };
+    curAudio=new Audio(url);
+    curAudio.onended=function(){ rmWave(); if(url.startsWith('blob:')) URL.revokeObjectURL(url); };
+    curAudio.onerror=function(){ rmWave(); };
     curAudio.play().catch(function(){ rmWave(); });
   })
-  .catch(function(e){
-    clearTimeout(ttsTimeout);
-    console.warn('TTS:', e.message);
-    rmWave();
-  });
+  .catch(function(e){ clearTimeout(ttsTimeout); console.warn('TTS',e.message); rmWave(); });
 }
 
-// ── SPEECH RECOGNITION ────────────────────────
 function initSpeech(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR) return;
@@ -688,19 +536,21 @@ function initSpeech(){
       rmTyping(); document.getElementById('btnSend').disabled=false;
       if(err){addMsg('b','❌ '+esc(err));return;}
       var p=parseResp(text);
-      addMsg('b',formatMsg(p.reply||text),buildFb(p));
+      var ruHtml=p.ru?'<div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:12px;color:#9bacc4;">🇷🇺 '+esc(p.ru)+'</div>':'';
+      addMsg('b',esc(p.reply||text)+ruHtml,buildFb(p));
       if(voiceOn) speak(p.reply||text);
     });
   };
-  recog.onerror=function(){stopRec();};
-  recog.onend=function(){if(isRec) stopRec();};
+  recog.onerror=function(){ stopRec(); };
+  recog.onend=function(){ if(isRec) stopRec(); };
 }
+
 function toggleMic(){
   if(!recog){alert('Balss ievade nav atbalstīta šajā pārlūkā.');return;}
-  if(isRec){recog.stop();stopRec();}
-  else{stopAudio();try{recog.start();}catch(e){} startRec();}
+  if(isRec){ recog.stop(); stopRec(); }
+  else{ stopAudio(); try{recog.start();}catch(e){} startRec(); }
 }
-function startRec(){ isRec=true; document.getElementById('btnMic').classList.add('rec'); document.getElementById('btnMic').textContent='⏹'; document.getElementById('txt').placeholder='🎙️ Klausos...'; }
+function startRec(){ isRec=true; document.getElementById('btnMic').classList.add('rec'); document.getElementById('btnMic').textContent='⏹'; document.getElementById('txt').placeholder='Klausos...'; }
 function stopRec(){ isRec=false; document.getElementById('btnMic').classList.remove('rec'); document.getElementById('btnMic').textContent='🎤'; document.getElementById('txt').placeholder='Raksti latviski...'; }
 
 function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
