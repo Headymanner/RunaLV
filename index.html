@@ -2,7 +2,7 @@
 <html lang="lv">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -27,7 +27,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .side-flag-w{background:#f5efe0;height:6px;}
 .side-flag-r2{background:#9b0016;height:12px;}
 @media(max-width:600px){.side-panel{display:none;}}
-#app{position:relative;z-index:1;max-width:480px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;border-left:1px solid rgba(201,168,76,.12);border-right:1px solid rgba(201,168,76,.12);}@supports(height:100dvh){#app{height:100dvh;}}
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;border-left:1px solid rgba(201,168,76,.12);border-right:1px solid rgba(201,168,76,.12);}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px;border-bottom:1px solid rgba(201,168,76,.12);background:rgba(6,13,26,.92);flex-shrink:0;}
 .hdr-logo{display:flex;align-items:center;gap:10px;}
 .hdr-ic{width:36px;height:36px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
@@ -81,7 +81,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .wb{width:3px;border-radius:3px;background:#c9a84c;animation:wv 1s ease-in-out infinite;}
 .wb:nth-child(2){animation-delay:.15s;}.wb:nth-child(3){animation-delay:.3s;}.wb:nth-child(4){animation-delay:.15s;}
 @keyframes wv{0%,100%{height:4px;opacity:.4;}50%{height:14px;opacity:1;}}
-.ibar{padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(201,168,76,.12);background:rgba(6,13,26,.95);flex-shrink:0;position:sticky;bottom:0;z-index:10;}
+.ibar{padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(201,168,76,.12);background:rgba(6,13,26,.95);flex-shrink:0;}
 .irow{display:flex;align-items:flex-end;gap:8px;}
 .mbtn{width:46px;height:46px;min-width:46px;border-radius:50%;background:#0f1e35;border:1px solid rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
 .mbtn.rec{background:rgba(224,90,90,.15);border-color:#e05a5a;animation:pr 1.5s ease infinite;}
@@ -120,6 +120,11 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .tog.on::after{transform:translateX(20px);}
 .selw select{background:#060d1a;border:1px solid rgba(201,168,76,.2);border-radius:10px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:5px 8px;}
 .selw select option{background:#060d1a;}
+.ru-trans{margin-top:7px;padding-top:7px;border-top:1px solid rgba(201,168,76,.12);font-size:12px;color:#7a8ea8;font-style:italic;line-height:1.5;}
+.beginner-topics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.beginner-topics .tc{border-color:rgba(90,184,138,.2);}
+.section-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#5a6e88;margin-bottom:10px;margin-top:4px;}
+.ln0{background:rgba(90,184,138,.15);color:#5ab88a;}
 </style>
 </head>
 <body>
@@ -189,21 +194,29 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 
   <div id="scr-topics">
     <div class="s-title">Izvēlies <em>tēmu</em></div>
-    <div class="s-sub" style="font-size:12px;color:#5a6e88;">Runā latviski ar AI skolotāju · Говори на латышском с AI учителем</div>
-    <div class="tgrid" id="tgrid">
-      <div class="tc" data-topic="ģimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Семья</span></div><div class="td">Stāsti par savu ģimeni</div><span class="tl la1">A1 · Viegls / Легко</span></div>
-      <div class="tc" data-topic="ceļošana"><span class="te">✈️</span><div class="tn">Ceļošana <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Путешествия</span></div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2 · Pamata / Базово</span></div>
-      <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Работа</span></div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2 · Pamata / Базово</span></div>
-      <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Спорт</span></div><div class="td">Iecienītie sporta veidi</div><span class="tl la1">A1 · Viegls / Легко</span></div>
-      <div class="tc" data-topic="ēdiens"><span class="te">🍽️</span><div class="tn">Ēdiens <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Еда</span></div><div class="td">Receptes, restorāni</div><span class="tl la1">A1 · Viegls / Легко</span></div>
-      <div class="tc" data-topic="latvija"><span class="te">🏰</span><div class="tn">Latvija <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Латвия</span></div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1 · Vidējs / Средне</span></div>
-      <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Природа</span></div><div class="td">Meži, ezeri, gadalaiki</div><span class="tl la2">A2 · Pamata / Базово</span></div>
-      <div class="tc" data-topic="ikdiena"><span class="te">🌅</span><div class="tn">Ikdiena <span style="font-size:11px;color:#5a6e88;font-family:'DM Sans',sans-serif;font-weight:400;">/ Каждый день</span></div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1 · Vidējs / Средне</span></div>
+    <div class="s-sub">Runā latviski ar AI skolotāju · bezmaksas</div>
+    <div class="section-label">🌱 С нуля · Iesācējiem</div>
+<div class="beginner-topics" id="tgrid-n0">
+  <div class="tc" data-topic="pamatfrāzes"><span class="te">👋</span><div class="tn">Pamatfrāzes</div><div class="td">Привет, спасибо, да, нет</div><span class="tl ln0">A0 · С нуля</span></div>
+  <div class="tc" data-topic="iepazīšanās"><span class="te">😊</span><div class="tn">Iepazīšanās</div><div class="td">Знакомство, имя, страна</div><span class="tl ln0">A0 · С нуля</span></div>
+  <div class="tc" data-topic="skaitļi"><span class="te">🔢</span><div class="tn">Skaitļi</div><div class="td">Числа от 1 до 10</div><span class="tl ln0">A0 · С нуля</span></div>
+  <div class="tc" data-topic="ģimene" data-n0="1"><span class="te">👨‍👩‍👧</span><div class="tn">Ģimene vienkārši</div><div class="td">Мама, папа, брат, сестра</div><span class="tl ln0">A0 · С нуля</span></div>
+</div>
+<div class="section-label">📚 Visi līmeņi · Все уровни</div>
+<div class="tgrid" id="tgrid">
+      <div class="tc" data-topic="ģimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par savu ģimeni</div><span class="tl la1">A1 · Viegls</span></div>
+      <div class="tc" data-topic="ceļošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2 · Pamata</span></div>
+      <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2 · Pamata</span></div>
+      <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Iecienītie sporta veidi</div><span class="tl la1">A1 · Viegls</span></div>
+      <div class="tc" data-topic="ēdiens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1 · Viegls</span></div>
+      <div class="tc" data-topic="latvija"><span class="te">🏰</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1 · Vidējs</span></div>
+      <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri, gadalaiki</div><span class="tl la2">A2 · Pamata</span></div>
+      <div class="tc" data-topic="ikdiena"><span class="te">🌅</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1 · Vidējs</span></div>
     </div>
     <!-- Donate -->
     <div style="text-align:center;margin-top:28px;padding-bottom:8px;">
       <a href="https://buymeacoffee.com/headymanner" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(255,221,0,.25);">☕ Buy me a coffee</a>
-      <div style="font-size:11px;color:#5a6e88;margin-top:8px;">Atbalsti projektu · Поддержи проект · Support</div>
+      <div style="font-size:11px;color:#5a6e88;margin-top:8px;">Atbalsti projektu · Support the project</div>
     </div>
   </div>
 
@@ -217,8 +230,8 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
     <div class="msgs" id="msgs"></div>
     <div class="ibar">
       <div class="irow">
-        <div class="mbtn" id="btnMic" title="Nospied un runā / Нажми и говори">🎤</div>
-        <div style="flex:1"><textarea id="txt" placeholder="Raksti latviski... / Пиши по-латышски..." rows="1"></textarea></div>
+        <div class="mbtn" id="btnMic">🎤</div>
+        <div style="flex:1"><textarea id="txt" placeholder="Raksti latviski..." rows="1"></textarea></div>
         <button class="sbtn" id="btnSend">➤</button>
       </div>
       <div class="hints" id="hints"></div>
@@ -233,30 +246,30 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
     <div class="md">Ievadi sava Cloudflare Worker adresi</div>
     <div class="ml">CLOUDFLARE WORKER URL</div>
     <input class="minp" type="text" id="inpKey" placeholder="https://lv-skolotajs.XXXX.workers.dev"/>
-    <button class="mbtn2" id="btnSave">Saglabāt / Сохранить →</button>
+    <button class="mbtn2" id="btnSave">Saglabāt →</button>
     <div class="mnote"><a href="https://workers.cloudflare.com" target="_blank">workers.cloudflare.com</a> → bezmaksas</div>
   </div>
 </div>
 
 <div class="sett" id="sett">
   <div class="sh">
-    <div class="stitle">Iestatījumi <span style="font-size:14px;color:#5a6e88;">/ Настройки</span></div>
+    <div class="stitle">Iestatījumi</div>
     <div class="ico-btn" id="btnCloseSett">✕</div>
   </div>
   <div class="sgrp">
-    <div class="sgl">Balss / Голос</div>
-    <div class="si" id="siVoice"><div class="sil"><span class="sico">🔊</span><div><div class="sname">Skolotāja balss <span style="font-size:11px;color:#5a6e88;">/ Голос учителя</span></div><div class="sdesc">Gemini Live TTS</div></div></div><div class="tog on" id="togV"></div></div>
-    <div class="si"><div class="sil"><span class="sico">👤</span><div><div class="sname">Balss tips <span style="font-size:11px;color:#5a6e88;">/ Тип голоса</span></div></div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede — sieviešu 👩</option><option value="Kore">Kore — mierīga 👩</option><option value="Charon">Charon — vīriešu 👨</option><option value="Fenrir">Fenrir — dziļš 👨</option><option value="Puck">Puck — dzīvespriecīgs</option></select></div></div>
+    <div class="sgl">Balss</div>
+    <div class="si" id="siVoice"><div class="sil"><span class="sico">🔊</span><div><div class="sname">Skolotāja balss</div><div class="sdesc">Gemini Live TTS</div></div></div><div class="tog on" id="togV"></div></div>
+    <div class="si"><div class="sil"><span class="sico">👤</span><div><div class="sname">Balss tips</div></div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede — sieviešu 👩</option><option value="Kore">Kore — mierīga 👩</option><option value="Charon">Charon — vīriešu 👨</option><option value="Fenrir">Fenrir — dziļš 👨</option><option value="Puck">Puck — dzīvespriecīgs</option></select></div></div>
   </div>
   <div class="sgrp">
-    <div class="sgl">Mācīšanās / Обучение</div>
-    <div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div><div class="sname">Kļūdu labojumi <span style="font-size:11px;color:#5a6e88;">/ Исправление ошибок</span></div></div></div><div class="tog on" id="togE"></div></div>
-    <div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div><div class="sname">Vērtējums <span style="font-size:11px;color:#5a6e88;">/ Оценка</span></div></div></div><div class="tog on" id="togS"></div></div>
-    <div class="si"><div class="sil"><span class="sico">📚</span><div><div class="sname">Valodas līmenis <span style="font-size:11px;color:#5a6e88;">/ Уровень языка</span></div></div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs / Начинающий</option><option value="A2" selected>A2 Pamata / Базовый</option><option value="B1">B1 Vidējs / Средний</option><option value="B2">B2 Augstāks / Выше среднего</option></select></div></div>
+    <div class="sgl">Mācīšanās</div>
+    <div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div><div class="sname">Kļūdu labojumi</div></div></div><div class="tog on" id="togE"></div></div>
+    <div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div><div class="sname">Vērtējums</div></div></div><div class="tog on" id="togS"></div></div>
+    <div class="si"><div class="sil"><span class="sico">📚</span><div><div class="sname">Valodas līmenis</div></div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
   </div>
   <div class="sgrp">
     <div class="sgl">API</div>
-    <div class="si" id="siKey"><div class="sil"><span class="sico">🔑</span><div><div class="sname">Mainīt API atslēgu <span style="font-size:11px;color:#5a6e88;">/ Изменить ключ</span></div><div class="sdesc" id="keyStatus">Nav iestatīta</div></div></div><span style="color:#5a6e88;font-size:18px">›</span></div>
+    <div class="si" id="siKey"><div class="sil"><span class="sico">🔑</span><div><div class="sname">Mainīt API atslēgu</div><div class="sdesc" id="keyStatus">Nav iestatīta</div></div></div><span style="color:#5a6e88;font-size:18px">›</span></div>
   </div>
 </div>
 
@@ -280,6 +293,9 @@ var curAudio = null;
 var chatActive = false; // Flag: prevent audio playing after chat closed
 
 var TOPICS = {
+  'pamatfrāzes': {e:'👋',n:'Pamatfrāzes',h:['Sveiki!','Paldies','Lūdzu','Jā / Nē']},
+  'iepazīšanās': {e:'😊',n:'Iepazīšanās',h:['Mani sauc...','Es esmu no...','Cik tev gadu?']},
+  'skaitļi':     {e:'🔢',n:'Skaitļi',    h:['Viens, divi, trīs','Man ir divi bērni','Es esmu 25']},
   'ģimene':   {e:'👨‍👩‍👧‍👦',n:'Ģimene',  h:['Man ir liela ģimene','Mana māte ir skolotāja','Man ir divi brāļi']},
   'ceļošana': {e:'✈️', n:'Ceļošana',h:['Es vēlos apmeklēt Rīgu','Man patīk ceļot','Es esmu bijis Igaunijā']},
   'darbs':    {e:'💼', n:'Darbs',   h:['Es strādāju birojā','Mans darbs ir interesants','Man patīk kolektīvs']},
@@ -305,19 +321,15 @@ document.getElementById('selVoice').addEventListener('change', function(){ gVoic
 document.getElementById('selLevel').addEventListener('change', function(){ level=this.value; localStorage.setItem('lv_lv',this.value); });
 document.getElementById('txt').addEventListener('keydown', function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
 document.getElementById('txt').addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,110)+'px'; });
-document.getElementById('txt').addEventListener('focus', function(){
-  var self = this;
-  setTimeout(function(){
-    self.scrollIntoView({behavior:'smooth', block:'end'});
-    var msgs = document.getElementById('msgs');
-    msgs.scrollTop = msgs.scrollHeight;
-  }, 350);
-});
 
 // Topic cards
 document.getElementById('tgrid').addEventListener('click', function(e){
   var tc = e.target.closest('.tc');
   if (tc) startChat(tc.getAttribute('data-topic'));
+});
+document.getElementById('tgrid-n0').addEventListener('click', function(e){
+  var tc = e.target.closest('.tc');
+  if(tc){ var prev=level; level='N0'; startChat(tc.getAttribute('data-topic')); level=prev; }
 });
 
 // ── INIT ──────────────────────────────────────
@@ -423,7 +435,21 @@ function showWave(){
 function rmWave(){ var w=document.getElementById('wave'); if(w) w.remove(); }
 
 // ── GEMINI CHAT ───────────────────────────────
+function formatMsg(text){
+  var parts=(text||'').split('🇷🇺');
+  var lv=esc(parts[0].trim());
+  if(parts.length>1&&parts[1].trim()){
+    return lv+'<div class="ru-trans"><span style="font-size:10px;font-weight:600;color:#c9a84c;margin-right:3px;">RU</span>'+esc(parts[1].trim())+'</div>';
+  }
+  return lv;
+}
 function buildSys(){
+  if(level==='N0'){
+    return 'Tu esi sirsnīgs un pacietīgs latviešu valodas skolotājs, kas māca absolūtus iesācējus.\n'
+      +'Esi silts, draudzīgs, iedrošinošs — kā labākais draugs. Runā ĻOTI vienkārši.\n'
+      +'Teikumi ne garāki par 6 vārdiem. Tēma: "'+topic+'".\n'
+      +'Uzdod VIENU ļoti vienkāršu jautājumu. Atbildi TIKAI latviski.\n';
+  }
   var s = 'Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
     +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'.\nATBILDI ĪSI: maksimums 2 īsi teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.\n';
   if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (paskaidrojums)\n';
@@ -454,23 +480,22 @@ function callGemini(txt, cb){
 }
 
 function parseResp(text){
-  // НЕ обрезаем ничего - показываем полный ответ с переводом
-  var reply = text.replace(/\\*\\*/g,'').replace(/```[\\s\\S]*?```/g,'').trim();
-  
-  // Парсим только ошибки и оценку ПОСЛЕ перевода
-  var errors = [], score = null;
-  
+  var reply=text, errors=[], score=null;
+  // Only split if marker appears at start of a line (not inside a word)
+  var si=text.search(/\n\s*KĻŪDAS|\n\s*VĒRTĒJUMS/i);
+  if(si>0) reply=text.slice(0,si).trim();
   if(errorsOn){
-    var em = text.match(/KĻŪDAS[\\s\\S]*?(?=VĒRTĒJUMS|$)/i);
-    if(em) em[0].split('\\n').forEach(function(l){
+    var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
+    if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
-        var p = l.replace(/[❌✅]/g,'').split('→');
+        var p=l.replace(/[❌✅]/g,'').split('→');
         if(p.length>=2){
-          var w = p[0].replace(/[\"\"\"]/g,'').trim();
-          var rest = p[1].trim();
-          var pm = rest.match(/^([^(]+)\\(?(.*?)\\)?$/);
-          var c = pm ? pm[1].replace(/[\"\"\"✅]/g,'').trim() : rest;
-          var ex = pm && pm
+          var w=p[0].replace(/["""]/g,'').trim();
+          var rest=p[1].trim();
+          var pm=rest.match(/^([^(]+)\(?(.*?)\)?$/);
+          var c=pm?pm[1].replace(/["""✅]/g,'').trim():rest;
+          var ex=pm&&pm[2]?pm[2].trim():'';
+          if(w&&c) errors.push({w:w,c:c,ex:ex});
         }
       }
     });
@@ -507,21 +532,29 @@ function buildFb(p){
 
 // ── GREET ─────────────────────────────────────
 function greet(t){
-  var greetings = {
-    'ģimene':   'Sveiki! Ļoti priecājos ar jums tikties. Pastāstiet, cik cilvēku ir jūsu ģimenē?',
-    'ceļošana': 'Labdien! Ceļošana ir brīnišķīga iespēja iepazīt pasauli. Kuru valsti jūs visvairāk vēlaties apmeklēt?',
-    'darbs':    'Sveiki! Darbs ir svarīga mūsu dzīves daļa. Ko jūs darāt savā darbā?',
-    'sports':   'Labdien! Sports palīdz mums būt veseliem un laimīgiem. Kāds ir jūsu iecienītākais sporta veids?',
-    'ēdiens':   'Sveiki! Latvijas virtuve ir ļoti garšīga. Kāds ir jūsu iecienītākais ēdiens?',
-    'latvija':  'Labdien! Latvija ir skaista valsts ar bagātu kultūru un vēsturi. Ko jūs zināt par Latviju?',
-    'daba':     'Sveiki! Latvijā ir skaista daba — meži, ezeri un jūra. Kāds ir jūsu iecienītākais gadalaiks?',
-    'ikdiena':  'Labdien! Ikdienas rutīna ir interesanta. Kā izskatās jūsu tipiskā diena?'
-  };
-  var text = greetings[t] || 'Sveiki! Sāksim sarunu latviski. Kā jums iet šodien?';
-  chatHist = [{role:'model', parts:[{text:text}]}];
-  rmTyping();
-  addMsg('b', esc(text));
-  if(voiceOn) speak(text);
+  showTyping();
+  var fb={'ģimene':'Sveiki! Pastāsti man — cik cilvēku ir tavā ģimenē?','ceļošana':'Labdien! Kuru valsti tu visvairāk vēlies apmeklēt?','darbs':'Sveiki! Stāsti — ko tu dari savā darbā?','sports':'Sveiki! Kāds ir tavs iecienītākais sporta veids?','ēdiens':'Labdien! Kāds ir tavs iecienītākais ēdiens?','latvija':'Sveiki! Ko tu zini par Latviju un tās kultūru?','daba':'Labdien! Kāds ir tavs iecienītākais gadalaiks?','ikdiena':'Sveiki! Kā izskatās tava tipiskā diena?'};
+  fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({system_instruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu "'+t+'". Uzraksti VIENU pilnīgu teikumu — sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:500}})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    rmTyping();
+    var txt=''; try{txt=d.candidates[0].content.parts[0].text.trim();}catch(e){}
+    if(!txt) txt=fb[t]||'Sveiki! Sāksim!';
+    chatHist=[{role:'model',parts:[{text:txt}]}];
+    var pr=parseResp(txt);
+    addMsg('b',formatMsg(pr.reply||txt));
+    if(voiceOn) speak(pr.reply||txt);
+  })
+  .catch(function(e){
+    rmTyping();
+    var fallback=fb[t]||'Sveiki! Sāksim sarunu!';
+    chatHist=[{role:'model',parts:[{text:fallback}]}];
+    addMsg('b',esc(fallback));
+    if(voiceOn) speak(fallback);
+  });
 }
 
 // ── SEND ──────────────────────────────────────
@@ -535,7 +568,7 @@ function sendMsg(){
     rmTyping(); document.getElementById('btnSend').disabled=false;
     if(err){addMsg('b','❌ '+esc(err));return;}
     var p=parseResp(text);
-    addMsg('b',esc(p.reply||text),buildFb(p));
+    addMsg('b',formatMsg(p.reply||text),buildFb(p));
     if(voiceOn) speak(p.reply||text);
   });
 }
@@ -616,7 +649,7 @@ function initSpeech(){
       rmTyping(); document.getElementById('btnSend').disabled=false;
       if(err){addMsg('b','❌ '+esc(err));return;}
       var p=parseResp(text);
-      addMsg('b',esc(p.reply||text),buildFb(p));
+      addMsg('b',formatMsg(p.reply||text),buildFb(p));
       if(voiceOn) speak(p.reply||text);
     });
   };
