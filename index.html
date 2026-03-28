@@ -374,11 +374,13 @@ function callGemini(txt,cb){
 }
 
 function parseResp(text){
-  var reply=text, errors=[], score=null, ru='';
-  // Extract Russian translation
-  var ruLines=text.split('\n'), ruLineIdx=-1;
-  for(var ri=0;ri<ruLines.length;ri++){
-    if(ruLines[ri].indexOf('🇷🇺')>-1){ruLineIdx=ri;break;}
+  var ruIdx=text.indexOf('🇷🇺');
+if(ruIdx>0){
+  var afterRu=text.slice(ruIdx+4);
+  var ruEnd=afterRu.indexOf('\n');
+  ru=(ruEnd>-1?afterRu.slice(0,ruEnd):afterRu).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
+  reply=text.slice(0,ruIdx).trim();
+}
   }
   if(ruLineIdx>-1){
     ru=ruLines[ruLineIdx].replace('🇷🇺','').replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
