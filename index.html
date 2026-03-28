@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#060d1a"/>
 <title>Latviešu Skolotājs</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -27,8 +26,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .s-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:4px;}
 .s-title em{font-style:italic;color:#c9a84c;}
 .s-sub{font-size:13px;color:#5a6e88;margin-bottom:16px;}
-
-/* BEGINNER BANNER */
 .beginner-banner{background:linear-gradient(135deg,rgba(90,184,138,.12),rgba(74,144,217,.08));border:1px solid rgba(90,184,138,.35);border-radius:16px;padding:16px;margin-bottom:16px;cursor:pointer;-webkit-user-select:none;user-select:none;}
 .beginner-banner:active{border-color:rgba(90,184,138,.7);}
 .bb-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
@@ -37,7 +34,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .bb-badge{background:rgba(90,184,138,.2);color:#5ab88a;border-radius:20px;padding:2px 8px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
 .bb-desc{font-size:12px;color:#9bacc4;line-height:1.5;}
 .bb-start{display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:rgba(90,184,138,.15);border:1px solid rgba(90,184,138,.4);border-radius:20px;padding:4px 12px;font-size:11px;color:#5ab88a;font-weight:500;}
-
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .tc{background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:16px 12px;cursor:pointer;text-align:center;-webkit-user-select:none;user-select:none;}
 .tc:active{background:#142540;border-color:rgba(201,168,76,.5);}
@@ -100,7 +96,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .minp{width:100%;background:#060d1a;border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:11px 14px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:12px;display:block;-webkit-appearance:none;}
 .minp:focus{border-color:rgba(201,168,76,.5);}
 .mbtn2{width:100%;padding:13px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:#060d1a;}
-.mnote{font-size:11px;color:#5a6e88;text-align:center;margin-top:12px;line-height:1.7;}
+.mnote{font-size:11px;color:#5a6e88;text-align:center;margin-top:12px;}
 .mnote a{color:#c9a84c;text-decoration:none;}
 .sett{position:fixed;inset:0;z-index:90;background:rgba(6,13,26,.97);padding:20px;overflow-y:auto;display:none;flex-direction:column;}
 .sett.open{display:flex;}
@@ -108,7 +104,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .stitle{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;}
 .sgrp{margin-bottom:18px;}
 .sgl{font-size:11px;color:#c9a84c;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
-.si{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:13px;margin-bottom:8px;}
+.si{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:13px;margin-bottom:8px;cursor:pointer;}
 .sil{display:flex;align-items:center;gap:12px;}
 .sico{font-size:20px;}.sname{font-size:14px;}.sdesc{font-size:11px;color:#5a6e88;}
 .tog{width:44px;height:24px;background:#060d1a;border:1px solid rgba(201,168,76,.2);border-radius:12px;position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;}
@@ -117,54 +113,44 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .tog.on::after{transform:translateX(20px);}
 .selw select{background:#060d1a;border:1px solid rgba(201,168,76,.2);border-radius:10px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:5px 8px;}
 .selw select option{background:#060d1a;}
-</style>
-</head>
+</style></head>
 <body>
 <div id="app">
 <div class="hdr">
   <div class="hdr-logo">
     <div class="hdr-ic">🇱🇻</div>
-    <div><div class="hdr-t">Latviešu Skolotājs</div><div class="hdr-s">AI · Bezmaksas · Latviski</div></div>
+    <div><div class="hdr-t">Latviešu Skolotājs</div><div class="hdr-s">AI · Bezmaksas</div></div>
   </div>
   <div class="hdr-r">
     <div class="pts">⭐ <span id="pts">0</span></div>
     <div class="ico-btn" id="btnSett">⚙️</div>
   </div>
 </div>
-
 <div id="scr-topics">
   <div class="s-title">Izvēlies <em>tēmu</em></div>
-  <div class="s-sub">Runā latviski ar AI skolotāju · bezmaksas</div>
-
-  <!-- BEGINNER SECTION -->
+  <div class="s-sub">Runā latviski ar AI skolotāju</div>
   <div class="beginner-banner" id="btnBeginner">
     <div class="bb-top">
       <span class="bb-icon">🌱</span>
-      <div>
-        <div class="bb-title">Iesācēji — no nulles</div>
-        <span class="bb-badge">A0 · Начинающие</span>
-      </div>
+      <div><div class="bb-title">Iesācēji — no nulles</div><span class="bb-badge">A0 · Начинающие</span></div>
     </div>
-    <div class="bb-desc">Никогда не учил латышский? Начни здесь! Бот говорит медленно, объясняет всё по-русски и учит с нуля — алфавит, приветствия, базовые фразы.</div>
+    <div class="bb-desc">Никогда не учил латышский? Начни здесь! Бот объясняет всё по-русски с нуля.</div>
     <div class="bb-start">▶ Начать с нуля</div>
   </div>
-
   <div class="tgrid" id="tgrid">
-    <div class="tc" data-topic="gimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par ģimeni</div><span class="tl la1">A1 · Viegls</span></div>
-    <div class="tc" data-topic="celošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2 · Pamata</span></div>
-    <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2 · Pamata</span></div>
-    <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Iecienītie sporta veidi</div><span class="tl la1">A1 · Viegls</span></div>
-    <div class="tc" data-topic="ediens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1 · Viegls</span></div>
-    <div class="tc" data-topic="latvija"><span class="te">🏛️</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1 · Vidējs</span></div>
-    <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri, gadalaiki</div><span class="tl la2">A2 · Pamata</span></div>
-    <div class="tc" data-topic="ikdiena"><span class="te">☀️</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1 · Vidējs</span></div>
+    <div class="tc" data-topic="gimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par ģimeni</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="celošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Sporta veidi</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="ediens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="latvija"><span class="te">🏛️</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1</span></div>
+    <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="ikdiena"><span class="te">☀️</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1</span></div>
   </div>
   <div style="text-align:center;margin-top:22px;padding-bottom:10px;">
     <a href="https://buymeacoffee.com/headymanner" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;">☕ Buy me a coffee</a>
-    <div style="font-size:11px;color:#5a6e88;margin-top:8px;">Atbalsti projektu · Support the project</div>
   </div>
 </div>
-
 <div id="scr-chat">
   <div class="cbar">
     <button class="bbtn" id="btnBack">←</button>
@@ -183,25 +169,22 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
   </div>
 </div>
 </div>
-
 <div class="modal h" id="modal">
   <div class="mbox">
-    <div class="mi">🔗</div>
-    <div class="mt">Worker URL</div>
+    <div class="mi">🔗</div><div class="mt">Worker URL</div>
     <div class="md">Ievadi sava Cloudflare Worker adresi</div>
     <div class="ml">CLOUDFLARE WORKER URL</div>
-    <input class="minp" type="text" id="inpKey" placeholder="https://lv-skolotajs.XXXX.workers.dev"/>
-    <button class="mbtn2" id="btnSave">Saglabāt →</button>
+    <input class="minp" type="text" id="inpKey" placeholder="https://xxx.workers.dev"/>
+    <button class="mbtn2" id="btnSave">Saglabāt</button>
     <div class="mnote"><a href="https://workers.cloudflare.com" target="_blank">workers.cloudflare.com</a></div>
   </div>
 </div>
-
 <div class="sett" id="sett">
   <div class="sh"><div class="stitle">Iestatījumi</div><div class="ico-btn" id="btnCloseSett">✕</div></div>
   <div class="sgrp">
     <div class="sgl">Balss</div>
     <div class="si" id="siVoice"><div class="sil"><span class="sico">🔊</span><div><div class="sname">Skolotāja balss</div><div class="sdesc">Gemini TTS</div></div></div><div class="tog on" id="togV"></div></div>
-    <div class="si"><div class="sil"><span class="sico">🎭</span><div class="sname">Balss tips</div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede — sieviešu 👩</option><option value="Kore">Kore — mierīga 👩</option><option value="Charon">Charon — vīriešu 👨</option><option value="Fenrir">Fenrir — dziļš 👨</option><option value="Puck">Puck — dzīvespriecīgs</option></select></div></div>
+    <div class="si"><div class="sil"><span class="sico">🎭</span><div class="sname">Balss tips</div></div><div class="selw"><select id="selVoice"><option value="Aoede">Aoede 👩</option><option value="Kore">Kore 👩</option><option value="Charon">Charon 👨</option><option value="Fenrir">Fenrir 👨</option><option value="Puck">Puck</option></select></div></div>
   </div>
   <div class="sgrp">
     <div class="sgl">Mācīšanās</div>
@@ -214,306 +197,292 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
     <div class="si" id="siKey"><div class="sil"><span class="sico">🔑</span><div><div class="sname">Mainīt Worker URL</div><div class="sdesc" id="keyStatus">Iestatīts</div></div></div><span style="color:#5a6e88;font-size:18px;">›</span></div>
   </div>
 </div>
-
 <script>
-var WORKER = 'https://runalv.treners52.workers.dev';
-var savedWorker = localStorage.getItem('lvworker');
-if(savedWorker) WORKER = savedWorker;
-var voiceOn = localStorage.getItem('lvvo') !== 'false';
-var errorsOn = localStorage.getItem('lveo') !== 'false';
-var scoreOn = localStorage.getItem('lvso') !== 'false';
-var gVoice = localStorage.getItem('lvgv') || 'Aoede';
-var level = localStorage.getItem('lvlv') || 'A2';
-var totalPts = parseInt(localStorage.getItem('lvpts')) || 0;
-var sessPts = 0;
-var topic = '';
-var chatHist = [];
-var recog = null;
-var isRec = false;
-var curAudio = null;
-var chatActive = false;
-
-var TOPICS = {
-  'gimene':   {e:'👨‍👩‍👧‍👦',n:'Ģimene',   h:['Man ir liela ģimene','Mana māte ir skolotāja','Man ir divi brāļi']},
-  'celošana': {e:'✈️',n:'Ceļošana', h:['Es vēlos apmeklēt Rīgu','Man patīk ceļot','Es esmu bijis Igaunijā']},
-  'darbs':    {e:'💼',n:'Darbs',    h:['Es strādāju birojā','Mans darbs ir interesants','Man patīk kolektīvs']},
-  'sports':   {e:'⚽',n:'Sports',   h:['Man patīk futbols','Es spēlēju basketbolu','Esmu aktīvs cilvēks']},
-  'ediens':   {e:'🍽️',n:'Ēdiens',  h:['Man patīk pelēkie zirņi','Es gatavoju vakariņas','Mans iecienītākais ēdiens']},
-  'latvija':  {e:'🏛️',n:'Latvija', h:['Rīga ir skaista pilsēta','Man patīk tradīcijas','Jāņi ir mani iecienītākie svētki']},
-  'daba':     {e:'🌲',n:'Daba',    h:['Latvijā ir skaisti meži','Man patīk peldēties','Ziema ir auksta']},
-  'ikdiena':  {e:'☀️',n:'Ikdiena', h:['Es ceļos septiņos','Brīvajā laikā es lasu','Man patīk rutīna']},
-  'iesacejs': {e:'🌱',n:'No nulles',h:['Labdien!','Kā jūs sauc?','Paldies!']}
+var WORKER='https://runalv.treners52.workers.dev';
+var sv=localStorage.getItem('lvworker');if(sv)WORKER=sv;
+var voiceOn=localStorage.getItem('lvvo')!=='false';
+var errorsOn=localStorage.getItem('lveo')!=='false';
+var scoreOn=localStorage.getItem('lvso')!=='false';
+var gVoice=localStorage.getItem('lvgv')||'Aoede';
+var level=localStorage.getItem('lvlv')||'A2';
+var totalPts=parseInt(localStorage.getItem('lvpts'))||0;
+var sessPts=0,topic='',chatHist=[],recog=null,isRec=false,curAudio=null,chatActive=false;
+var TOPICS={
+  gimene:{e:'👨‍👩‍👧‍👦',n:'Gīmene',h:['Man ir liela gģimene','Mana māte ir skolotāja','Man ir divi brāļi']},
+  'celošana':{e:'✈️',n:'Ceļošana',h:['Es vēlos apmeklēt Rīgu','Man patīk ceļot','Es esmu bijis Igaunijā']},
+  darbs:{e:'💼',n:'Darbs',h:['Es strādāju birojā','Mans darbs ir interesants','Man patīk kolektīvs']},
+  sports:{e:'⚽',n:'Sports',h:['Man patīk futbols','Es spēlēju basketbolu','Esmu aktīvs cilvēks']},
+  ediens:{e:'🍽️',n:'Ēdiens',h:['Man patīk pelēkie zirņi','Es gatavoju vakarāņas','Mans iecienītākais ēdiens']},
+  latvija:{e:'🏛️',n:'Latvija',h:['Rīga ir skaista pilsēta','Man patīk tradīcijas','Jāņi ir mani iecienītākie svētki']},
+  daba:{e:'🌲',n:'Daba',h:['Latvijā ir skaisti meži','Man patīk peldēties','Ziema ir auksta']},
+  ikdiena:{e:'☀️',n:'Ikdiena',h:['Es ceļos sepţiņos','Brīvajā laikā es lasu','Man patīk rutīna']},
+  iesacejs:{e:'🌱',n:'No nulles',h:['Labdien!','Paldies!','Kā jūs sauc?']}
 };
-
-document.getElementById('btnSett').addEventListener('click',function(){ document.getElementById('sett').classList.add('open'); });
-document.getElementById('btnCloseSett').addEventListener('click',function(){ document.getElementById('sett').classList.remove('open'); });
-document.getElementById('btnBack').addEventListener('click', goBack);
-document.getElementById('btnSend').addEventListener('click', sendMsg);
-document.getElementById('btnMic').addEventListener('click', toggleMic);
-document.getElementById('btnSave').addEventListener('click', saveKey);
-document.getElementById('siKey').addEventListener('click',function(){ document.getElementById('sett').classList.remove('open'); showModal(); });
-document.getElementById('siVoice').addEventListener('click',function(){ togSet('voiceOn','lvvo','togV'); });
-document.getElementById('siErrors').addEventListener('click',function(){ togSet('errorsOn','lveo','togE'); });
-document.getElementById('siScore').addEventListener('click',function(){ togSet('scoreOn','lvso','togS'); });
-document.getElementById('selVoice').addEventListener('change',function(){ gVoice=this.value; localStorage.setItem('lvgv',this.value); });
-document.getElementById('selLevel').addEventListener('change',function(){ level=this.value; localStorage.setItem('lvlv',this.value); });
-document.getElementById('txt').addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
-document.getElementById('txt').addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,110)+'px'; });
-document.getElementById('tgrid').addEventListener('click',function(e){ var tc=e.target.closest('.tc'); if(tc) startChat(tc.getAttribute('data-topic')); });
-document.getElementById('btnBeginner').addEventListener('click',function(){ level='A0'; localStorage.setItem('lvlv','A0'); document.getElementById('selLevel').value='A0'; startChat('iesacejs'); });
-
-document.getElementById('togV').classList.toggle('on',voiceOn);
-document.getElementById('togE').classList.toggle('on',errorsOn);
-document.getElementById('togS').classList.toggle('on',scoreOn);
-document.getElementById('selVoice').value=gVoice;
-document.getElementById('selLevel').value=level;
-document.getElementById('pts').textContent=totalPts;
+function G(id){return document.getElementById(id);}
+G('btnSett').onclick=function(){G('sett').classList.add('open');};
+G('btnCloseSett').onclick=function(){G('sett').classList.remove('open');};
+G('btnBack').onclick=goBack;
+G('btnSend').onclick=sendMsg;
+G('btnMic').onclick=toggleMic;
+G('btnSave').onclick=saveKey;
+G('siKey').onclick=function(){G('sett').classList.remove('open');G('modal').classList.remove('h');};
+G('siVoice').onclick=function(){togSet('voiceOn','lvvo','togV');};
+G('siErrors').onclick=function(){togSet('errorsOn','lveo','togE');};
+G('siScore').onclick=function(){togSet('scoreOn','lvso','togS');};
+G('selVoice').onchange=function(){gVoice=this.value;localStorage.setItem('lvgv',this.value);};
+G('selLevel').onchange=function(){level=this.value;localStorage.setItem('lvlv',this.value);};
+G('txt').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}});
+G('txt').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px';});
+G('tgrid').onclick=function(e){var tc=e.target.closest('.tc');if(tc)startChat(tc.getAttribute('data-topic'));};
+G('btnBeginner').onclick=function(){level='A0';localStorage.setItem('lvlv','A0');G('selLevel').value='A0';startChat('iesacejs');};
+G('togV').classList.toggle('on',voiceOn);
+G('togE').classList.toggle('on',errorsOn);
+G('togS').classList.toggle('on',scoreOn);
+G('selVoice').value=gVoice;
+G('selLevel').value=level;
+G('pts').textContent=totalPts;
 initSpeech();
 
-function showModal(){ document.getElementById('modal').classList.remove('h'); }
-function hideModal(){ document.getElementById('modal').classList.add('h'); }
 function saveKey(){
-  var k=document.getElementById('inpKey').value.trim();
-  if(!k){alert('Ievadi Worker URL!');return;}
+  var k=G('inpKey').value.trim();
+  if(!k){alert('Ievadi URL!');return;}
   WORKER=k.replace(/\/$/,'');
   localStorage.setItem('lvworker',WORKER);
-  hideModal();
+  G('modal').classList.add('h');
 }
 function togSet(key,lsKey,elId){
-  var cur=key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn;
-  var nv=!cur;
-  if(key==='voiceOn') voiceOn=nv; else if(key==='errorsOn') errorsOn=nv; else scoreOn=nv;
+  var nv=!(key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn);
+  if(key==='voiceOn')voiceOn=nv;
+  else if(key==='errorsOn')errorsOn=nv;
+  else scoreOn=nv;
   localStorage.setItem(lsKey,nv);
-  document.getElementById(elId).classList.toggle('on',nv);
+  G(elId).classList.toggle('on',nv);
 }
 function startChat(t){
-  stopAudio(); chatActive=true;
-  if(isRec){try{recog.stop();}catch(e){}stopRec();}
-  topic=t; chatHist=[]; sessPts=0;
+  stopAudio();chatActive=true;
+  if(isRec){try{recog.stop();}catch(x){}stopRec();}
+  topic=t;chatHist=[];sessPts=0;
   var info=TOPICS[t];
-  document.getElementById('cEmoji').textContent=info.e;
-  document.getElementById('cTitle').textContent=info.n;
-  document.getElementById('cPts').textContent='0 pts';
-  document.getElementById('msgs').innerHTML='';
-  document.getElementById('hints').innerHTML=info.h.map(function(h){return '<div class="hint">'+h+'</div>';}).join('');
-  document.getElementById('scr-topics').style.display='none';
-  document.getElementById('scr-chat').style.display='flex';
-  document.getElementById('hints').addEventListener('click',function(e){
-    var h=e.target.closest('.hint');
-    if(h) document.getElementById('txt').value=h.textContent;
-  });
+  G('cEmoji').textContent=info.e;
+  G('cTitle').textContent=info.n;
+  G('cPts').textContent='0 pts';
+  G('msgs').innerHTML='';
+  G('hints').innerHTML=info.h.map(function(h){return '<div class="hint">'+h+'</div>';}).join('');
+  G('hints').onclick=function(e){var h=e.target.closest('.hint');if(h)G('txt').value=h.textContent;};
+  G('scr-topics').style.display='none';
+  G('scr-chat').style.display='flex';
   greet(t);
 }
 function goBack(){
-  chatActive=false; stopAudio();
-  if(isRec){try{recog.abort();}catch(e){}stopRec();}
+  chatActive=false;stopAudio();
+  if(isRec){try{recog.abort();}catch(x){}stopRec();}
   chatHist=[];topic='';
-  document.getElementById('scr-chat').style.display='none';
-  document.getElementById('scr-topics').style.display='block';
+  G('scr-chat').style.display='none';
+  G('scr-topics').style.display='block';
 }
-function addMsg(role,lvText,ruText,fb){
-  var c=document.getElementById('msgs');
-  var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
+function addMsg(role,lvT,ruT,fb){
+  var c=G('msgs'),now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
-  var ruBlock=ruText?'<div class="ru-tr">🇷🇺 '+escHtml(ruText)+'</div>':'';
-  d.innerHTML='<div class="av">'+(role==='b'?'🇱🇻':'👤')+'</div><div class="mbody"><div class="bub">'+escHtml(lvText)+'</div>'+ruBlock+(fb||'')+'<div class="mtime">'+now+'</div></div>';
-  c.appendChild(d); c.scrollTop=c.scrollHeight;
+  var rb=ruT?'<div class="ru-tr">🇷🇺 '+esc(ruT)+'</div>':'';
+  d.innerHTML='<div class="av">'+(role==='b'?'🇱🇻':'👤')+'</div><div class="mbody"><div class="bub">'+esc(lvT)+'</div>'+rb+(fb||'')+'<div class="mtime">'+now+'</div></div>';
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
 }
-function showTyping(){var c=document.getElementById('msgs'),d=document.createElement('div');d.className='msg b';d.id='typ';d.innerHTML='<div class="av">🇱🇻</div><div class="mbody"><div class="tdots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
-function rmTyping(){var t=document.getElementById('typ');if(t)t.remove();}
+function showTyping(){
+  var c=G('msgs'),d=document.createElement('div');
+  d.className='msg b';d.id='typ';
+  d.innerHTML='<div class="av">🇱🇻</div><div class="mbody"><div class="tdots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function rmTyping(){var t=G('typ');if(t)t.remove();}
 function showWave(){rmWave();var bs=document.querySelectorAll('.msg.b .bub');if(!bs.length)return;var w=document.createElement('div');w.className='ww';w.id='wave';w.innerHTML='<div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>';bs[bs.length-1].parentNode.insertBefore(w,bs[bs.length-1].nextSibling);}
-function rmWave(){var w=document.getElementById('wave');if(w)w.remove();}
+function rmWave(){var w=G('wave');if(w)w.remove();}
 function buildSys(){
-  var isA0=level==='A0';
   var s;
-  if(isA0){
-    s='Ты — дружелюбный учитель латышского языка для АБСОЛЮТНЫХ новичков. Уровень студента: A0 (никогда не учил латышский). ПРАВИЛА: 1) Говори на латышском языке ОЧЕНЬ короткими фразами (макс 1 предложение). 2) ВСЕГДА объясняй каждое латышское слово по-русски в скобках. 3) Произноси слова по слогам если нужно. 4) Будь очень поддерживающим и терпеливым. 5) Задавай ОДИН простой вопрос. Тема: '+topic+'.';
+  if(level==='A0'){
+    s='Ты дружелюбный учитель латышского для новичков (A0). Одна короткая фраза на латышском + объяснение по-русски в скобках + один вопрос. Тема: '+topic+'.';
   } else {
-    s='Tu esi profesionāls latviešu valodas pasniedzējs. Atbildi latviski. Tēma: '+topic+'. Līmenis: '+level+'. Maksimums: 2 teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi.';
-    if(errorsOn) s+='\nKļūdas: KĻŪDAS\n❌nepareizi → ✅pareizi (paskaidrojums)';
-    if(scoreOn) s+='\nVĒRTĒJUMS\nGramatikaX/100 VārdiX/100 PlūsmaX/100 KopX/100';
+    s='Tu esi latviešu valodas pasniedzējs. Atbildi latviski. Tēma: '+topic+'. Līmenis: '+level+'. Maksimums: 2 teikumi + 1 jautājums.';
+    if(errorsOn)s+='\nKļūdas: KĻŪDAS\n❌nepareizi → ✅pareizi';
+    if(scoreOn)s+='\nVĒRTĒJUMS GramatikaX/100 VārdiX/100 PlūsmaX/100 KopX/100';
   }
-  s+='\n\nOBLIGATORY: After your response ALWAYS add on a new line: 🇷🇺 [Russian translation of everything you said]';
+  s+='\n\nOBLIGATORY: after response always add new line: 🇷🇺 [russian translation of your response]';
   return s;
 }
+
 function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:1200,thinkingConfig:{thinkingBudget:0}}
+    body:JSON.stringify({
+      systemInstruction:{parts:[{text:buildSys()}]},
+      contents:chatHist,
+      generationConfig:{temperature:0.8,maxOutputTokens:1000,thinkingConfig:{thinkingBudget:0}}
+    })
   })
-  .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
+  .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
   .then(function(d){
-    var t;try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
-    if(!t) throw new Error('Tukša atbilde');
+    var t;try{t=d.candidates[0].content.parts[0].text.trim();}catch(x){}
+    if(!t)throw new Error('Tukša atbilde');
     chatHist.push({role:'model',parts:[{text:t}]});
     cb(null,t);
   })
   .catch(function(e){cb(e.message||'Kļūda',null);});
 }
 function parseResp(text){
-  var lvText=text, ruText='', errors=[], score=null;
+  var lv=text,ru='',errors=[],score=null;
   var ri=text.lastIndexOf('🇷🇺');
   if(ri>=0){
     var after=text.slice(ri+4);
     var nl=after.indexOf('\n');
-    ruText=(nl>=0?after.slice(0,nl):after).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
-    lvText=text.slice(0,ri).trim();
+    ru=(nl>=0?after.slice(0,nl):after).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
+    lv=text.slice(0,ri).trim();
   }
-  var si=lvText.search(/\n\s*K[LĻ][UŪ]DAS|\n\s*V[EĒ]RT[EĒ]JUMS/i);
-  if(si>0) lvText=lvText.slice(0,si).trim();
+  var si=lv.search(/\n\s*K[LĻ][UŪ]DAS|\n\s*V[EĒ]RT[EĒ]JUMS/i);
+  if(si>0)lv=lv.slice(0,si).trim();
   if(errorsOn){
     var em=text.match(/K[LĻ][UŪ]DAS[\s\S]*?(?=V[EĒ]RT[EĒ]JUMS|🇷🇺|$)/i);
-    if(em) em[0].split('\n').forEach(function(l){
+    if(em){em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
-        var pts=l.replace(/[❌✅]/g,'').split('→');
-        if(pts.length>=2){
-          var w=pts[0].replace(/["""]/g,'').trim();
-          var rest=pts[1].trim();
-          var pm=rest.match(/^([^(]+)\(?(.*?)\)?$/);
-          var c=pm?pm[1].replace(/["""✅]/g,'').trim():rest;
+        var pp=l.replace(/[❌✅]/g,'').split('→');
+        if(pp.length>=2){
+          var w=pp[0].replace(/[“”"]/g,'').trim();
+          var rest=pp[1].trim();
+          var pm=rest.match(/^([^(]+)[(]?(.*?)[)]?$/);
+          var c2=pm?pm[1].replace(/[“”"✅]/g,'').trim():rest;
           var ex=pm&&pm[2]?pm[2].trim():'';
-          if(w&&c) errors.push({w:w,c:c,ex:ex});
+          if(w&&c2)errors.push({w:w,c:c2,ex:ex});
         }
       }
-    });
+    });}
   }
   if(scoreOn){
     var sm=text.match(/V[EĒ]RT[EĒ]JUMS[:\s]*(.*)/i);
     if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
   }
-  lvText=lvText.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
-  return {lv:lvText||text,ru:ruText,errors:errors,score:score};
+  lv=lv.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
+  return {lv:lv||text,ru:ru,errors:errors,score:score};
 }
+
 function buildFb(p){
-  if(!p.errors.length&&!p.score) return '';
+  if(!p.errors.length&&!p.score)return'';
   var h='<div class="fbc">';
   if(p.errors.length&&errorsOn){
     h+='<div class="fbt">Kļūdu labojumi</div>';
-    p.errors.forEach(function(e){h+='<div class="el">❌ '+escHtml(e.w)+'</div><div class="fl">✅ '+escHtml(e.c)+(e.ex?' <em>('+escHtml(e.ex)+')</em>':'')+'</div>';});
+    p.errors.forEach(function(e){h+='<div class="el">❌ '+esc(e.w)+'</div><div class="fl">✅ '+esc(e.c)+(e.ex?' ('+esc(e.ex)+')':'')+'</div>';});
   }
   if(p.score&&scoreOn){
-    var s=p.score,c=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
+    var s=p.score,cl=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
     sessPts+=s.tot;totalPts+=Math.round(s.tot/10);
     localStorage.setItem('lvpts',totalPts);
-    document.getElementById('pts').textContent=totalPts;
-    document.getElementById('cPts').textContent=sessPts+' pts';
+    G('pts').textContent=totalPts;
+    G('cPts').textContent=sessPts+' pts';
     h+='<div class="fbt">Vērtējums</div><div class="scrs">';
-    h+='<div class="sp"><span class="sn '+c+'">'+s.g+'</span><span class="sl">Gram.</span></div>';
-    h+='<div class="sp"><span class="sn '+c+'">'+s.v+'</span><span class="sl">Vārdi</span></div>';
-    h+='<div class="sp"><span class="sn '+c+'">'+s.f+'</span><span class="sl">Plūsma</span></div>';
-    h+='<div class="sp"><span class="sn '+c+'">'+s.tot+'</span><span class="sl">Kop.</span></div></div>';
+    h+='<div class="sp"><span class="sn '+cl+'">'+s.g+'</span><span class="sl">Gram.</span></div>';
+    h+='<div class="sp"><span class="sn '+cl+'">'+s.v+'</span><span class="sl">Vārdi</span></div>';
+    h+='<div class="sp"><span class="sn '+cl+'">'+s.f+'</span><span class="sl">Plūsma</span></div>';
+    h+='<div class="sp"><span class="sn '+cl+'">'+s.tot+'</span><span class="sl">Kop.</span></div></div>';
   }
   return h+'</div>';
 }
 function greet(t){
   showTyping();
-  var greetPrompt=level==='A0'?'Поприветствуй студента, который только начинает учить латышский с нуля. Скажи одно простое слово или фразу приветствия на латышском, объясни его по-русски в скобках, и задай один очень простой вопрос. Обязательно добавь 🇷🇺 с полным переводом.':'Sāc sarunu par tēmu '+t+'. VIENU īsu teikumu latviski + VIENU jautājumu. Pievieno 🇷🇺 tulkojumu.';
+  var gp=level==='A0'?'Поприветствуй новичка. Одна фраза + объяснение по-русски + вопрос. Добавь 🇷🇺 перевод.':'Sāc sarunu: VIENU teikumu + VIENU jautājumu. Pievieno 🇷🇺 tulkojumu.';
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:greetPrompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:500,thinkingConfig:{thinkingBudget:0}}
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:gp}]}],generationConfig:{temperature:0.9,maxOutputTokens:400,thinkingConfig:{thinkingBudget:0}}})
   })
   .then(function(r){return r.json();})
   .then(function(d){
     rmTyping();
-    var txt;try{txt=d.candidates[0].content.parts[0].text.trim();}catch(e){}
-    if(!txt) txt='Labdien! Sāksim!';
+    var txt;try{txt=d.candidates[0].content.parts[0].text.trim();}catch(x){}
+    if(!txt)txt='Labdien!';
     chatHist.push({role:'model',parts:[{text:txt}]});
     var p=parseResp(txt);
     addMsg('b',p.lv,p.ru);
-    if(voiceOn) speak(p.lv);
+    if(voiceOn)speak(p.lv);
   })
   .catch(function(){
     rmTyping();
-    var fb='Labdien! Sāksim sarunu!';
-    chatHist.push({role:'model',parts:[{text:fb}]});
-    addMsg('b',fb,'Добрый день! Начнём разговор!');
-    if(voiceOn) speak(fb);
+    addMsg('b','Labdien! Sāksim!','Добрый день!');
   });
 }
 function sendMsg(){
-  var el=document.getElementById('txt'),txt=el.value.trim();
-  if(!txt) return;
+  var el=G('txt'),txt=el.value.trim();
+  if(!txt)return;
   el.value='';el.style.height='auto';
-  document.getElementById('btnSend').disabled=true;
+  G('btnSend').disabled=true;
   addMsg('u',txt,'');showTyping();
   callGemini(txt,function(err,text){
-    rmTyping();document.getElementById('btnSend').disabled=false;
+    rmTyping();G('btnSend').disabled=false;
     if(err){addMsg('b','❌ '+err,'');return;}
     var p=parseResp(text);
     addMsg('b',p.lv,p.ru,buildFb(p));
-    if(voiceOn) speak(p.lv);
+    if(voiceOn)speak(p.lv);
   });
 }
+
 function pcmToWav(b64){
   var bin=atob(b64),bytes=new Uint8Array(bin.length);
-  for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-  var sr=24000,ch=1,bps=16,ds=bytes.length,buf=new ArrayBuffer(44+ds),v=new DataView(buf);
-  function ws(o,s){for(var i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i));}
-  ws(0,'RIFF');v.setUint32(4,36+ds,true);ws(8,'WAVE');ws(12,'fmt ');
-  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);
-  v.setUint32(24,sr,true);v.setUint32(28,sr*ch*bps/8,true);
-  v.setUint16(32,ch*bps/8,true);v.setUint16(34,bps,true);
-  ws(36,'data');v.setUint32(40,ds,true);
-  for(var j=0;j<ds;j++) v.setUint8(44+j,bytes[j]);
+  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  var sr=24000,ch=1,bps=16,ds=bytes.length,buf=new ArrayBuffer(44+ds),dv=new DataView(buf);
+  function ws(o,s){for(var i=0;i<s.length;i++)dv.setUint8(o+i,s.charCodeAt(i));}
+  ws(0,'RIFF');dv.setUint32(4,36+ds,true);ws(8,'WAVE');ws(12,'fmt ');
+  dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,ch,true);
+  dv.setUint32(24,sr,true);dv.setUint32(28,sr*ch*bps/8,true);
+  dv.setUint16(32,ch*bps/8,true);dv.setUint16(34,bps,true);
+  ws(36,'data');dv.setUint32(40,ds,true);
+  for(var j=0;j<ds;j++)dv.setUint8(44+j,bytes[j]);
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
 function stopAudio(){
   if(curAudio){curAudio.onended=null;curAudio.onerror=null;curAudio.pause();curAudio.src='';curAudio=null;}
-  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
   rmWave();
 }
 function speak(text){
-  if(!chatActive||!voiceOn||!text) return;
+  if(!chatActive||!voiceOn||!text)return;
   stopAudio();showWave();
-  var ss=topic,ctrl=new AbortController();
-  var tt=setTimeout(function(){ctrl.abort();rmWave();},12000);
+  var ss=topic,ctrl=new AbortController(),tt=setTimeout(function(){ctrl.abort();rmWave();},12000);
   fetch(WORKER+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl.signal,body:JSON.stringify({text:text,voice:gVoice})})
-  .then(function(r){if(!r.ok) throw new Error('TTS '+r.status);return r.json();})
+  .then(function(r){if(!r.ok)throw new Error('TTS');return r.json();})
   .then(function(d){
     clearTimeout(tt);
     if(!chatActive||ss!==topic){rmWave();return;}
     if(!d||!d.data){rmWave();return;}
-    var mime=d.mimeType;
-    var url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1)&&!mime.includes('base64')?pcmToWav(d.data):'data:'+mime+';base64,'+d.data;
+    var mime=d.mimeType,url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1)&&!mime.includes('base64')?pcmToWav(d.data):'data:'+mime+';base64,'+d.data;
     curAudio=new Audio(url);
     curAudio.onended=function(){rmWave();if(url.startsWith('blob:'))URL.revokeObjectURL(url);};
     curAudio.onerror=function(){rmWave();};
     curAudio.play().catch(function(){rmWave();});
   })
-  .catch(function(e){clearTimeout(tt);console.warn('TTS',e.message);rmWave();});
+  .catch(function(e){clearTimeout(tt);console.warn('TTS:',e.message);rmWave();});
 }
 function initSpeech(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR) return;
+  if(!SR)return;
   recog=new SR();recog.lang='lv-LV';recog.continuous=false;recog.interimResults=false;
   recog.onresult=function(e){
     var t=e.results[0][0].transcript.trim();stopRec();
-    if(!t) return;
+    if(!t)return;
     stopAudio();addMsg('u',t,'');showTyping();
-    document.getElementById('btnSend').disabled=true;
+    G('btnSend').disabled=true;
     callGemini(t,function(err,text){
-      rmTyping();document.getElementById('btnSend').disabled=false;
+      rmTyping();G('btnSend').disabled=false;
       if(err){addMsg('b','❌ '+err,'');return;}
       var p=parseResp(text);
       addMsg('b',p.lv,p.ru,buildFb(p));
-      if(voiceOn) speak(p.lv);
+      if(voiceOn)speak(p.lv);
     });
   };
   recog.onerror=function(){stopRec();};
-  recog.onend=function(){if(isRec) stopRec();};
+  recog.onend=function(){if(isRec)stopRec();};
 }
-function toggleMic(){
-  if(!recog){alert('Balss ievade nav atbalstīta šajā pārlūkā.');return;}
-  if(isRec){recog.stop();stopRec();}
-  else{stopAudio();try{recog.start();}catch(e){}startRec();}
-}
-function startRec(){isRec=true;document.getElementById('btnMic').classList.add('rec');document.getElementById('btnMic').textContent='⏹';document.getElementById('txt').placeholder='Klausos...';}
-function stopRec(){isRec=false;document.getElementById('btnMic').classList.remove('rec');document.getElementById('btnMic').textContent='🎤';document.getElementById('txt').placeholder='Raksti latviski...';}
-function escHtml(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+function toggleMic(){if(!recog){alert('Mikrofons nav atbalstīts.');return;}if(isRec){recog.stop();stopRec();}else{stopAudio();try{recog.start();}catch(x){}startRec();}}
+function startRec(){isRec=true;G('btnMic').classList.add('rec');G('btnMic').textContent='⏹';G('txt').placeholder='Klausos...';}
+function stopRec(){isRec=false;G('btnMic').classList.remove('rec');G('btnMic').textContent='🎤';G('txt').placeholder='Raksti latviski...';}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 </script>
 </body>
 </html>
