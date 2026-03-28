@@ -454,22 +454,23 @@ function callGemini(txt, cb){
 }
 
 function parseResp(text){
-  var reply=text, errors=[], score=null;
-  // Only split if marker appears at start of a line (not inside a word)
-  var si=text.search(/\n\s*KĻŪDAS|\n\s*VĒRTĒJUMS/i);
-  if(si>0) reply=text.slice(0,si).trim();
+  // НЕ обрезаем ничего - показываем полный ответ с переводом
+  var reply = text.replace(/\\*\\*/g,'').replace(/```[\\s\\S]*?```/g,'').trim();
+  
+  // Парсим только ошибки и оценку ПОСЛЕ перевода
+  var errors = [], score = null;
+  
   if(errorsOn){
-    var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
-    if(em) em[0].split('\n').forEach(function(l){
+    var em = text.match(/KĻŪDAS[\\s\\S]*?(?=VĒRTĒJUMS|$)/i);
+    if(em) em[0].split('\\n').forEach(function(l){
       if(l.indexOf('→')>-1){
-        var p=l.replace(/[❌✅]/g,'').split('→');
+        var p = l.replace(/[❌✅]/g,'').split('→');
         if(p.length>=2){
-          var w=p[0].replace(/["""]/g,'').trim();
-          var rest=p[1].trim();
-          var pm=rest.match(/^([^(]+)\(?(.*?)\)?$/);
-          var c=pm?pm[1].replace(/["""✅]/g,'').trim():rest;
-          var ex=pm&&pm[2]?pm[2].trim():'';
-          if(w&&c) errors.push({w:w,c:c,ex:ex});
+          var w = p[0].replace(/[\"\"\"]/g,'').trim();
+          var rest = p[1].trim();
+          var pm = rest.match(/^([^(]+)\\(?(.*?)\\)?$/);
+          var c = pm ? pm[1].replace(/[\"\"\"✅]/g,'').trim() : rest;
+          var ex = pm && pm
         }
       }
     });
