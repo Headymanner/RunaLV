@@ -479,11 +479,34 @@ function callGemini(txt, cb){
   .catch(function(e){ cb(e.message||'Kļūda',null); });
 }
 
-function parseResp(text){
-  var reply = text.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
-
-  // Errors and score AFTER full reply (translation included)
-  var errors = [], score = null;
+function parseResp(text) {
+  var reply = text, errors = null, score = null;
+  
+  // 🇷🇺 Найти перевод
+  var ruIdx = text.indexOf('🇷🇺');
+  if (ruIdx > 0) {
+    reply = text.slice(0, ruIdx).trim();
+  }
+  
+  // Ошибки (если включены)
+  if (errorsOn) {
+    var errMatch = text.match(/КД?А[СШ]\s*([^▽]+)/i);
+    if (errMatch) {
+      errors = errMatch[1].split('\n').map(l => l.trim()).filter(Boolean);
+    }
+  }
+  
+  // Оценка (если включена)
+  if (scoreOn) {
+    var scoreMatch = text.match(/ВРТ?ЖУМС\s*([\d%]+)\s*([\d%]+)\s*([\d%]+)\s*([\d%]+)/i);
+    if (scoreMatch) {
+      var g = scoreMatch[1], v = scoreMatch[2], f = scoreMatch[3], tot = scoreMatch[4];
+      score = {g, v, f, tot};
+    }
+  }
+  
+  return { reply: reply.trim(), errors, score };
+}
 
   if(errorsOn){
     var em = text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
