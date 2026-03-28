@@ -132,20 +132,20 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
   <div class="beginner-banner" id="btnBeginner">
     <div class="bb-top">
       <span class="bb-icon">🌱</span>
-      <div><div class="bb-title">Iesācēji — no nulles</div><span class="bb-badge">A0 · Начинающие</span></div>
+      <div><div class="bb-title">Iesācēji / Начинающие</div><span class="bb-badge">A0 · С нуля</span></div>
     </div>
     <div class="bb-desc">Никогда не учил латышский? Начни здесь! Бот объясняет всё по-русски с нуля.</div>
     <div class="bb-start">▶ Начать с нуля</div>
   </div>
   <div class="tgrid" id="tgrid">
-    <div class="tc" data-topic="gimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene</div><div class="td">Stāsti par ģimeni</div><span class="tl la1">A1</span></div>
-    <div class="tc" data-topic="celošana"><span class="te">✈️</span><div class="tn">Ceļošana</div><div class="td">Ceļojumi, valstis</div><span class="tl la2">A2</span></div>
-    <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs</div><div class="td">Profesija, kolēģi</div><span class="tl la2">A2</span></div>
-    <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports</div><div class="td">Sporta veidi</div><span class="tl la1">A1</span></div>
-    <div class="tc" data-topic="ediens"><span class="te">🍽️</span><div class="tn">Ēdiens</div><div class="td">Receptes, restorāni</div><span class="tl la1">A1</span></div>
-    <div class="tc" data-topic="latvija"><span class="te">🏛️</span><div class="tn">Latvija</div><div class="td">Kultūra, vēsture</div><span class="tl lb1">B1</span></div>
-    <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba</div><div class="td">Meži, ezeri</div><span class="tl la2">A2</span></div>
-    <div class="tc" data-topic="ikdiena"><span class="te">☀️</span><div class="tn">Ikdiena</div><div class="td">Rutīna, hobiji</div><span class="tl lb1">B1</span></div>
+    <div class="tc" data-topic="gimene"><span class="te">👨‍👩‍👧‍👦</span><div class="tn">Ģimene / Семья</div><div class="td">Stāsti par ģimeni · О семье</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="celošana"><span class="te">✈️</span><div class="tn">Ceļošana / Путешествия</div><div class="td">Ceļojumi · Путешествия</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="darbs"><span class="te">💼</span><div class="tn">Darbs / Работа</div><div class="td">Profesija · Профессия</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="sports"><span class="te">⚽</span><div class="tn">Sports / Спорт</div><div class="td">Sporta veidi · Виды спорта</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="ediens"><span class="te">🍽️</span><div class="tn">Ēdiens / Еда</div><div class="td">Receptes · Рецепты</div><span class="tl la1">A1</span></div>
+    <div class="tc" data-topic="latvija"><span class="te">🏛️</span><div class="tn">Latvija / Латвия</div><div class="td">Kultūra · Культура</div><span class="tl lb1">B1</span></div>
+    <div class="tc" data-topic="daba"><span class="te">🌲</span><div class="tn">Daba / Природа</div><div class="td">Meži, ezeri · Леса, озёра</div><span class="tl la2">A2</span></div>
+    <div class="tc" data-topic="ikdiena"><span class="te">☀️</span><div class="tn">Ikdiena / Быт</div><div class="td">Rutīna · Повседневность</div><span class="tl lb1">B1</span></div>
   </div>
   <div style="text-align:center;margin-top:22px;padding-bottom:10px;">
     <a href="https://buymeacoffee.com/headymanner" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;">☕ Buy me a coffee</a>
@@ -284,8 +284,9 @@ function addMsg(role,lvT,ruT,fb){
   var c=G('msgs'),now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
-  var rb=ruT?'<div class="ru-tr">🇷🇺 '+esc(ruT)+'</div>':'';
-  d.innerHTML='<div class="av">'+(role==='b'?'🇱🇻':'👤')+'</div><div class="mbody"><div class="bub">'+esc(lvT)+'</div>'+rb+(fb||'')+'<div class="mtime">'+now+'</div></div>';
+  var bubContent=esc(lvT);
+  if(ruT&&role==='b'){bubContent+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(201,168,76,.15);font-size:12px;color:#8a9db8;">🇷🇺 '+esc(ruT)+'</div>';}
+  d.innerHTML='<div class="av">'+(role==='b'?'🇱🇻':'👤')+'</div><div class="mbody"><div class="bub">'+bubContent+'</div>'+(fb||'')+'<div class="mtime">'+now+'</div></div>';
   c.appendChild(d);c.scrollTop=c.scrollHeight;
 }
 function showTyping(){
@@ -318,7 +319,7 @@ function callGemini(txt,cb){
     body:JSON.stringify({
       systemInstruction:{parts:[{text:buildSys()}]},
       contents:chatHist,
-      generationConfig:{temperature:0.8,maxOutputTokens:1000,thinkingConfig:{thinkingBudget:0}}
+      generationConfig:{temperature:0.8,maxOutputTokens:2000,thinkingConfig:{thinkingBudget:0}}
     })
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
@@ -391,7 +392,7 @@ function greet(t){
   var gp=level==='A0'?'Поприветствуй новичка. Одна фраза + объяснение по-русски + вопрос. Добавь 🇷🇺 перевод.':'Sāc sarunu: VIENU teikumu + VIENU jautājumu. Pievieno 🇷🇺 tulkojumu.';
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:gp}]}],generationConfig:{temperature:0.9,maxOutputTokens:400,thinkingConfig:{thinkingBudget:0}}})
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:gp}]}],generationConfig:{temperature:0.9,maxOutputTokens:600,thinkingConfig:{thinkingBudget:0}}})
   })
   .then(function(r){return r.json();})
   .then(function(d){
