@@ -224,7 +224,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 <div class="sgl">Mācīšanās</div>
 <div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div class="sname">Kļūdu labojumi</div></div><div class="tog on" id="togE"></div></div>
 <div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div class="sname">Vērtējums</div></div><div class="tog on" id="togS"></div></div>
-<div class="si"><div class="sil"><span class="sico">📊</span><div class="sname">Valodas līmenis</div></div><div class="selw"><select id="selLevel"><option value="A0">A0 No nulles</option><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
+<div class="si"><div class="sil"><span class="sico">📊</span><div class="sname">Valodas līmenis</div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
 </div>
 <div class="sgrp">
 <div class="sgl">API</div>
@@ -283,12 +283,11 @@ document.getElementById('togS').classList.toggle('on', scoreOn);
 document.getElementById('selVoice').value = gVoice;
 document.getElementById('selLevel').value = level;
 document.getElementById('pts').textContent = totalPts;
-if(gk) document.getElementById('keyStatus').textContent = 'Iestatīta';
-else document.getElementById('keyStatus').textContent = 'Nav API key needed - using Worker';
+document.getElementById('keyStatus').textContent = 'Nav API key needed - using Worker';
 initSpeech();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
 
-function showModal(){ document.getElementById('modal').classList.remove('h'); if(gk) document.getElementById('inpKey').value=gk; }
+function showModal(){ document.getElementById('modal').classList.remove('h'); }
 function hideModal(){ document.getElementById('modal').classList.add('h'); }
 function saveKey(){
   var k=document.getElementById('inpKey').value.trim();
@@ -298,9 +297,8 @@ function saveKey(){
   document.getElementById('keyStatus').textContent='Iestatīts';
   hideModal();
 }
-
 function togSet(key,lsKey,elId){
-  var cur = key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn;
+  var cur=key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn;
   var nv=!cur;
   if(key==='voiceOn') voiceOn=nv; else if(key==='errorsOn') errorsOn=nv; else scoreOn=nv;
   localStorage.setItem(lsKey,nv);
@@ -325,10 +323,8 @@ function startChat(t){
     if(h) document.getElementById('txt').value=h.getAttribute('data-hint');
   });
 }
-
 function goBack(){
-  chatActive=false;
-  stopAudio();
+  chatActive=false; stopAudio();
   if(isRec){try{recog.abort();}catch(e){} stopRec();}
   chatHist=[]; topic='';
   document.getElementById('scr-chat').style.display='none';
@@ -352,7 +348,7 @@ function buildSys(){
   var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski. Tēma: '+topic+'. Lietotāja līmenis: '+level+'. Sī maksimums: 2 sīki teikumi + 1 jautājums. Katram teikumam JĀBEIDZAS ar punktu vai jautājuma zīmi. Nekad nepārtrauc teikumu.';
   if(errorsOn) s+='\nJa kļūdas: norādi PC atbildes\nKĻŪDAS\n❌nepareizi → ✅pareizi (paskaidrojums)';
   if(scoreOn) s+='\nTad:\nVĒRTĒJUMS\nGramatikaX/100 VārdiX/100 PlūsmaX/100 KopX/100';
-  s+='\n\nSVARĪGI: Pēc katras atbildes latviešu valodā OBLIGĀTI pievieno tulkojumu krievu valodā šādā formātā:\n🇷🇺 [krievu tulkojums šeit]';
+  s+='\n\nSVARĪGI: Pēc katras atbildes OBLIGĀTI pievieno tulkojumu krievu valodā formātā: 🇷🇺 [tulkojums]';
   return s;
 }
 
@@ -363,7 +359,7 @@ function callGemini(txt,cb){
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:900}})
   })
-  .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status); return d;})})
+  .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status); return d;});})
   .then(function(d){
     var t; try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
     if(!t) throw new Error('Tukša atbilde');
@@ -374,17 +370,13 @@ function callGemini(txt,cb){
 }
 
 function parseResp(text){
+  var reply=text, errors=[], score=null, ru='';
   var ruIdx=text.indexOf('🇷🇺');
-if(ruIdx>0){
-  var afterRu=text.slice(ruIdx+4);
-  var ruEnd=afterRu.indexOf('\n');
-  ru=(ruEnd>-1?afterRu.slice(0,ruEnd):afterRu).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
-  reply=text.slice(0,ruIdx).trim();
-}
-  }
-  if(ruLineIdx>-1){
-    ru=ruLines[ruLineIdx].replace('🇷🇺','').replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
-    reply=ruLines.slice(0,ruLineIdx).join('\n').trim();
+  if(ruIdx>0){
+    var afterRu=text.slice(ruIdx+4);
+    var ruEnd=afterRu.indexOf('\n');
+    ru=(ruEnd>-1?afterRu.slice(0,ruEnd):afterRu).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
+    reply=text.slice(0,ruIdx).trim();
   }
   var si=reply.search(/\n\s*KĻŪDAS|\n\s*VĒRTĒJUMS/i);
   if(si>0) reply=reply.slice(0,si).trim();
@@ -392,10 +384,10 @@ if(ruIdx>0){
     var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
     if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
-        var p=l.replace(/[❌✅]/g,'').split('→');
-        if(p.length>=2){
-          var w=p[0].replace(/["""]/g,'').trim();
-          var rest=p[1].trim();
+        var pts=l.replace(/[❌✅]/g,'').split('→');
+        if(pts.length>=2){
+          var w=pts[0].replace(/["""]/g,'').trim();
+          var rest=pts[1].trim();
           var pm=rest.match(/^([^(]+)\(?(.*?)\)?$/);
           var c=pm?pm[1].replace(/["""✅]/g,'').trim():rest;
           var ex=pm&&pm[2]?pm[2].trim():'';
@@ -439,7 +431,7 @@ function greet(t){
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu '+t+'. Uzraksti VIENU pilnīgu teikumu sveiciens. Tad uzraksti VIENU pilnīgu jautājumu. Obligāti pabeidz abus teikumus ar punktu vai jautājuma zīmi. Pievieno 🇷🇺 tulkojumu.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:200}})
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:'Sāc sarunu par tēmu '+t+'. VIENU teikumu sveiciens + VIENU jautājumu. Beidz ar punktu vai jautājuma zīmi. Pievieno 🇷🇺 tulkojumu.'}]}],generationConfig:{temperature:0.9,maxOutputTokens:400}})
   })
   .then(function(r){return r.json();})
   .then(function(d){
@@ -448,8 +440,8 @@ function greet(t){
     if(!txt) txt='Sveiki! Sāksim!';
     chatHist.push({role:'model',parts:[{text:txt}]});
     var pr=parseResp(txt);
-    var ruHtml=pr.ru?'<div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:12px;color:#9bacc4;">🇷🇺 '+esc(pr.ru)+'</div>':'';
-    addMsg('b',esc(pr.reply||txt)+ruHtml);
+    var ruHtmlG=pr.ru?'<div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:12px;color:#9bacc4;">🇷🇺 '+esc(pr.ru)+'</div>':'';
+    addMsg('b',esc(pr.reply||txt)+ruHtmlG);
     if(voiceOn) speak(pr.reply||txt);
   })
   .catch(function(e){
@@ -490,13 +482,11 @@ function pcmToWav(b64){
   for(var j=0;j<ds;j++) v.setUint8(44+j,bytes[j]);
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
-
 function stopAudio(){
   if(curAudio){ curAudio.onended=null; curAudio.onerror=null; curAudio.pause(); curAudio.src=''; curAudio=null; }
   if(window.speechSynthesis) window.speechSynthesis.cancel();
   rmWave();
 }
-
 function speak(text){
   if(!chatActive||!voiceOn||!text) return;
   stopAudio(); showWave();
@@ -504,8 +494,7 @@ function speak(text){
   var ctrl=new AbortController();
   var ttsTimeout=setTimeout(function(){ ctrl.abort(); rmWave(); },12000);
   fetch(WORKER+'/tts',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     signal:ctrl.signal,
     body:JSON.stringify({text:text,voice:gVoice})
   })
@@ -515,7 +504,7 @@ function speak(text){
     if(!chatActive||speakSession!==topic){ rmWave(); return; }
     if(!d||!d.data){ rmWave(); return; }
     var mime=d.mimeType;
-    var url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1)&&!mime.includes('base64') ? pcmToWav(d.data) : 'data:'+mime+';base64,'+d.data;
+    var url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1)&&!mime.includes('base64')?pcmToWav(d.data):'data:'+mime+';base64,'+d.data;
     showWave();
     curAudio=new Audio(url);
     curAudio.onended=function(){ rmWave(); if(url.startsWith('blob:')) URL.revokeObjectURL(url); };
@@ -546,7 +535,6 @@ function initSpeech(){
   recog.onerror=function(){ stopRec(); };
   recog.onend=function(){ if(isRec) stopRec(); };
 }
-
 function toggleMic(){
   if(!recog){alert('Balss ievade nav atbalstīta šajā pārlūkā.');return;}
   if(isRec){ recog.stop(); stopRec(); }
@@ -554,7 +542,6 @@ function toggleMic(){
 }
 function startRec(){ isRec=true; document.getElementById('btnMic').classList.add('rec'); document.getElementById('btnMic').textContent='⏹'; document.getElementById('txt').placeholder='Klausos...'; }
 function stopRec(){ isRec=false; document.getElementById('btnMic').classList.remove('rec'); document.getElementById('btnMic').textContent='🎤'; document.getElementById('txt').placeholder='Raksti latviski...'; }
-
 function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 </script>
 </body>
