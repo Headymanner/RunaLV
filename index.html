@@ -224,7 +224,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 <div class="sgl">Mācīšanās</div>
 <div class="si" id="siErrors"><div class="sil"><span class="sico">✏️</span><div class="sname">Kļūdu labojumi</div></div><div class="tog on" id="togE"></div></div>
 <div class="si" id="siScore"><div class="sil"><span class="sico">⭐</span><div class="sname">Vērtējums</div></div><div class="tog on" id="togS"></div></div>
-<div class="si"><div class="sil"><span class="sico">📊</span><div class="sname">Valodas līmenis</div></div><div class="selw"><select id="selLevel"><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
+<div class="si"><div class="sil"><span class="sico">📊</span><div class="sname">Valodas līmenis</div></div><div class="selw"><select id="selLevel"><option value="A0">A0 No nulles</option><option value="A1">A1 Iesācējs</option><option value="A2" selected>A2 Pamata</option><option value="B1">B1 Vidējs</option><option value="B2">B2 Augstāks</option></select></div></div>
 </div>
 <div class="sgrp">
 <div class="sgl">API</div>
@@ -361,7 +361,7 @@ function callGemini(txt,cb){
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:512}})
+    body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:chatHist,generationConfig:{temperature:0.8,maxOutputTokens:900}})
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok) throw new Error(d.error&&d.error.message||'HTTP '+r.status); return d;})})
   .then(function(d){
