@@ -480,23 +480,38 @@ function callGemini(txt, cb){
 }
 
 function parseResp(text){
-  // НЕ обрезаем ничего - показываем полный ответ с переводом
-  var reply = text.replace(/\\*\\*/g,'').replace(/```[\\s\\S]*?```/g,'').trim();
-  
-  // Парсим только ошибки и оценку ПОСЛЕ перевода
+  var reply = text.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
+
+  // Errors and score AFTER full reply (translation included)
   var errors = [], score = null;
-  
+
   if(errorsOn){
-    var em = text.match(/KĻŪDAS[\\s\\S]*?(?=VĒRTĒJUMS|$)/i);
-    if(em) em[0].split('\\n').forEach(function(l){
+    var em = text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
+    if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
         var p = l.replace(/[❌✅]/g,'').split('→');
         if(p.length>=2){
-          var w = p[0].replace(/[\"\"\"]/g,'').trim();
+          var w = p[0].replace(/["""]/g,'').trim();
           var rest = p[1].trim();
-          var pm = rest.match(/^([^(]+)\\(?(.*?)\\)?$/);
-          var c = pm ? pm[1].replace(/[\"\"\"✅]/g,'').trim() : rest;
-          var ex = pm && pm
+          var pm = rest.match(/^([^(]+)\(?(.*?)\)?$/);
+          var c = pm ? pm[1].replace(/["""✅]/g,'').trim() : rest;
+          var ex = pm && pm[2] ? pm[2].trim() : '';
+          if(w&&c) errors.push({w:w,c:c,ex:ex});
+        }
+      }
+    });
+  }
+
+  if(scoreOn){
+    var sm = text.match(/VĒRTĒJUMS[:\s]*(.*)/i);
+    if(sm){ var ns = sm[1].match(/\d+/g)||[]; if(ns.length>=3){
+      var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);
+      score={g:g,v:v,f:f,tot:tot}; 
+    }}
+  }
+
+  return {reply:reply||text, errors:errors, score:score};
+});
         }
       }
     });
