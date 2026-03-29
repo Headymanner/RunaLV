@@ -584,15 +584,15 @@ function addMsg(role,html,fb){
   c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
 
-function addMsgWithTranslation(role,html,translation,explain,fb){
+function addMsgWithTranslation(role,html,translation,words,fb){
   var c=document.getElementById('msgs');
   var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
   var transHtml=translation?'<div class="translation">🇷🇺 '+esc(translation)+'</div>':'';
-  var explainHtml="";
+  var wordsHtml=words||'';
   d.innerHTML='<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
-    +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+(fb||'')
+    +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+wordsHtml+(fb||'')
     +'<div class="mtime">'+now+'</div></div>';
   c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
@@ -619,13 +619,14 @@ function buildBeginnerSys(){
   return 'Ты очень добрый и терпеливый учитель латышского для абсолютных новичков.\n'
     +'Тема: "'+topic+'". Ученик НИКОГДА не учил латышский.\n'
     +'ПРАВИЛА:\n'
-    +'1. Пиши по-латышски, сразу в скобках давай русский перевод каждого слова\n'
+    +'1. Пиши ТОЛЬКО по-латышски — красиво и естественно, БЕЗ скобок и переводов в тексте\n'
     +'2. Максимум 2-3 коротких предложения\n'
     +'3. Будь тёплым, хвали ученика, используй эмодзи 😊\n'
-    +'4. Давай одну готовую фразу для повторения\n'
-    +'5. Исправляй ошибки мягко по-русски\n'
-    +'В КОНЦЕ добавь одну строку:\n'
-    +'ПЕРЕВОД: [перевод твоего ответа на русский, 1-2 предложения]\n';
+    +'4. Исправляй ошибки мягко\n'
+    +'ПОСЛЕ своего латышского текста добавь СТРОГО в таком формате:\n'
+    +'ПЕРЕВОД: [полный перевод на русский]\n'
+    +'СЛОВА: слово1 = перевод1 | слово2 = перевод2 | слово3 = перевод3\n'
+    +'(максимум 5 новых слов в СЛОВА)\n';
 }
 
 function buildAdvancedSys(){
@@ -667,15 +668,31 @@ function callGemini(txt,cb){
 
 // ── PARSE BEGINNER RESPONSE ───────────────────
 function parseBeginnerResp(text){
-  var reply=text, translation='';
+  var reply=text, translation='', words='';
+  // Split at ПЕРЕВОД marker
   var si=text.search(/\nПЕРЕВОД/i);
-  if(si>0){
-    reply=text.slice(0,si).trim();
-    var tm=text.match(/ПЕРЕВОД[:\s]+([\s\S]+)$/i);
-    if(tm) translation=tm[1].trim().split('\n')[0];
+  if(si>0) reply=text.slice(0,si).trim();
+  // Extract ПЕРЕВОД
+  // Get everything between ПЕРЕВОД and СЛОВА (or end)
+  var tm=text.match(/ПЕРЕВОД[:\s]+([\s\S]+?)(?=\nСЛОВА|$)/i);
+  if(tm) translation=tm[1].trim();
+  // Extract СЛОВА
+  var wm=text.match(/СЛОВА[:\s]+([^\n]+)/i);
+  if(wm){
+    var wordsHtml='';
+    wm[1].split('|').forEach(function(pair){
+      var p=pair.trim();
+      if(p.indexOf('=')>-1){
+        var parts=p.split('=');
+        wordsHtml+='<span style="display:inline-block;margin:2px 4px 2px 0;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:2px 8px;font-size:11px;">'
+          +'<strong style="color:#e8b84b;">'+esc(parts[0].trim())+'</strong>'
+          +' = '+esc(parts[1].trim())+'</span>';
+      }
+    });
+    if(wordsHtml) words='<div style="margin-top:6px;max-width:88%;">'+wordsHtml+'</div>';
   }
   reply=reply.replace(/\*\*/g,'').trim();
-  return {reply:reply||text, translation:translation};
+  return {reply:reply||text, translation:translation, words:words};
 }
 
 // ── PARSE ADVANCED RESPONSE ───────────────────
@@ -735,7 +752,7 @@ function sendMsg(){
     if(isBeginner){
       var p=parseBeginnerResp(text);
       var replyHtml=esc(p.reply);
-      addMsgWithTranslation('b',replyHtml,p.translation);
+      addMsgWithTranslation('b',replyHtml,p.translation,p.words);
       if(voiceOn) speak((p.reply||text).substring(0,200));
     } else {
       var p2=parseAdvResp(text);
@@ -804,7 +821,7 @@ function initSpeech(){
       if(err){addMsg('b','❌ '+esc(err));return;}
       if(isBeginner){
         var p=parseBeginnerResp(text);
-        addMsgWithTranslation('b',esc(p.reply),p.translation);
+        addMsgWithTranslation('b',esc(p.reply),p.translation,p.words);
         if(voiceOn)speak(p.reply||text);
       } else {
         var p2=parseAdvResp(text);
