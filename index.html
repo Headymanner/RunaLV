@@ -349,6 +349,35 @@ function greet(t){
     addMsg('b','Labdien! Sāksim!','Добрый день!');
   });
 }
+function callGemini(txt,cb){
+  chatHist.push({role:'user',parts:[{text:txt}]});
+  var attempt=0;
+  function doFetch(){
+    attempt++;
+    fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        systemInstruction:{parts:[{text:buildSys()}]},
+        contents:chatHist,
+        generationConfig:{temperature:0.8,maxOutputTokens:2000,thinkingConfig:{thinkingBudget:0}}
+      })
+    })
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
+    .then(function(d){
+      var t;try{t=d.candidates[0].content.parts[0].text.trim();}catch(x){}
+      if(!t)throw new Error('Tukša atbilde');
+      chatHist.push({role:'model',parts:[{text:t}]});
+      cb(null,t);
+    })
+    .catch(function(e){
+      if(attempt<2){setTimeout(doFetch,1500);return;}
+      chatHist.pop();
+      cb(e.message||'Kļūda',null);
+    });
+  }
+  doFetch();
+}
 function sendMsg(){
   var el=G('txt'),txt=el.value.trim();
   if(!txt)return;
