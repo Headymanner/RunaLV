@@ -655,7 +655,7 @@ function callGemini(txt,cb){
   fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      system_instruction:{parts:[{text:sys}]},
+      systemInstruction:{parts:[{text:sys}]},
       contents:chatHist,
       generationConfig:{temperature:0.85,maxOutputTokens:700}
     })
