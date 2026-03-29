@@ -301,95 +301,35 @@ function rmWave(){var w=G('wave');if(w)w.remove();}
 function buildSys(){
   var s;
   if(level==='A0'){
-    s='Ты дружелюбный учитель латышского для новичков (A0). Одна короткая фраза на латышском + объяснение по-русски в скобках + один вопрос. Тема: '+topic+'.';
+    s='Ты профессиональный учитель латышского языка для абсолютных новичков (A0). Объясняй ВСЁ по-русски.\n'+
+      'ФОРМАТ КАЖДОГО ОТВЕТА (строго соблюдай):\n'+
+      '🇱🇻 [одна простая латышская фраза по теме: '+topic+']\n'+
+      '🔊 Произношение: [как читать по-русски, например: "Labdien = лабдиен"]\n'+
+      '📚 Слова: [разбери каждое слово отдельно: слово = перевод]\n'+
+      '📝 Грамматика: [одно простое правило, объяснение по-русски]\n'+
+      '💡 Пример: [ещё один похожий пример]\n'+
+      '❓ Задание: [попроси студента составить похожую фразу или ответить]\n'+
+      'ВАЖНО: Хвали студента! Будь терпелив. Никогда не отвечай коротко — ты УЧИТЕЛЬ, не чат-бот.\n'+
+      'После ответа добавь новую строку: 🇷🇺 [краткий перевод твоего объяснения на случай если что-то непонятно]';
   } else {
-    s='Tu esi latviešu valodas pasniedzējs. Atbildi latviski. Tēma: '+topic+'. Līmenis: '+level+'. Maksimums: 2 teikumi + 1 jautājums.';
-    if(errorsOn)s+='\nKļūdas: KĻŪDAS\n❌nepareizi → ✅pareizi';
-    if(scoreOn)s+='\nVĒRTĒJUMS GramatikaX/100 VārdiX/100 PlūsmaX/100 KopX/100';
+    s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava misija — MĀCĪT, ne tikai sarunāties!\n'+
+      'KATRAS ATBILDES FORMĀTS (obligāti):\n'+
+      '💬 Saruna [atbildi uz studentu, tēma: '+topic+', līmenis: '+level+']\n'+
+      '📚 Vārdi: [2-3 jauni vārdi no atbildes + krievu tulkojums + piemērs teikumā]\n'+
+      '📝 Gramatika: [viens skaidrojums — kas ir šajā atbildē gramatiski interesants + likums krieviski]\n'+
+      '💡 Piemērs: [viens papildu piemērs ar šo gramatikas likumu]\n'+
+      '❓ Uzdevums: [lūdz studentu veidot līdzīgu teikumu vai atbildēt uz jautājumu]\n';
+    if(errorsOn)s+='❌ Kļūdas: ja students kļūdījās — ❌nepareizi → ✅pareizi un PASKAIDRO KĀPĒC (krieviski)\n';
+    if(scoreOn)s+='⭐ VĒRTĒJUMS Gramatika X/100 Vārdi X/100 Plūsma X/100 Kop X/100\n';
+    s+='Nekad neatbildi īsi! Tu esi skolotājs — katram studentam vajag pilnu izskaidrojumu.\n';
+    s+='Pēc atbildes pievieno jaunu rindiņu: 🇷🇺 [краткий перевод твоего ответа на русский]';
   }
-  s+='\n\nOBLIGATORY: after response always add new line: 🇷🇺 [russian translation of your response]';
   return s;
 }
 
-function callGemini(txt,cb){
-  chatHist.push({role:'user',parts:[{text:txt}]});
-  fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      systemInstruction:{parts:[{text:buildSys()}]},
-      contents:chatHist,
-      generationConfig:{temperature:0.8,maxOutputTokens:2000,thinkingConfig:{thinkingBudget:0}}
-    })
-  })
-  .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error&&d.error.message||'HTTP '+r.status);return d;});})
-  .then(function(d){
-    var t;try{t=d.candidates[0].content.parts[0].text.trim();}catch(x){}
-    if(!t)throw new Error('Tukša atbilde');
-    chatHist.push({role:'model',parts:[{text:t}]});
-    cb(null,t);
-  })
-  .catch(function(e){cb(e.message||'Kļūda',null);});
-}
-function parseResp(text){
-  var lv=text,ru='',errors=[],score=null;
-  var ri=text.lastIndexOf('🇷🇺');
-  if(ri>=0){
-    var after=text.slice(ri+4);
-    var nl=after.indexOf('\n');
-    ru=(nl>=0?after.slice(0,nl):after).replace(/^\s*\[?/,'').replace(/\]?\s*$/,'').trim();
-    lv=text.slice(0,ri).trim();
-  }
-  var si=lv.search(/\n\s*K[LĻ][UŪ]DAS|\n\s*V[EĒ]RT[EĒ]JUMS/i);
-  if(si>0)lv=lv.slice(0,si).trim();
-  if(errorsOn){
-    var em=text.match(/K[LĻ][UŪ]DAS[\s\S]*?(?=V[EĒ]RT[EĒ]JUMS|🇷🇺|$)/i);
-    if(em){em[0].split('\n').forEach(function(l){
-      if(l.indexOf('→')>-1){
-        var pp=l.replace(/[❌✅]/g,'').split('→');
-        if(pp.length>=2){
-          var w=pp[0].replace(/[“”"]/g,'').trim();
-          var rest=pp[1].trim();
-          var pm=rest.match(/^([^(]+)[(]?(.*?)[)]?$/);
-          var c2=pm?pm[1].replace(/[“”"✅]/g,'').trim():rest;
-          var ex=pm&&pm[2]?pm[2].trim():'';
-          if(w&&c2)errors.push({w:w,c:c2,ex:ex});
-        }
-      }
-    });}
-  }
-  if(scoreOn){
-    var sm=text.match(/V[EĒ]RT[EĒ]JUMS[:\s]*(.*)/i);
-    if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
-  }
-  lv=lv.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,'').trim();
-  return {lv:lv||text,ru:ru,errors:errors,score:score};
-}
-
-function buildFb(p){
-  if(!p.errors.length&&!p.score)return'';
-  var h='<div class="fbc">';
-  if(p.errors.length&&errorsOn){
-    h+='<div class="fbt">Kļūdu labojumi</div>';
-    p.errors.forEach(function(e){h+='<div class="el">❌ '+esc(e.w)+'</div><div class="fl">✅ '+esc(e.c)+(e.ex?' ('+esc(e.ex)+')':'')+'</div>';});
-  }
-  if(p.score&&scoreOn){
-    var s=p.score,cl=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
-    sessPts+=s.tot;totalPts+=Math.round(s.tot/10);
-    localStorage.setItem('lvpts',totalPts);
-    G('pts').textContent=totalPts;
-    G('cPts').textContent=sessPts+' pts';
-    h+='<div class="fbt">Vērtējums</div><div class="scrs">';
-    h+='<div class="sp"><span class="sn '+cl+'">'+s.g+'</span><span class="sl">Gram.</span></div>';
-    h+='<div class="sp"><span class="sn '+cl+'">'+s.v+'</span><span class="sl">Vārdi</span></div>';
-    h+='<div class="sp"><span class="sn '+cl+'">'+s.f+'</span><span class="sl">Plūsma</span></div>';
-    h+='<div class="sp"><span class="sn '+cl+'">'+s.tot+'</span><span class="sl">Kop.</span></div></div>';
-  }
-  return h+'</div>';
-}
 function greet(t){
   showTyping();
-  var gp=level==='A0'?'Поприветствуй новичка. Одна фраза + объяснение по-русски + вопрос. Добавь 🇷🇺 перевод.':'Sāc sarunu: VIENU teikumu + VIENU jautājumu. Pievieno 🇷🇺 tulkojumu.';
+  var gp=level==='A0'?'Поприветствуй студента по-русски, объясни как будет проходить урок. Скажи первую латышскую фразу по теме '+topic+' с полным разбором: произношение, слова, грамматика. Добавь 🇷🇺 перевод.':'Sāc nodarbību kā īsts skolotājs: iepazīstini ar tēmu, pasaki pirmo teikumu, izskaidro 2-3 vārdus un gramatikas punktu. Pievieno 🇷🇺 tulkojumu.';
   fetch(WORKER+'/v1beta/models/gemini-2.5-flash:generateContent',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({systemInstruction:{parts:[{text:buildSys()}]},contents:[{role:'user',parts:[{text:gp}]}],generationConfig:{temperature:0.9,maxOutputTokens:600,thinkingConfig:{thinkingBudget:0}}})
