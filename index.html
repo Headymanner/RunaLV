@@ -590,9 +590,9 @@ function addMsgWithTranslation(role,html,translation,explain,fb){
   var d=document.createElement('div');
   d.className='msg '+role;
   var transHtml=translation?'<div class="translation">🇷🇺 '+esc(translation)+'</div>':'';
-  var explainHtml=explain?'<div class="explain"><div class="explain-title">📖 Разбор / Skaidrojums</div>'+explain+'</div>':'';
+  var explainHtml="";
   d.innerHTML='<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
-    +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+explainHtml+(fb||'')
+    +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+(fb||'')
     +'<div class="mtime">'+now+'</div></div>';
   c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
@@ -616,21 +616,16 @@ function rmWave(){var w=document.getElementById('wave');if(w)w.remove();}
 
 // ── SYSTEM PROMPTS ────────────────────────────
 function buildBeginnerSys(){
-  return 'Ты доброжелательный учитель латышского языка для абсолютных новичков.\n'
-    +'Тема урока: "'+topic+'". Ученик никогда не учил латышский.\n'
+  return 'Ты очень добрый и терпеливый учитель латышского для абсолютных новичков.\n'
+    +'Тема: "'+topic+'". Ученик НИКОГДА не учил латышский.\n'
     +'ПРАВИЛА:\n'
-    +'1. Пиши по-латышски, сразу давай русский перевод в скобках\n'
-    +'2. Объясняй каждое новое слово по-русски\n'
-    +'3. Будь очень терпелив, тёпл и доброжелателен! Хвали ученика!\n'
-    +'4. Давай готовые фразы для повторения\n'
-    +'5. Исправляй ошибки мягко, с объяснением по-русски\n'
-    +'6. Короткие сообщения — максимум 3-4 предложения\n'
-    +'ФОРМАТ ОТВЕТА:\n'
-    +'Латышская фраза (русский перевод)\n'
-    +'Объяснение по-русски если нужно\n'
-    +'Вопрос или задание для ученика\n'
-    +'ПЕРЕВОД: [полный русский перевод твоего сообщения]\n'
-    +'РАЗБОР: [объяснение новых слов: слово = значение, по одному на строку]\n';
+    +'1. Пиши по-латышски, сразу в скобках давай русский перевод каждого слова\n'
+    +'2. Максимум 2-3 коротких предложения\n'
+    +'3. Будь тёплым, хвали ученика, используй эмодзи 😊\n'
+    +'4. Давай одну готовую фразу для повторения\n'
+    +'5. Исправляй ошибки мягко по-русски\n'
+    +'В КОНЦЕ добавь одну строку:\n'
+    +'ПЕРЕВОД: [перевод твоего ответа на русский, 1-2 предложения]\n';
 }
 
 function buildAdvancedSys(){
@@ -672,29 +667,15 @@ function callGemini(txt,cb){
 
 // ── PARSE BEGINNER RESPONSE ───────────────────
 function parseBeginnerResp(text){
-  var reply=text, translation='', explain='';
-  // Extract ПЕРЕВОД section
-  var tm=text.match(/ПЕРЕВОД[:\s]+([^\n]+(?:\n(?!РАЗБОР)[^\n]+)*)/i);
-  if(tm) translation=tm[1].trim();
-  // Extract РАЗБОР section
-  var em=text.match(/РАЗБОР[:\s]+([\s\S]+)$/i);
-  if(em) explain=em[1].trim();
-  // Reply = everything before ПЕРЕВОД
-  var si=text.search(/\nПЕРЕВОД|\nРАЗБОР/i);
-  if(si>0) reply=text.slice(0,si).trim();
-  // Build explain HTML
-  var explainHtml='';
-  if(explain){
-    var lines=explain.split('\n').filter(function(l){return l.trim();});
-    lines.forEach(function(l){
-      if(l.indexOf('=')>-1||l.indexOf('—')>-1||l.indexOf('-')>-1){
-        explainHtml+='<div class="explain-word">'+esc(l)+'</div>';
-      } else {
-        explainHtml+='<div class="grammar-note">'+esc(l)+'</div>';
-      }
-    });
+  var reply=text, translation='';
+  var si=text.search(/\nПЕРЕВОД/i);
+  if(si>0){
+    reply=text.slice(0,si).trim();
+    var tm=text.match(/ПЕРЕВОД[:\s]+([\s\S]+)$/i);
+    if(tm) translation=tm[1].trim().split('\n')[0];
   }
-  return {reply:reply.replace(/\*\*/g,'').trim(), translation:translation, explainHtml:explainHtml};
+  reply=reply.replace(/\*\*/g,'').trim();
+  return {reply:reply||text, translation:translation};
 }
 
 // ── PARSE ADVANCED RESPONSE ───────────────────
@@ -754,8 +735,8 @@ function sendMsg(){
     if(isBeginner){
       var p=parseBeginnerResp(text);
       var replyHtml=esc(p.reply);
-      addMsgWithTranslation('b',replyHtml,p.translation,p.explainHtml);
-      if(voiceOn) speak(p.reply||text);
+      addMsgWithTranslation('b',replyHtml,p.translation);
+      if(voiceOn) speak((p.reply||text).substring(0,200));
     } else {
       var p2=parseAdvResp(text);
       addMsg('b',esc(p2.reply||text),buildFb(p2));
@@ -823,7 +804,7 @@ function initSpeech(){
       if(err){addMsg('b','❌ '+esc(err));return;}
       if(isBeginner){
         var p=parseBeginnerResp(text);
-        addMsgWithTranslation('b',esc(p.reply),p.translation,p.explainHtml);
+        addMsgWithTranslation('b',esc(p.reply),p.translation);
         if(voiceOn)speak(p.reply||text);
       } else {
         var p2=parseAdvResp(text);
