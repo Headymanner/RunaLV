@@ -358,22 +358,22 @@ var chatActive = false;
 var BEGINNER_TOPICS = [
   {id:'sveicieni', e:'👋', lv:'Sveicieni', ru:'Приветствия',
    h:['Sveiki!','Labdien!','Paldies'],
-   greet:'Sveiki! Es esmu tavs latviešu valodas skolotājs. Šodien mācīsimies sveicienus. Es tev palīdzēšu! 😊\n\n🇷🇺 Привет! Я твой учитель латышского. Сегодня учим приветствия. Я помогу тебе!'},
+   greet:'Sveiki! Es esmu tavs latviešu valodas skolotājs. Šodien mācīsimies sveicienus. Es tev palīdzēšu! 😊\n\nПривет! Я твой учитель латышского. Сегодня учим приветствия. Я помогу тебе!'},
   {id:'skaitli', e:'🔢', lv:'Skaitļi 1-10', ru:'Цифры 1-10',
    h:['Viens','Divi','Trīs'],
-   greet:'Sveiki! Šodien mācīsimies skaitļus no 1 līdz 10. Tas ir ļoti svarīgi! 😊\n\n🇷🇺 Привет! Сегодня учим цифры от 1 до 10. Это очень важно!'},
+   greet:'Sveiki! Šodien mācīsimies skaitļus no 1 līdz 10. Tas ir ļoti svarīgi! 😊\n\nПривет! Сегодня учим цифры от 1 до 10. Это очень важно!'},
   {id:'iepazisanas', e:'🤝', lv:'Iepazīšanās', ru:'Знакомство',
    h:['Mani sauc...','Es esmu no...','Cik tev gadu?'],
-   greet:'Sveiki! Šodien mācīsimies iepazīties latviski. Es tev palīdzēšu soli pa solim! 😊\n\n🇷🇺 Привет! Сегодня учимся знакомиться по-латышски. Помогу шаг за шагом!'},
+   greet:'Sveiki! Šodien mācīsimies iepazīties latviski. Es tev palīdzēšu soli pa solim! 😊\n\nПривет! Сегодня учимся знакомиться по-латышски. Помогу шаг за шагом!'},
   {id:'jaja_ne', e:'✅', lv:'Jā / Nē', ru:'Да / Нет',
    h:['Jā','Nē','Varbūt'],
-   greet:'Sveiki! Šodien mācīsimies svarīgākos vārdus: Jā un Nē. Ļoti vienkārši! 😊\n\n🇷🇺 Привет! Сегодня учим важнейшие слова: Да и Нет. Очень просто!'},
+   greet:'Sveiki! Šodien mācīsimies svarīgākos vārdus: Jā un Nē. Ļoti vienkārši! 😊\n\nПривет! Сегодня учим важнейшие слова: Да и Нет. Очень просто!'},
   {id:'krasa', e:'🎨', lv:'Krāsas', ru:'Цвета',
    h:['Sarkans','Zils','Zaļš'],
-   greet:'Sveiki! Šodien mācīsimies krāsas latviski. Tas ir ļoti jautri! 🌈\n\n🇷🇺 Привет! Сегодня учим цвета по-латышски. Это очень весело!'},
+   greet:'Sveiki! Šodien mācīsimies krāsas latviski. Tas ir ļoti jautri! 🌈\n\nПривет! Сегодня учим цвета по-латышски. Это очень весело!'},
   {id:'gimene_beg', e:'👨‍👩‍👧', lv:'Ģimene', ru:'Семья',
    h:['Māte','Tēvs','Brālis'],
-   greet:'Sveiki! Šodien mācīsimies ģimenes vārdus. Māte, tēvs, brālis... 😊\n\n🇷🇺 Привет! Сегодня учим слова про семью. Мама, папа, брат...'},
+   greet:'Sveiki! Šodien mācīsimies ģimenes vārdus. Māte, tēvs, brālis... 😊\n\nПривет! Сегодня учим слова про семью. Мама, папа, брат...'},
 ];
 
 var ADVANCED_TOPICS = {
@@ -524,7 +524,7 @@ function startBeginner(id){
   var parts=t.greet.split('\n\n');
   var lvText=parts[0];
   var ruText=parts[1]||'';
-  addMsgWithTranslation('b', esc(lvText), ruText.replace('🇷🇺 ',''));
+  addMsgWithTranslation('b', esc(lvText), ruText.replace('',''));
   if(voiceOn) speak(lvText);
 }
 
@@ -589,7 +589,7 @@ function addMsgWithTranslation(role,html,translation,words,fb){
   var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
-  var transHtml=translation?'<div class="translation">🇷🇺 '+esc(translation)+'</div>':'';
+  var transHtml=translation?'<div class="translation">esc(translation)+'</div>':'';
   var wordsHtml=words||'';
   d.innerHTML='<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
     +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+wordsHtml+(fb||'')
