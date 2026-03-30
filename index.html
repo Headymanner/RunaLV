@@ -589,7 +589,7 @@ function addMsgWithTranslation(role,html,translation,words,fb){
   var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
-  var transHtml=translation?'<div class="translation">esc(translation)+'</div>':'';
+  var transHtml=translation?'<div class="translation">'+esc(translation)+'</div>':'';
   var wordsHtml=words||'';
   d.innerHTML='<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
     +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+wordsHtml+(fb||'')
