@@ -275,13 +275,10 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 <!-- MODAL -->
 <div class="modal h" id="modal">
   <div class="mbox">
-    <div class="mi">⚙️</div>
-    <div class="mt">Worker URL</div>
-    <div class="md">Ievadi Cloudflare Worker adresi</div>
-    <div class="ml">CLOUDFLARE WORKER URL</div>
-    <input class="minp" type="text" id="inpKey" placeholder="https://runalv.treners52.workers.dev"/>
-    <button class="mbtn2" id="btnSave">Saglabāt / Сохранить →</button>
-    <div class="mnote"><a href="https://workers.cloudflare.com" target="_blank">workers.cloudflare.com</a></div>
+    <div class="mi">✅</div>
+    <div class="mt">API darbojas!</div>
+    <div class="md">Serveris ir konfigurēts.<br><span style="color:#5a6e88;">Сервер настроен и работает.</span></div>
+    <button class="mbtn2" id="btnSave">Aizvērt / Закрыть</button>
   </div>
 </div>
 
@@ -331,7 +328,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
   <div class="sgrp">
     <div class="sgl">API</div>
     <div class="si" id="siKey">
-      <div class="sil"><span class="sico">🔑</span><div><div class="sname">Worker URL</div><div class="sdesc" id="keyStatus">Nav iestatīts</div></div></div>
+      <div class="sil"><span class="sico">🔑</span><div><div class="sname">Worker URL</div><div class="sdesc" id="keyStatus">Darbojas ✓</div></div></div>
       <span style="color:#5a6e88;font-size:18px">›</span>
     </div>
   </div>
@@ -402,7 +399,7 @@ document.getElementById('togS').classList.toggle('on', scoreOn);
 document.getElementById('selVoice').value = gVoice;
 document.getElementById('selLevel').value = level;
 document.getElementById('pts').textContent = totalPts;
-if (WORKER && WORKER !== 'https://runalv.treners52.workers.dev') {
+if (true) {
   document.getElementById('keyStatus').textContent = 'Iestatīts ✓';
 }
 initSpeech();
@@ -433,12 +430,7 @@ document.getElementById('btnBackToHome').addEventListener('click', function(){
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-home').style.display='block';
 });
-document.getElementById('btnLang').addEventListener('click', function(){
-  micLang = micLang === 'ru-RU' ? 'lv-LV' : 'ru-RU';
-  this.textContent = micLang === 'ru-RU' ? 'RU' : 'LV';
-  this.style.color = micLang === 'ru-RU' ? '#e8b84b' : '#5ab88a';
-  if(recog) recog.lang = micLang;
-});
+// btnLang bound after chat opens - see startBeginner/startAdvanced
 document.getElementById('hints').addEventListener('click', function(e){
   var h=e.target.closest('.hint');
   if(h){ document.getElementById('txt').value=h.getAttribute('data-hint'); }
@@ -447,14 +439,7 @@ document.getElementById('hints').addEventListener('click', function(e){
 // ── MODAL ─────────────────────────────────────
 function showModal(){ document.getElementById('modal').classList.remove('h'); document.getElementById('inpKey').value=WORKER; }
 function hideModal(){ document.getElementById('modal').classList.add('h'); }
-function saveKey(){
-  var k=document.getElementById('inpKey').value.trim();
-  if(!k){ alert('Ievadi Worker URL!'); return; }
-  WORKER=k.replace(/\/+$/,'');
-  localStorage.setItem('lv_worker',WORKER);
-  document.getElementById('keyStatus').textContent='Iestatīts ✓';
-  hideModal();
-}
+function saveKey(){ hideModal(); }
 
 // ── SETTINGS ──────────────────────────────────
 function togSet(key,lsKey,elId){
@@ -533,6 +518,16 @@ function startBeginner(id){
   }).join('');
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-chat').style.display='flex';
+  // Bind lang button after chat is visible
+  var lb=document.getElementById('btnLang');
+  if(lb){
+    lb.onclick=function(){
+      micLang=micLang==='ru-RU'?'lv-LV':'ru-RU';
+      this.textContent=micLang==='ru-RU'?'RU':'LV';
+      this.style.color=micLang==='ru-RU'?'#e8b84b':'#5ab88a';
+      if(recog)recog.lang=micLang;
+    };
+  }
   // Show greeting
   chatHist=[{role:'model',parts:[{text:t.greet}]}];
   var parts=t.greet.split('\n\n');
@@ -558,6 +553,17 @@ function startAdvanced(id){
   }).join('');
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-chat').style.display='flex';
+  var lb2=document.getElementById('btnLang');
+  if(lb2){
+    lb2.textContent='LV'; lb2.style.color='#5ab88a';
+    micLang='lv-LV'; if(recog)recog.lang='lv-LV';
+    lb2.onclick=function(){
+      micLang=micLang==='ru-RU'?'lv-LV':'ru-RU';
+      this.textContent=micLang==='ru-RU'?'RU':'LV';
+      this.style.color=micLang==='ru-RU'?'#e8b84b':'#5ab88a';
+      if(recog)recog.lang=micLang;
+    };
+  }
   var greetings={
     'ģimene':   'Sveiki! Ļoti priecājos ar jums tikties. Pastāstiet, cik cilvēku ir jūsu ģimenē?',
     'ceļošana': 'Labdien! Ceļošana ir brīnišķīga iespēja iepazīt pasauli. Kuru valsti jūs visvairāk vēlaties apmeklēt?',
@@ -587,13 +593,14 @@ function goBack(){
 }
 
 // ── MESSAGES ──────────────────────────────────
-function addMsg(role,html,fb){
+function addMsg(role,html,fb,translation){
   var c=document.getElementById('msgs');
   var now=new Date().toLocaleTimeString('lv-LV',{hour:'2-digit',minute:'2-digit'});
   var d=document.createElement('div');
   d.className='msg '+role;
+  var transHtml=translation?'<div class="translation">'+esc(translation)+'</div>':'';
   d.innerHTML='<div class="av">'+(role==='b'?'🎓':'👤')+'</div>'
-    +'<div class="mbody"><div class="bub">'+html+'</div>'+(fb||'')
+    +'<div class="mbody"><div class="bub">'+html+'</div>'+transHtml+(fb||'')
     +'<div class="mtime">'+now+'</div></div>';
   c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
@@ -713,9 +720,10 @@ function parseAdvResp(text){
   var reply=text,errors=[],score=null,razb='';
   var si=text.search(/\nKĻŪDAS|\nVĒRTĒJUMS|\nРАЗБОР|\nTULKOJUMS/i);
   if(si>0) reply=text.slice(0,si).trim();
-  // Extract Russian translation
-  var tum=text.match(/TULKOJUMS[:\s]+([^\n]+)/i);
-  if(tum) razb='<div style="font-size:12px;color:#9bacc4;margin-top:4px;font-style:italic;">'+esc(tum[1].trim())+'</div>'+(razb||'');
+  // Extract Russian translation (TULKOJUMS)
+  var translation='';
+  var tum=text.match(/TULKOJUMS[:\s]+([\s\S]+?)(?=\nKĻŪDAS|\nVĒRTĒJUMS|\nРАЗБОР|$)/i);
+  if(tum) translation=tum[1].trim();
   // Extract РАЗБОР
   var rm=text.match(/РАЗБОР[:\s]+([^\n]+)/i);
   if(rm) razb='<div style="margin-top:5px;font-size:11px;color:#9bacc4;font-style:italic;">📖 '+esc(rm[1].trim())+'</div>';
@@ -733,7 +741,7 @@ function parseAdvResp(text){
     if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
   }
   reply=reply.replace(/\*\*/g,'').trim();
-  return {reply:reply||text,errors:errors,score:score,razb:razb};
+  return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation};
 }
 
 function buildFb(p){
@@ -775,7 +783,7 @@ function sendMsg(){
       if(voiceOn) speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
     } else {
       var p2=parseAdvResp(text);
-      var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2);
+      var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2,p2.translation);
       if(voiceOn) speak(p2.reply||text);
     }
   });
@@ -837,7 +845,10 @@ function initSpeech(){
   recog.onresult=function(e){
     var t=e.results[0][0].transcript.trim();stopRec();
     if(!t)return;
-    stopAudio();addMsg('u',esc(t));showTyping();
+    stopAudio();
+    // If Russian mic - add note that it's Russian input
+    var displayT = micLang==='ru-RU' ? t+' <span style="font-size:10px;color:#5a6e88;">(ru)</span>' : t;
+    addMsg('u',displayT);showTyping();
     document.getElementById('btnSend').disabled=true;
     callGemini(t,function(err,text){
       rmTyping();document.getElementById('btnSend').disabled=false;
@@ -848,7 +859,7 @@ function initSpeech(){
         if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
       } else {
         var p2=parseAdvResp(text);
-        var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2);
+        var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2,p2.translation);
         if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
       }
     });
