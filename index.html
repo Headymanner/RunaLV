@@ -809,21 +809,46 @@ function stopAudio(){
   rmWave();
 }
 var ttsLock = false;
+var lastTtsTime = 0;
 function speak(text){
   if(!chatActive||!voiceOn||!text)return;
-  if(ttsLock){ console.log('TTS busy, skipping'); return; }
+  if(ttsLock){ return; }
   ttsLock = true;
   stopAudio();showWave();
   var speakSession=topic;
+  // Ensure at least 2 seconds between TTS calls
+  var now = Date.now();
+  var delay = Math.max(0, 2000 - (now - lastTtsTime));
+  setTimeout(function(){
+    if(!chatActive||speakSession!==topic){rmWave();ttsLock=false;return;}
+    lastTtsTime = Date.now();
+    doSpeak(text, speakSession, 0);
+  }, delay);
+}
+function doSpeak(text, speakSession, attempt){
   var ctrl=new AbortController();
-  var ttsTimeout=setTimeout(function(){ctrl.abort();rmWave();},12000);
+  var ttsTimeout=setTimeout(function(){ctrl.abort();rmWave();ttsLock=false;},20000);
   fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
     signal:ctrl.signal,
     body:JSON.stringify({type:'tts',text:text,voice:gVoice})
   })
-  .then(function(r){if(!r.ok)throw new Error('TTS '+r.status);return r.json();})
+  .then(function(r){
+    if(r.status===429 && attempt<2){
+      // Rate limited - wait 3 seconds and retry
+      clearTimeout(ttsTimeout);
+      console.log('TTS rate limited, retry in 3s...');
+      setTimeout(function(){
+        if(chatActive&&speakSession===topic) doSpeak(text,speakSession,attempt+1);
+        else {rmWave();ttsLock=false;}
+      },3000);
+      return null;
+    }
+    if(!r.ok)throw new Error('TTS '+r.status);
+    return r.json();
+  })
   .then(function(d){
+    if(!d)return; // retry case
     clearTimeout(ttsTimeout);
     if(!chatActive||speakSession!==topic){rmWave();ttsLock=false;return;}
     if(!d||!d.data){rmWave();ttsLock=false;return;}
