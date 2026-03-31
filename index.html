@@ -338,7 +338,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 </div>
 
 <script>
-var WORKER  = localStorage.getItem('lv_worker') || 'https://runalv.treners52.workers.dev';
+var WORKER = '/api/proxy'; // Vercel serverless function
 var voiceOn  = localStorage.getItem('lv_vo')  !== 'false';
 var errorsOn = localStorage.getItem('lv_eo')  !== 'false';
 var scoreOn  = localStorage.getItem('lv_so')  !== 'false';
@@ -525,7 +525,7 @@ function startBeginner(id){
   var lvText=parts[0];
   var ruText=parts[1]||'';
   addMsgWithTranslation('b', esc(lvText), ruText.replace('',''));
-  if(voiceOn) speak(lvText);
+  if(voiceOn) speak(lvText.substring(0,180));
 }
 
 function startAdvanced(id){
@@ -557,7 +557,7 @@ function startAdvanced(id){
   var greetText=greetings[id]||'Sveiki! Sāksim sarunu!';
   chatHist=[{role:'model',parts:[{text:greetText}]}];
   addMsg('b',esc(greetText));
-  if(voiceOn) speak(greetText);
+  if(voiceOn) speak(greetText.substring(0,180));
 }
 
 function goBack(){
@@ -616,17 +616,11 @@ function rmWave(){var w=document.getElementById('wave');if(w)w.remove();}
 
 // ── SYSTEM PROMPTS ────────────────────────────
 function buildBeginnerSys(){
-  return 'Ты очень добрый и терпеливый учитель латышского для абсолютных новичков.\n'
-    +'Тема: "'+topic+'". Ученик НИКОГДА не учил латышский.\n'
-    +'ПРАВИЛА:\n'
-    +'1. Пиши ТОЛЬКО по-латышски — красиво и естественно, БЕЗ скобок и переводов в тексте\n'
-    +'2. Максимум 2-3 коротких предложения\n'
-    +'3. Будь тёплым, хвали ученика, используй эмодзи 😊\n'
-    +'4. Исправляй ошибки мягко\n'
-    +'ПОСЛЕ своего латышского текста добавь СТРОГО в таком формате:\n'
-    +'ПЕРЕВОД: [полный перевод на русский]\n'
-    +'СЛОВА: слово1 = перевод1 | слово2 = перевод2 | слово3 = перевод3\n'
-    +'(максимум 5 новых слов в СЛОВА)\n';
+  return 'Ты добрый учитель латышского для новичков. Тема: "'+topic+'".\n'
+    +'СТРОГО: пиши ТОЛЬКО по-латышски. Максимум 2 коротких предложения. Затем:\n'
+    +'ПЕРЕВОД: [1-2 предложения по-русски]\n'
+    +'СЛОВА: слово1 = перевод | слово2 = перевод | слово3 = перевод\n'
+    +'Хвали ученика. Используй эмодзи. Исправляй ошибки по-русски в ПЕРЕВОД.\n'';
 }
 
 function buildAdvancedSys(){
@@ -638,7 +632,7 @@ function buildAdvancedSys(){
   };
   var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
     +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'. '+(levelDesc[level]||'')+'\n'
-    +'Atbildi 2 pilnīgos teikumos un uzdod 1 jautājumu. Katrs teikums JĀBEIDZAS ar punktu vai jautājuma zīmi.\n';
+    +'Atbildi TIKAI 1-2 īsos teikumos + 1 jautājums. OBLIGĀTI pabeidz katru teikumu ar . vai ?\n';
   if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
   return s;
@@ -648,13 +642,13 @@ function buildAdvancedSys(){
 function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
   var sys=isBeginner?buildBeginnerSys():buildAdvancedSys();
-  fetch(WORKER+'/gemini/v1beta/models/gemini-2.5-flash:generateContent',{
+  fetch(WORKER,{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
+    body:JSON.stringify({type:'chat', body:{
       systemInstruction:{parts:[{text:sys}]},
       contents:chatHist,
-      generationConfig:{temperature:0.85,maxOutputTokens:700}
-    })
+      generationConfig:{temperature:0.85,maxOutputTokens:800}
+    }})
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);return d;});})
   .then(function(d){
@@ -753,7 +747,7 @@ function sendMsg(){
       var p=parseBeginnerResp(text);
       var replyHtml=esc(p.reply);
       addMsgWithTranslation('b',replyHtml,p.translation,p.words);
-      if(voiceOn) speak((p.reply||text).substring(0,200));
+      if(voiceOn) speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
     } else {
       var p2=parseAdvResp(text);
       addMsg('b',esc(p2.reply||text),buildFb(p2));
@@ -786,10 +780,10 @@ function speak(text){
   var speakSession=topic;
   var ctrl=new AbortController();
   var ttsTimeout=setTimeout(function(){ctrl.abort();rmWave();},12000);
-  fetch(WORKER+'/tts',{
+  fetch(WORKER,{
     method:'POST',headers:{'Content-Type':'application/json'},
     signal:ctrl.signal,
-    body:JSON.stringify({text:text,voice:gVoice})
+    body:JSON.stringify({type:'tts',text:text,voice:gVoice})
   })
   .then(function(r){if(!r.ok)throw new Error('TTS '+r.status);return r.json();})
   .then(function(d){
@@ -803,7 +797,11 @@ function speak(text){
     curAudio.onerror=function(){rmWave();};
     curAudio.play().catch(function(){rmWave();});
   })
-  .catch(function(e){clearTimeout(ttsTimeout);console.warn('TTS:',e.message);rmWave();});
+  .catch(function(e){
+    clearTimeout(ttsTimeout);
+    console.warn('TTS failed:', e.message);
+    rmWave();
+  });
 }
 
 // ── SPEECH RECOGNITION ────────────────────────
@@ -822,11 +820,11 @@ function initSpeech(){
       if(isBeginner){
         var p=parseBeginnerResp(text);
         addMsgWithTranslation('b',esc(p.reply),p.translation,p.words);
-        if(voiceOn)speak(p.reply||text);
+        if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
       } else {
         var p2=parseAdvResp(text);
         addMsg('b',esc(p2.reply||text),buildFb(p2));
-        if(voiceOn)speak(p2.reply||text);
+        if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
       }
     });
   };
