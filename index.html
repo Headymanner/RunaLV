@@ -351,30 +351,37 @@ var topic    = '';
 var isBeginner = false;
 var chatHist = [];
 var recog    = null;
+var micLang  = 'ru-RU'; // Default Russian for beginners, switch to lv-LV for advanced
 var isRec    = false;
 var curAudio = null;
 var chatActive = false;
 
 // ── TOPICS DATA ──────────────────────────────
 var BEGINNER_TOPICS = [
-  {id:'sveicieni', e:'👋', lv:'Sveicieni', ru:'Приветствия',
-   h:['Sveiki!','Labdien!','Paldies'],
-   greet:'Sveiki! Es esmu tavs latviešu valodas skolotājs. Šodien mācīsimies sveicienus. Es tev palīdzēšu! 😊\n\nПривет! Я твой учитель латышского. Сегодня учим приветствия. Я помогу тебе!'},
-  {id:'skaitli', e:'🔢', lv:'Skaitļi 1-10', ru:'Цифры 1-10',
-   h:['Viens','Divi','Trīs'],
-   greet:'Sveiki! Šodien mācīsimies skaitļus no 1 līdz 10. Tas ir ļoti svarīgi! 😊\n\nПривет! Сегодня учим цифры от 1 до 10. Это очень важно!'},
-  {id:'iepazisanas', e:'🤝', lv:'Iepazīšanās', ru:'Знакомство',
-   h:['Mani sauc...','Es esmu no...','Cik tev gadu?'],
-   greet:'Sveiki! Šodien mācīsimies iepazīties latviski. Es tev palīdzēšu soli pa solim! 😊\n\nПривет! Сегодня учимся знакомиться по-латышски. Помогу шаг за шагом!'},
-  {id:'jaja_ne', e:'✅', lv:'Jā / Nē', ru:'Да / Нет',
-   h:['Jā','Nē','Varbūt'],
-   greet:'Sveiki! Šodien mācīsimies svarīgākos vārdus: Jā un Nē. Ļoti vienkārši! 😊\n\nПривет! Сегодня учим важнейшие слова: Да и Нет. Очень просто!'},
-  {id:'krasa', e:'🎨', lv:'Krāsas', ru:'Цвета',
-   h:['Sarkans','Zils','Zaļš'],
-   greet:'Sveiki! Šodien mācīsimies krāsas latviski. Tas ir ļoti jautri! 🌈\n\nПривет! Сегодня учим цвета по-латышски. Это очень весело!'},
-  {id:'gimene_beg', e:'👨‍👩‍👧', lv:'Ģimene', ru:'Семья',
-   h:['Māte','Tēvs','Brālis'],
-   greet:'Sveiki! Šodien mācīsimies ģimenes vārdus. Māte, tēvs, brālis... 😊\n\nПривет! Сегодня учим слова про семью. Мама, папа, брат...'},
+  {id:'sveicieni', e:'👋', lv:'Урок 1: Привет!', ru:'Приветствия',
+   h:['Sveiki!','Labdien!','Uz redzēšanos!'],
+   greet:'Sveiki! Es esmu Māra — tava latviešu skolotāja! 😊 Šodien tu iemācīsies sasveicināties latviski. Pirmais vārds: Sveiki! (Привет!) Pamēģini pateikt: Sveiki!\n\nПривет! Я Мара — твой учитель латышского! Сегодня ты научишься здороваться. Первое слово: Sveiki! = Привет! Попробуй написать: Sveiki!'},
+  {id:'skaitli', e:'🔢', lv:'Урок 2: Цифры', ru:'Цифры 1-10',
+   h:['Viens - 1','Divi - 2','Trīs - 3'],
+   greet:'Lieliski, ka tu šeit! 🌟 Šodien mācīsimies skaitļus! Viens, divi, trīs... Spēlēsim spēli — es teikšu skaitli latviski, tu atbildi krieviski! Sāksim: Viens! Ko tas nozīmē?\n\nОтлично, что ты здесь! Сегодня учим цифры! Играем в игру — я говорю цифру по-латышски, ты отвечаешь по-русски! Начнём: Viens! Что это значит?'},
+  {id:'iepazisanas', e:'🤝', lv:'Урок 3: Знакомство', ru:'Знакомство',
+   h:['Mani sauc...','Es esmu no Rīgas','Cik tev gadu?'],
+   greet:'Sveiki, draugs! 😊 Es esmu Māra. Un tu? Latviski mēs sakām: "Mani sauc [vārds]" — это значит "Меня зовут [имя]". Pamēģini: Mani sauc...\n\nПривет, друг! Я Мара. А ты? По-латышски мы говорим: "Mani sauc [имя]" = "Меня зовут [имя]". Попробуй написать своё имя!'},
+  {id:'jaja_ne', e:'✅', lv:'Урок 4: Да и Нет', ru:'Да / Нет / Спасибо',
+   h:['Jā!','Nē','Paldies!'],
+   greet:'Lieliski! 🎉 Šodien mācīsimies 3 svarīgus vārdus: Jā (Да), Nē (Нет), Paldies (Спасибо)! Tie ir vajadzīgi katru dienu. Spēlēsim: es uzdošu jautājumu, tu atbildi Jā vai Nē! Vai tev patīk mācīties latviski?\n\nОтлично! Сегодня учим 3 важных слова: Jā (Да), Nē (Нет), Paldies (Спасибо)! Играем: я задаю вопрос, ты отвечаешь Jā или Nē! Тебе нравится учить латышский?'},
+  {id:'krasa', e:'🎨', lv:'Урок 5: Цвета', ru:'Цвета',
+   h:['Sarkans - красный','Zils - синий','Zaļš - зелёный'],
+   greet:'Krāsas ir ļoti jautras! 🌈 Šodien mācīsimies krāsas. Paskatīsimies apkārt — ko tu redzi? Latviski: sarkans (красный), zils (синий), zaļš (зелёный), dzeltens (жёлтый), balts (белый). Kāda ir tava iecienītākā krāsa? Atbildi latviski!\n\nЦвета — это весело! Сегодня учим цвета. Посмотрим вокруг. По-латышски: sarkans, zils, zaļš, dzeltens, balts. Какой твой любимый цвет? Ответь по-латышски!'},
+  {id:'gimene_beg', e:'👨‍👩‍👧', lv:'Урок 6: Семья', ru:'Семья',
+   h:['Māte - мама','Tēvs - папа','Brālis - брат'],
+   greet:'Ģimene ir ļoti svarīga! ❤️ Šodien mācīsimies ģimenes vārdus. Māte (мама), Tēvs (папа), Brālis (брат), Māsa (сестра), Vecāmāte (бабушка). Pastāsti par savu ģimeni! Vai tev ir brāļi vai māsas?\n\nСемья очень важна! Сегодня учим слова про семью. Māte (мама), Tēvs (папа), Brālis (брат), Māsa (сестра). Расскажи о своей семье! У тебя есть братья или сёстры?'},
+  {id:'ediens_beg', e:'🍽️', lv:'Урок 7: Еда', ru:'Еда и напитки',
+   h:['Maize - хлеб','Piens - молоко','Gaļa - мясо'],
+   greet:'Ēdiens ir ļoti garšīgs! 😋 Šodien mācīsimies ēdiena vārdus. Maize (хлеб), piens (молоко), ūdens (вода), gaļa (мясо), augļi (фрукты). Spēlēsim: es teikšu ēdienu latviski — tu tulko krieviski! Maize — ko tas nozīmē?\n\nЕда очень вкусная! Сегодня учим слова про еду. Играем: я говорю слово по-латышски — ты переводишь на русский! Maize — что это значит?'},
+  {id:'laiks_beg', e:'🕐', lv:'Урок 8: Время', ru:'Время и дни недели',
+   h:['Šodien - сегодня','Rīt - завтра','Vakar - вчера'],
+   greet:'Laiks skrien ātri! ⏰ Šodien mācīsimies par laiku. Šodien (сегодня), rīt (завтра), vakar (вчера), rīts (утро), vakars (вечер). Kāda šodien ir diena? Atbildi: Šodien ir...\n\nВремя летит быстро! Сегодня учим слова про время. Šodien (сегодня), rīt (завтра), vakar (вчера). Какой сегодня день? Ответь: Šodien ir...'},
 ];
 
 var ADVANCED_TOPICS = {
@@ -425,6 +432,12 @@ document.getElementById('btnAdvanced').addEventListener('click', function(){ sho
 document.getElementById('btnBackToHome').addEventListener('click', function(){
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-home').style.display='block';
+});
+document.getElementById('btnLang').addEventListener('click', function(){
+  micLang = micLang === 'ru-RU' ? 'lv-LV' : 'ru-RU';
+  this.textContent = micLang === 'ru-RU' ? 'RU' : 'LV';
+  this.style.color = micLang === 'ru-RU' ? '#e8b84b' : '#5ab88a';
+  if(recog) recog.lang = micLang;
 });
 document.getElementById('hints').addEventListener('click', function(e){
   var h=e.target.closest('.hint');
@@ -636,7 +649,8 @@ function buildAdvancedSys(){
   };
   var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
     +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'. '+(levelDesc[level]||'')+'\n'
-    +'Atbildi TIKAI 1-2 īsos teikumos + 1 jautājums. OBLIGĀTI pabeidz katru teikumu ar . vai ?\n';
+    +'Atbildi 1-2 īsos teikumos + 1 jautājums. OBLIGĀTI pabeidz katru teikumu ar . vai ?\n'
+    +'TULKOJUMS: [перевод твоего ответа на русский язык]\n';
   if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
     +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
@@ -697,8 +711,11 @@ function parseBeginnerResp(text){
 // ── PARSE ADVANCED RESPONSE ───────────────────
 function parseAdvResp(text){
   var reply=text,errors=[],score=null,razb='';
-  var si=text.search(/\nKĻŪDAS|\nVĒRTĒJUMS|\nРАЗБОР/i);
+  var si=text.search(/\nKĻŪDAS|\nVĒRTĒJUMS|\nРАЗБОР|\nTULKOJUMS/i);
   if(si>0) reply=text.slice(0,si).trim();
+  // Extract Russian translation
+  var tum=text.match(/TULKOJUMS[:\s]+([^\n]+)/i);
+  if(tum) razb='<div style="font-size:12px;color:#9bacc4;margin-top:4px;font-style:italic;">'+esc(tum[1].trim())+'</div>'+(razb||'');
   // Extract РАЗБОР
   var rm=text.match(/РАЗБОР[:\s]+([^\n]+)/i);
   if(rm) razb='<div style="margin-top:5px;font-size:11px;color:#9bacc4;font-style:italic;">📖 '+esc(rm[1].trim())+'</div>';
@@ -816,7 +833,7 @@ function speak(text){
 function initSpeech(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return;
-  recog=new SR();recog.lang='lv-LV';recog.continuous=false;recog.interimResults=false;
+  recog=new SR();recog.lang=micLang;recog.continuous=false;recog.interimResults=false;
   recog.onresult=function(e){
     var t=e.results[0][0].transcript.trim();stopRec();
     if(!t)return;
