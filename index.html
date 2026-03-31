@@ -803,12 +803,16 @@ function pcmToWav(b64){
   return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
 }
 function stopAudio(){
+  ttsLock=false;
   if(curAudio){curAudio.onended=null;curAudio.onerror=null;curAudio.pause();curAudio.src='';curAudio=null;}
   if(window.speechSynthesis)window.speechSynthesis.cancel();
   rmWave();
 }
+var ttsLock = false;
 function speak(text){
   if(!chatActive||!voiceOn||!text)return;
+  if(ttsLock){ console.log('TTS busy, skipping'); return; }
+  ttsLock = true;
   stopAudio();showWave();
   var speakSession=topic;
   var ctrl=new AbortController();
@@ -821,17 +825,18 @@ function speak(text){
   .then(function(r){if(!r.ok)throw new Error('TTS '+r.status);return r.json();})
   .then(function(d){
     clearTimeout(ttsTimeout);
-    if(!chatActive||speakSession!==topic){rmWave();return;}
-    if(!d||!d.data){rmWave();return;}
+    if(!chatActive||speakSession!==topic){rmWave();ttsLock=false;return;}
+    if(!d||!d.data){rmWave();ttsLock=false;return;}
     var mime=d.mimeType||'';
     var url=(mime.indexOf('L16')>-1||mime.indexOf('pcm')>-1||!mime)?pcmToWav(d.data):'data:'+mime+';base64,'+d.data;
     showWave();curAudio=new Audio(url);
-    curAudio.onended=function(){rmWave();if(url.startsWith('blob:'))URL.revokeObjectURL(url);};
-    curAudio.onerror=function(){rmWave();};
-    curAudio.play().catch(function(){rmWave();});
+    curAudio.onended=function(){rmWave();ttsLock=false;if(url.startsWith('blob:'))URL.revokeObjectURL(url);};
+    curAudio.onerror=function(){rmWave();ttsLock=false;};
+    curAudio.play().catch(function(){rmWave();ttsLock=false;});
   })
   .catch(function(e){
     clearTimeout(ttsTimeout);
+    ttsLock=false;
     console.warn('TTS failed:', e.message);
     rmWave();
   });
