@@ -338,7 +338,8 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 </div>
 
 <script>
-var WORKER = '/api/proxy'; // Vercel serverless function
+// API endpoint - uses Vercel if available, falls back to Cloudflare
+var WORKER = '/api/proxy';
 var voiceOn  = localStorage.getItem('lv_vo')  !== 'false';
 var errorsOn = localStorage.getItem('lv_eo')  !== 'false';
 var scoreOn  = localStorage.getItem('lv_so')  !== 'false';
@@ -616,11 +617,14 @@ function rmWave(){var w=document.getElementById('wave');if(w)w.remove();}
 
 // ── SYSTEM PROMPTS ────────────────────────────
 function buildBeginnerSys(){
-  return 'Ты добрый учитель латышского для новичков. Тема: "'+topic+'".\n'
-    +'СТРОГО: пиши ТОЛЬКО по-латышски. Максимум 2 коротких предложения. Затем:\n'
-    +'ПЕРЕВОД: [1-2 предложения по-русски]\n'
-    +'СЛОВА: слово1 = перевод | слово2 = перевод | слово3 = перевод\n'
-    +'Хвали ученика. Используй эмодзи. Исправляй ошибки по-русски в ПЕРЕВОД.\n';
+  return 'Ты очень добрый и весёлый учитель латышского для абсолютных новичков. Тема: "'+topic+'".\n'
+    +'СТИЛЬ: как живой человек, тепло, с юмором, хвали за каждый ответ 😊\n'
+    +'СТРУКТУРА КАЖДОГО ОТВЕТА:\n'
+    +'1. Пиши по-латышски (1-2 предложения) — красиво и естественно\n'
+    +'2. Давай интересное задание: повтори фразу / ответь на вопрос / выбери правильный вариант\n'
+    +'3. Чередуй типы заданий: иногда загадки, иногда ролевые игры, иногда счёт\n'
+    +'ПЕРЕВОД: [перевод на русский]\n'
+    +'СЛОВА: слово1 = значение | слово2 = значение\n';
 }
 
 function buildAdvancedSys(){
@@ -633,7 +637,8 @@ function buildAdvancedSys(){
   var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
     +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'. '+(levelDesc[level]||'')+'\n'
     +'Atbildi TIKAI 1-2 īsos teikumos + 1 jautājums. OBLIGĀTI pabeidz katru teikumu ar . vai ?\n';
-  if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n';
+  if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
+    +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
   return s;
 }
@@ -642,9 +647,9 @@ function buildAdvancedSys(){
 function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
   var sys=isBeginner?buildBeginnerSys():buildAdvancedSys();
-  fetch(WORKER,{
+  fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({type:'chat', body:{
+    body:JSON.stringify({type:'chat',body:{
       systemInstruction:{parts:[{text:sys}]},
       contents:chatHist,
       generationConfig:{temperature:0.85,maxOutputTokens:800}
@@ -691,9 +696,12 @@ function parseBeginnerResp(text){
 
 // ── PARSE ADVANCED RESPONSE ───────────────────
 function parseAdvResp(text){
-  var reply=text,errors=[],score=null;
-  var si=text.search(/\nKĻŪDAS|\nVĒRTĒJUMS/i);
+  var reply=text,errors=[],score=null,razb='';
+  var si=text.search(/\nKĻŪDAS|\nVĒRTĒJUMS|\nРАЗБОР/i);
   if(si>0) reply=text.slice(0,si).trim();
+  // Extract РАЗБОР
+  var rm=text.match(/РАЗБОР[:\s]+([^\n]+)/i);
+  if(rm) razb='<div style="margin-top:5px;font-size:11px;color:#9bacc4;font-style:italic;">📖 '+esc(rm[1].trim())+'</div>';
   if(errorsOn){
     var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
     if(em) em[0].split('\n').forEach(function(l){
@@ -708,7 +716,7 @@ function parseAdvResp(text){
     if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
   }
   reply=reply.replace(/\*\*/g,'').trim();
-  return {reply:reply||text,errors:errors,score:score};
+  return {reply:reply||text,errors:errors,score:score,razb:razb};
 }
 
 function buildFb(p){
@@ -750,7 +758,7 @@ function sendMsg(){
       if(voiceOn) speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
     } else {
       var p2=parseAdvResp(text);
-      addMsg('b',esc(p2.reply||text),buildFb(p2));
+      var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2);
       if(voiceOn) speak(p2.reply||text);
     }
   });
@@ -780,7 +788,7 @@ function speak(text){
   var speakSession=topic;
   var ctrl=new AbortController();
   var ttsTimeout=setTimeout(function(){ctrl.abort();rmWave();},12000);
-  fetch(WORKER,{
+  fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
     signal:ctrl.signal,
     body:JSON.stringify({type:'tts',text:text,voice:gVoice})
@@ -823,7 +831,7 @@ function initSpeech(){
         if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
       } else {
         var p2=parseAdvResp(text);
-        addMsg('b',esc(p2.reply||text),buildFb(p2));
+        var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2);
         if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
       }
     });
