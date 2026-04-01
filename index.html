@@ -565,19 +565,20 @@ function startAdvanced(id){
     };
   }
   var greetings={
-    'ģimene':   'Sveiki! Ļoti priecājos ar jums tikties. Pastāstiet, cik cilvēku ir jūsu ģimenē?',
-    'ceļošana': 'Labdien! Ceļošana ir brīnišķīga iespēja iepazīt pasauli. Kuru valsti jūs visvairāk vēlaties apmeklēt?',
-    'darbs':    'Sveiki! Darbs ir svarīga mūsu dzīves daļa. Ko jūs darāt savā darbā?',
-    'sports':   'Labdien! Sports palīdz mums būt veseliem. Kāds ir jūsu iecienītākais sporta veids?',
-    'ēdiens':   'Sveiki! Latvijas virtuve ir ļoti garšīga. Kāds ir jūsu iecienītākais ēdiens?',
-    'latvija':  'Labdien! Latvija ir skaista valsts. Ko jūs zināt par Latviju?',
-    'daba':     'Sveiki! Latvijā ir skaista daba. Kāds ir jūsu iecienītākais gadalaiks?',
-    'ikdiena':  'Labdien! Ikdienas rutīna ir interesanta. Kā izskatās jūsu tipiskā diena?'
+    'ģimene':   'Sveiki! Ļoti priecājos ar jums tikties. Pastāstiet, cik cilvēku ir jūsu ģimenē?\nTULKOJUMS: Привет! Очень рад встрече. Расскажите, сколько человек в вашей семье?',
+    'ceļošana': 'Labdien! Ceļošana ir brīnišķīga iespēja iepazīt pasauli. Kuru valsti jūs visvairāk vēlaties apmeklēt?\nTULKOJUMS: Добрый день! Путешествия — это замечательная возможность познать мир. Какую страну вы больше всего хотите посетить?',
+    'darbs':    'Sveiki! Darbs ir svarīga mūsu dzīves daļa. Ko jūs darāt savā darbā?\nTULKOJUMS: Привет! Работа — важная часть нашей жизни. Чем вы занимаетесь на работе?',
+    'sports':   'Labdien! Sports palīdz mums būt veseliem un laimīgiem. Kāds ir jūsu iecienītākais sporta veids?\nTULKOJUMS: Добрый день! Спорт помогает нам быть здоровыми и счастливыми. Какой ваш любимый вид спорта?',
+    'ēdiens':   'Sveiki! Latvijas virtuve ir ļoti garšīga un daudzveidīga. Kāds ir jūsu iecienītākais ēdiens?\nTULKOJUMS: Привет! Латышская кухня очень вкусная и разнообразная. Какое ваше любимое блюдо?',
+    'latvija':  'Labdien! Latvija ir skaista valsts ar bagātu kultūru un vēsturi. Ko jūs zināt par Latviju?\nTULKOJUMS: Добрый день! Латвия — красивая страна с богатой культурой и историей. Что вы знаете о Латвии?',
+    'daba':     'Sveiki! Latvijā ir brīnišķīga daba — meži, ezeri un jūra. Kāds ir jūsu iecienītākais gadalaiks?\nTULKOJUMS: Привет! В Латвии замечательная природа — леса, озёра и море. Какое ваше любимое время года?',
+    'ikdiena':  'Labdien! Ikdienā mēs visi esam dažādi. Kā izskatās jūsu tipiskā diena?\nTULKOJUMS: Добрый день! В повседневной жизни мы все разные. Как выглядит ваш типичный день?'
   };
   var greetText=greetings[id]||'Sveiki! Sāksim sarunu!';
   chatHist=[{role:'model',parts:[{text:greetText}]}];
-  addMsg('b',esc(greetText));
-  if(voiceOn) speak(greetText.substring(0,180));
+  var p0=parseAdvResp(greetText);
+  addMsg('b',esc(p0.reply||greetText),buildFb(p0)+(p0.razb||''),p0.translation);
+  if(voiceOn) speak((p0.reply||greetText).substring(0,180));
 }
 
 function goBack(){
@@ -637,14 +638,28 @@ function rmWave(){var w=document.getElementById('wave');if(w)w.remove();}
 
 // ── SYSTEM PROMPTS ────────────────────────────
 function buildBeginnerSys(){
-  return 'Ты очень добрый и весёлый учитель латышского для абсолютных новичков. Тема: "'+topic+'".\n'
-    +'СТИЛЬ: как живой человек, тепло, с юмором, хвали за каждый ответ 😊\n'
-    +'СТРУКТУРА КАЖДОГО ОТВЕТА:\n'
-    +'1. Пиши по-латышски (1-2 предложения) — красиво и естественно\n'
-    +'2. Давай интересное задание: повтори фразу / ответь на вопрос / выбери правильный вариант\n'
-    +'3. Чередуй типы заданий: иногда загадки, иногда ролевые игры, иногда счёт\n'
-    +'ПЕРЕВОД: [перевод на русский]\n'
-    +'СЛОВА: слово1 = значение | слово2 = значение\n';
+  return 'Ты профессиональный репетитор латышского языка. Тема урока: "'+topic+'".\n'
+    +'ТВОЯ ЗАДАЧА: помочь ученику говорить по-латышски естественно и уверенно.\n'
+    +'\n'
+    +'КАК ТЫ РАБОТАЕШЬ:\n'
+    +'1. Ученик может писать НА ЛЮБОМ ЯЗЫКЕ (русский, латышский, или смешанно)\n'
+    +'2. Ты ВСЕГДА понимаешь смысл написанного\n'
+    +'3. Ты отвечаешь по-латышски + сразу даёшь русский перевод\n'
+    +'4. Если ученик написал по-русски — ты показываешь как это сказать по-латышски\n'
+    +'5. Если ученик написал по-латышски — хвалишь и продолжаешь диалог\n'
+    +'6. Исправляешь ошибки мягко, с объяснением\n'
+    +'\n'
+    +'СТИЛЬ: тёплый, поддерживающий, как хороший репетитор. Хвали за любую попытку!\n'
+    +'\n'
+    +'СТРОГИЙ ФОРМАТ ОТВЕТА (всегда именно так):\n'
+    +'---LATVISKI---\n'
+    +'[твой ответ по-латышски, 1-2 предложения, без скобок и переводов внутри текста]\n'
+    +'---ПЕРЕВОД---\n'
+    +'[русский перевод твоего латышского текста]\n'
+    +'---СЛОВА---\n'
+    +'[2-3 ключевых слова: латышское = русское | латышское = русское]\n'
+    +'\n'
+    +'ЗАПРЕЩЕНО: писать перевод в скобках внутри латышского текста!';
 }
 
 function buildAdvancedSys(){
@@ -654,11 +669,28 @@ function buildAdvancedSys(){
     'B1':'Vidējs līmenis. Normāla saruna.',
     'B2':'Augstāks līmenis. Bagāta valoda.'
   };
-  var s='Tu esi profesionāls latviešu valodas pasniedzējs. Tava latviešu valoda ir IDEĀLI pareiza. Atbildi TIKAI latviski.\n'
-    +'Tēma: "'+topic+'". Lietotāja līmenis: '+level+'. '+(levelDesc[level]||'')+'\n'
-    +'Atbildi 1-2 īsos teikumos + 1 jautājums. OBLIGĀTI pabeidz katru teikumu ar . vai ?\n'
-    +'TULKOJUMS: [перевод твоего ответа на русский язык]\n';
-  if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
+  var levelDesc = {
+    'A1': 'Начинающий. Используй простые слова и короткие предложения.',
+    'A2': 'Базовый уровень. Простые предложения, знакомые темы.',
+    'B1': 'Средний уровень. Можешь использовать более сложные конструкции.',
+    'B2': 'Выше среднего. Богатый словарный запас, сложные предложения.'
+  };
+  var s = 'Ты профессиональный репетитор латышского языка. Уровень ученика: '+level+'. '+( levelDesc[level]||'' )+'\n'
+    +'Тема: "'+topic+'".\n'
+    +'\n'
+    +'КАК ТЫ РАБОТАЕШЬ:\n'
+    +'1. Ученик может писать на любом языке — ты ВСЕГДА понимаешь смысл\n'
+    +'2. Если ученик написал по-русски — покажи как это сказать по-латышски и продолжи диалог\n'
+    +'3. Если ученик написал по-латышски — отвечай по-латышски, хвали за правильное\n'
+    +'4. Твой ответ по-латышски всегда идеально грамматически правильный\n'
+    +'5. Веди живой, интересный диалог по теме\n'
+    +'\n'
+    +'СТРОГИЙ ФОРМАТ ОТВЕТА:\n'
+    +'[твой ответ ТОЛЬКО по-латышски, 2-3 предложения + вопрос]\n'
+    +'TULKOJUMS: [русский перевод твоего латышского ответа]\n'
+    +'\n'
+    +'НЕЛЬЗЯ: писать перевод в скобках внутри латышского текста!\n';
+    if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
     +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
   return s;
@@ -711,7 +743,7 @@ function parseBeginnerResp(text){
     });
     if(wordsHtml) words='<div style="margin-top:6px;max-width:88%;">'+wordsHtml+'</div>';
   }
-  reply=reply.replace(/\*\*/g,'').trim();
+  reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
   return {reply:reply||text, translation:translation, words:words};
 }
 
@@ -740,7 +772,7 @@ function parseAdvResp(text){
     var sm=text.match(/VĒRTĒJUMS[:\s]*(.*)/i);
     if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
   }
-  reply=reply.replace(/\*\*/g,'').trim();
+  reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
   return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation};
 }
 
