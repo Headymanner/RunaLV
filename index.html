@@ -688,12 +688,11 @@ function buildAdvancedSys(){
     +'4. Всегда веди живой интересный диалог, задавай вопросы\n'
     +'5. Твой латышский всегда грамматически идеален\n'
     +'\n'
-    +'ФОРМАТ ОТВЕТА:\n'
-    +'[1-2 предложения по-латышски]\n'
-    +'[1 вопрос по-латышски]\n'
-    +'TULKOJUMS: [перевод на русский]\n';
-    if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
-    +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
+    +'ФОРМАТ ОТВЕТА — СТРОГО:\n'
+    +'[1-2 предложения по-латышски + 1 вопрос. Всё в одном блоке.]\n'
+    +'TULKOJUMS: [перевод на русский]\n'
+    +'ЗАПРЕЩЕНО: писать "KĀ BŪS PAREIZI", "Pareizi būtu", заголовки секций!\n';
+    if(errorsOn) s+='Если есть ошибка в латышском — добавь ТОЛЬКО:\nKĻŪDAS:\n❌ [неверное слово] → ✅ [правильное] (объяснение по-русски)\nБОЛЬШЕ НИЧЕГО не добавляй после KĻŪDAS!\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
   return s;
 }
@@ -756,6 +755,7 @@ function parseBeginnerResp(text){
     });
     if(wordsHtml) words='<div style="margin-top:6px;max-width:88%;">'+wordsHtml+'</div>';
   }
+  reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
   return {reply:reply||text, translation:translation, words:words};
 }
@@ -785,6 +785,7 @@ function parseAdvResp(text){
     var sm=text.match(/VĒRTĒJUMS[:\s]*(.*)/i);
     if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
   }
+  reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
   return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation};
 }
