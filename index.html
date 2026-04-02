@@ -112,7 +112,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .err-explain{font-size:11px;color:#9bacc4;margin-top:2px;font-style:italic;}
 .fbt{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;}
 .el{color:#e05a5a;margin-bottom:2px;}.fl{color:#5ab88a;margin-bottom:5px;}
-.scrs{display:flex;gap:6px;margin-top:8px;}
 .sp{display:flex;flex-direction:column;align-items:center;background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:10px;padding:6px 8px;flex:1;}
 .sn{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;}.sl{font-size:9px;color:#5a6e88;text-transform:uppercase;}
 .cg{color:#5ab88a;}.cgo{color:#c9a84c;}.cb{color:#4a90d9;}.cr{color:#e05a5a;}
@@ -318,10 +317,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
       <div class="sil"><span class="sico">✏️</span><div><div class="sname">Kļūdu labojumi <span style="font-size:11px;color:#5a6e88;">/ Исправления</span></div></div></div>
       <div class="tog on" id="togE"></div>
     </div>
-    <div class="si" id="siScore">
-      <div class="sil"><span class="sico">⭐</span><div><div class="sname">Vērtējums <span style="font-size:11px;color:#5a6e88;">/ Оценка</span></div></div></div>
-      <div class="tog on" id="togS"></div>
-    </div>
+
     <div class="si">
       <div class="sil"><span class="sico">📚</span><div><div class="sname">Valodas līmenis <span style="font-size:11px;color:#5a6e88;">/ Уровень</span></div></div></div>
       <div class="selw"><select id="selLevel">
@@ -346,7 +342,6 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 var WORKER = '/api/proxy';
 var voiceOn  = localStorage.getItem('lv_vo')  !== 'false';
 var errorsOn = localStorage.getItem('lv_eo')  !== 'false';
-var scoreOn  = localStorage.getItem('lv_so')  !== 'false';
 var gVoice   = localStorage.getItem('lv_gv')  || 'Aoede';
 var level    = localStorage.getItem('lv_lv')  || 'A2';
 var totalPts = parseInt(localStorage.getItem('lv_pts') || '0');
@@ -402,7 +397,6 @@ var ADVANCED_TOPICS = {
 // ── INIT ──────────────────────────────────────
 document.getElementById('togV').classList.toggle('on', voiceOn);
 document.getElementById('togE').classList.toggle('on', errorsOn);
-document.getElementById('togS').classList.toggle('on', scoreOn);
 document.getElementById('selVoice').value = gVoice;
 document.getElementById('selLevel').value = level;
 document.getElementById('pts').textContent = totalPts;
@@ -422,7 +416,7 @@ document.getElementById('btnSave').addEventListener('click', saveKey);
 document.getElementById('siKey').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); showModal(); });
 document.getElementById('siVoice').addEventListener('click', function(){ togSet('voiceOn','lv_vo','togV'); });
 document.getElementById('siErrors').addEventListener('click', function(){ togSet('errorsOn','lv_eo','togE'); });
-document.getElementById('siScore').addEventListener('click', function(){ togSet('scoreOn','lv_so','togS'); });
+
 document.getElementById('selVoice').addEventListener('change', function(){ gVoice=this.value; localStorage.setItem('lv_gv',this.value); });
 document.getElementById('selLevel').addEventListener('change', function(){ level=this.value; localStorage.setItem('lv_lv',this.value); });
 document.getElementById('txt').addEventListener('keydown', function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
@@ -450,11 +444,10 @@ function saveKey(){ hideModal(); }
 
 // ── SETTINGS ──────────────────────────────────
 function togSet(key,lsKey,elId){
-  var cur=key==='voiceOn'?voiceOn:key==='errorsOn'?errorsOn:scoreOn;
+  var cur=key==='voiceOn'?voiceOn:errorsOn;
   var nv=!cur;
   if(key==='voiceOn')voiceOn=nv;
   else if(key==='errorsOn')errorsOn=nv;
-  else scoreOn=nv;
   localStorage.setItem(lsKey,nv);
   document.getElementById(elId).classList.toggle('on',nv);
 }
@@ -693,7 +686,7 @@ function buildAdvancedSys(){
     +'TULKOJUMS: [перевод на русский]\n'
     +'ЗАПРЕЩЕНО: писать "KĀ BŪS PAREIZI", "Pareizi būtu", заголовки секций!\n';
     if(errorsOn) s+='Если есть ошибка в латышском — добавь ТОЛЬКО:\nKĻŪDAS:\n❌ [неверное слово] → ✅ [правильное] (объяснение по-русски)\nБОЛЬШЕ НИЧЕГО не добавляй после KĻŪDAS!\n';
-  if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
+  // Score removed
   return s;
 }
 
@@ -781,10 +774,7 @@ function parseAdvResp(text){
       }
     });
   }
-  if(scoreOn){
-    var sm=text.match(/VĒRTĒJUMS[:\s]*(.*)/i);
-    if(sm){var ns=sm[1].match(/\d+/g)||[];if(ns.length>=3){var g=+ns[0],v=+ns[1],f=+ns[2],tot=ns[3]?+ns[3]:Math.round((g+v+f)/3);score={g:g,v:v,f:f,tot:tot};}}
-  }
+  // Score removed
   reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
   return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation};
@@ -809,14 +799,6 @@ function buildFb(p){
     });
     h+='</div>';
   }
-  if(p.score&&scoreOn){
-    h+='<div class="fbc">';
-    var s=p.score,cc=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
-    sessPts+=s.tot;totalPts+=Math.round(s.tot/10);
-    localStorage.setItem('lv_pts',totalPts);
-    document.getElementById('pts').textContent=totalPts;
-    document.getElementById('cPts').textContent=sessPts+' pts';
-    h+='<div class="fbt">⭐ Оценка / Vērtējums</div><div class="scrs">';
     h+='<div class="sp"><span class="sn '+cc+'">'+s.g+'</span><span class="sl">Грамм.</span></div>';
     h+='<div class="sp"><span class="sn '+cc+'">'+s.v+'</span><span class="sl">Слова</span></div>';
     h+='<div class="sp"><span class="sn '+cc+'">'+s.f+'</span><span class="sl">Беглость</span></div>';
