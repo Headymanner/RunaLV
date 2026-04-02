@@ -103,6 +103,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* FEEDBACK */
 .fbc{background:#142540;border:1px solid rgba(201,168,76,.12);border-radius:12px;padding:10px 12px;margin-top:6px;font-size:12.5px;line-height:1.7;max-width:88%;}
+.err-popup{background:linear-gradient(135deg,rgba(224,90,90,.12),rgba(224,90,90,.05));border:1px solid rgba(224,90,90,.35);border-radius:14px;padding:12px 14px;margin-top:8px;max-width:88%;animation:fu .3s ease;}
+.err-popup-title{font-size:11px;font-weight:600;color:#e05a5a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.err-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:13px;}
+.err-wrong{color:#e05a5a;text-decoration:line-through;opacity:.8;}
+.err-arrow{color:#5a6e88;flex-shrink:0;}
+.err-right{color:#5ab88a;font-weight:500;}
+.err-explain{font-size:11px;color:#9bacc4;margin-top:2px;font-style:italic;}
 .fbt{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;}
 .el{color:#e05a5a;margin-bottom:2px;}.fl{color:#5ab88a;margin-bottom:5px;}
 .scrs{display:flex;gap:6px;margin-top:8px;}
@@ -685,11 +692,11 @@ function buildAdvancedSys(){
     +'5. Твой ответ по-латышски всегда идеально правильный\n'
     +'6. Веди живой диалог — задавай уточняющие вопросы по теме\n'
     +'\n'
-    +'СТРОГИЙ ФОРМАТ ОТВЕТА (МАКСИМУМ 2 предложения + 1 вопрос!):\n'
-    +'[1-2 коротких предложения по-латышски]\n'
-    +'[1 вопрос по-латышски]\n'
-    +'TULKOJUMS: [перевод на русский, 1-2 предложения]\n'
-    +'НЕЛЬЗЯ: длинные ответы, перевод в скобках в латышском тексте!\n';
+    +'ФОРМАТ ОТВЕТА — СТРОГО:\n'
+    +'Строка 1: одно короткое предложение по-латышски.\n'
+    +'Строка 2: один короткий вопрос по-латышски?\n'
+    +'TULKOJUMS: перевод на русский.\n'
+    +'ЗАПРЕЩЕНО: больше 2 предложений, длинные ответы!\n';
     if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
     +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
@@ -705,7 +712,7 @@ function callGemini(txt,cb){
     body:JSON.stringify({type:'chat',body:{
       systemInstruction:{parts:[{text:sys}]},
       contents:chatHist,
-      generationConfig:{temperature:0.85,maxOutputTokens:500}
+      generationConfig:{temperature:0.85,maxOutputTokens:350}
     }})
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);return d;});})
@@ -778,12 +785,25 @@ function parseAdvResp(text){
 
 function buildFb(p){
   if(!p.errors.length&&!p.score)return'';
-  var h='<div class="fbc">';
+  var h='';
   if(p.errors.length&&errorsOn){
-    h+='<div class="fbt">✏️ Ошибки / Kļūdas</div>';
-    p.errors.forEach(function(e){h+='<div class="el">✗ "'+esc(e.w)+'"</div><div class="fl">✓ '+esc(e.c)+'</div>';});
+    h+='<div class="err-popup">';
+    h+='<div class="err-popup-title">✏️ Ошибки / Kļūdas</div>';
+    p.errors.forEach(function(e){
+      var parts=e.c.split('(');
+      var correct=parts[0].trim();
+      var explain=parts[1]?parts[1].replace(')','').trim():'';
+      h+='<div class="err-item">';
+      h+='<div><span class="err-wrong">'+esc(e.w)+'</span></div>';
+      h+='<span class="err-arrow">→</span>';
+      h+='<div><span class="err-right">'+esc(correct)+'</span>';
+      if(explain) h+='<div class="err-explain">'+esc(explain)+'</div>';
+      h+='</div></div>';
+    });
+    h+='</div>';
   }
   if(p.score&&scoreOn){
+    h+='<div class="fbc">';
     var s=p.score,cc=s.tot>=80?'cg':s.tot>=60?'cgo':s.tot>=40?'cb':'cr';
     sessPts+=s.tot;totalPts+=Math.round(s.tot/10);
     localStorage.setItem('lv_pts',totalPts);
@@ -795,7 +815,7 @@ function buildFb(p){
     h+='<div class="sp"><span class="sn '+cc+'">'+s.f+'</span><span class="sl">Беглость</span></div>';
     h+='<div class="sp"><span class="sn '+cc+'">'+s.tot+'</span><span class="sl">Итого</span></div></div>';
   }
-  return h+'</div>';
+  return h;
 }
 
 // ── SEND ──────────────────────────────────────
