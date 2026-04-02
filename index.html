@@ -692,11 +692,10 @@ function buildAdvancedSys(){
     +'5. Твой ответ по-латышски всегда идеально правильный\n'
     +'6. Веди живой диалог — задавай уточняющие вопросы по теме\n'
     +'\n'
-    +'ФОРМАТ ОТВЕТА — СТРОГО:\n'
-    +'Строка 1: одно короткое предложение по-латышски.\n'
-    +'Строка 2: один короткий вопрос по-латышски?\n'
-    +'TULKOJUMS: перевод на русский.\n'
-    +'ЗАПРЕЩЕНО: больше 2 предложений, длинные ответы!\n';
+    +'ФОРМАТ ОТВЕТА:\n'
+    +'[1-2 предложения по-латышски]\n'
+    +'[1 вопрос по-латышски]\n'
+    +'TULKOJUMS: [перевод на русский]\n';
     if(errorsOn) s+='Ja kļūdas — norādi PĒC atbildes:\nKĻŪDAS:\n❌ [nepareizi] → ✅ [pareizi] (объясни ошибку по-русски)\n'
     +'РАЗБОР: [разбери одно интересное слово или грамматику из своего ответа по-русски, 1 строка]\n';
   if(scoreOn)  s+='Tad:\nVĒRTĒJUMS: Gramatika:X/100|Vārdi:X/100|Plūsma:X/100|Kopā:X/100\n';
@@ -706,19 +705,30 @@ function buildAdvancedSys(){
 // ── GEMINI CALL ───────────────────────────────
 function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
+  // Keep only last 8 messages to prevent context overflow
+  if(chatHist.length > 8) chatHist = chatHist.slice(-8);
   var sys=isBeginner?buildBeginnerSys():buildAdvancedSys();
   fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({type:'chat',body:{
       systemInstruction:{parts:[{text:sys}]},
       contents:chatHist,
-      generationConfig:{temperature:0.85,maxOutputTokens:350}
+      generationConfig:{temperature:0.85,maxOutputTokens:600}
     }})
   })
   .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);return d;});})
   .then(function(d){
-    var t='';try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
+    var t='';
+    var finishReason='';
+    try{
+      t=d.candidates[0].content.parts[0].text.trim();
+      finishReason=d.candidates[0].finishReason||'';
+    }catch(e){}
     if(!t)throw new Error('Tukša atbilde');
+    // If truncated due to token limit - log it
+    if(finishReason==='MAX_TOKENS'){
+      console.warn('Response truncated! finishReason=MAX_TOKENS');
+    }
     chatHist.push({role:'model',parts:[{text:t}]});
     cb(null,t);
   })
