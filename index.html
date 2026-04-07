@@ -685,7 +685,12 @@ function buildAdvancedSys(){
     +'[1-2 предложения по-латышски + 1 вопрос. Всё в одном блоке.]\n'
     +'TULKOJUMS: [перевод на русский]\n'
     +'ЗАПРЕЩЕНО: писать "KĀ BŪS PAREIZI", "Pareizi būtu", заголовки секций!\n';
-    if(errorsOn) s+='Если есть ошибка в латышском — добавь ТОЛЬКО:\nKĻŪDAS:\n❌ [неверное слово] → ✅ [правильное] (объяснение по-русски)\nБОЛЬШЕ НИЧЕГО не добавляй после KĻŪDAS!\n';
+    if(errorsOn) s+='Если есть грамматическая ошибка — добавь после TULKOJUMS:\n'
+    +'KĻŪDAS:\n'
+    +'❌ [неверное слово] → ✅ [правильное слово] (объяснение по-русски одной строкой)\n'
+    +'PAREIZI: [полное исправленное предложение целиком]\n'
+    +'ВАЖНО: исправляй ТОЛЬКО реальные ошибки! Если слово правильное — не исправляй!\n'
+    +'Например "grubas" (крупа/гречка) — правильное слово, не исправляй на griķi!\n';
   // Score removed
   return s;
 }
@@ -765,8 +770,13 @@ function parseAdvResp(text){
   // Extract РАЗБОР
   var rm=text.match(/РАЗБОР[:\s]+([^\n]+)/i);
   if(rm) razb='<div style="margin-top:5px;font-size:11px;color:#9bacc4;font-style:italic;">📖 '+esc(rm[1].trim())+'</div>';
+  // Extract PAREIZI (corrected sentence)
+  var pareizi='';
+  var pm=text.match(/PAREIZI[:\s]+([^\n]+)/i);
+  if(pm) pareizi=pm[1].trim();
+
   if(errorsOn){
-    var em=text.match(/KĻŪDAS[\s\S]*?(?=VĒRTĒJUMS|$)/i);
+    var em=text.match(/KĻŪDAS[\s\S]*?(?=PAREIZI|VĒRTĒJUMS|$)/i);
     if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
         var p=l.replace(/[❌✅]/g,'').split('→');
@@ -777,7 +787,7 @@ function parseAdvResp(text){
   // Score removed
   reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
-  return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation};
+  return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation,pareizi:pareizi};
 }
 
 function buildFb(p){
@@ -797,6 +807,12 @@ function buildFb(p){
       if(explain) h+='<div class="err-explain">'+esc(explain)+'</div>';
       h+='</div></div>';
     });
+    if(p.pareizi){
+      h+='<div style="margin-top:8px;padding:8px 10px;background:rgba(90,184,138,.08);border:1px solid rgba(90,184,138,.2);border-radius:10px;">';
+      h+='<div style="font-size:10px;color:#5ab88a;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">✅ Правильно / Pareizi:</div>';
+      h+='<div style="font-size:13px;color:#e8b84b;">'+esc(p.pareizi)+'</div>';
+      h+='</div>';
+    }
     h+='</div>';
   }
   return h;
@@ -912,8 +928,7 @@ function initSpeech(){
     var t=e.results[0][0].transcript.trim();stopRec();
     if(!t)return;
     stopAudio();
-    // If Russian mic - add note that it's Russian input
-    var displayT = micLang==='ru-RU' ? t+' <span style="font-size:10px;color:#5a6e88;">(ru)</span>' : t;
+    var displayT = t;
     addMsg('u',displayT);showTyping();
     document.getElementById('btnSend').disabled=true;
     callGemini(t,function(err,text){
