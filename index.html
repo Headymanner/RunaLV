@@ -350,7 +350,7 @@ var sessPts  = 0;
 var topic    = '';
 var isBeginner = false;
 var chatHist = [];
-var recog    = null;
+var recog = null; // kept for compat
 var micLang  = 'ru-RU'; // Default Russian for beginners, switch to lv-LV for advanced
 var isRec    = false;
 var curAudio = null;
@@ -920,48 +920,90 @@ function doSpeak(text, speakSession, attempt){
   });
 }
 
-// ── SPEECH RECOGNITION ────────────────────────
-function initSpeech(){
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR)return;
-  recog=new SR();recog.lang=micLang;recog.continuous=false;recog.interimResults=false;recog.maxAlternatives=1;
-  recog.onresult=function(e){
-    var t=e.results[0][0].transcript.trim();stopRec();
-    if(!t)return;
-    stopAudio();
-    var displayT = t;
-    addMsg('u',displayT);showTyping();
+// ── SPEECH RECOGNITION (Gemini STT) ──────────
+var mediaRec = null;
+var audioChunks = [];
+
+function initSpeech(){ /* Gemini STT - no browser API needed */ }
+
+function toggleMic(){
+  if(isRec){ stopMicRec(); return; }
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    alert('Микрофон недоступен в этом браузере. Используй Chrome.');
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(function(stream){
+      audioChunks=[];
+      // Try webm first, fallback to ogg
+      var mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm')
+          ? 'audio/webm'
+          : 'audio/ogg';
+      mediaRec = new MediaRecorder(stream, {mimeType: mimeType});
+      mediaRec.ondataavailable = function(e){
+        if(e.data.size>0) audioChunks.push(e.data);
+      };
+      mediaRec.onstop = function(){
+        stream.getTracks().forEach(function(t){t.stop();});
+        var blob = new Blob(audioChunks, {type: mimeType});
+        sendAudioToGemini(blob, mimeType);
+      };
+      mediaRec.start();
+      startRec();
+    })
+    .catch(function(){
+      alert('Микрофон заблокирован!\n\n1. Нажми 🔒 в адресной строке\n2. Найди «Микрофон»\n3. Выбери «Разрешить»\n4. Обнови страницу');
+    });
+}
+
+function stopMicRec(){
+  if(mediaRec && mediaRec.state!=='inactive') mediaRec.stop();
+  stopRec();
+}
+
+function sendAudioToGemini(blob, mimeType){
+  var reader = new FileReader();
+  reader.onloadend = function(){
+    var base64 = reader.result.split(',')[1];
+    var langCode = micLang === 'ru-RU' ? 'ru' : 'lv';
     document.getElementById('btnSend').disabled=true;
-    callGemini(t,function(err,text){
+    showTyping();
+    fetch('/api/proxy',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:'stt', audio:base64, mimeType:mimeType, lang:langCode})
+    })
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var t = d.text||'';
+      if(!t||t.length<1){rmTyping();document.getElementById('btnSend').disabled=false;return;}
+      stopAudio();
+      addMsg('u', esc(t));
+      callGemini(t, function(err,text){
+        rmTyping();document.getElementById('btnSend').disabled=false;
+        if(err){addMsg('b','❌ '+esc(err));return;}
+        if(isBeginner){
+          var p=parseBeginnerResp(text);
+          addMsgWithTranslation('b',esc(p.reply),p.translation,p.words);
+          if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
+        } else {
+          var p2=parseAdvResp(text);
+          var fb2=buildFb(p2)+(p2.razb||'');
+          addMsg('b',esc(p2.reply||text),fb2,p2.translation);
+          if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
+        }
+      });
+    })
+    .catch(function(e){
       rmTyping();document.getElementById('btnSend').disabled=false;
-      if(err){addMsg('b','❌ '+esc(err));return;}
-      if(isBeginner){
-        var p=parseBeginnerResp(text);
-        addMsgWithTranslation('b',esc(p.reply),p.translation,p.words);
-        if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
-      } else {
-        var p2=parseAdvResp(text);
-        var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2,p2.translation);
-        if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
-      }
+      console.error('STT error:',e);
     });
   };
-  recog.onerror=function(){stopRec();};
-  recog.onend=function(){if(isRec)stopRec();};
+  reader.readAsDataURL(blob);
 }
-function toggleMic(){
-  if(!recog){alert('Микрофон не поддерживается в этом браузере.\nИспользуй Chrome.');return;}
-  if(isRec){recog.stop();stopRec();}
-  else{
-    stopAudio();
-    if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-      navigator.mediaDevices.getUserMedia({audio:true})
-        .then(function(s){s.getTracks().forEach(function(t){t.stop();});recog.lang=micLang;try{recog.start();}catch(e){}startRec();})
-        .catch(function(){alert('Микрофон заблокирован!\n\n1. Нажми 🔒 в адресной строке\n2. Найди «Микрофон»\n3. Выбери «Разрешить»\n4. Обнови страницу');});
-    } else {try{recog.start();}catch(e){}startRec();}
-  }
-}
-function startRec(){isRec=true;document.getElementById('btnMic').classList.add('rec');document.getElementById('btnMic').textContent='⏹';document.getElementById('txt').placeholder='🎙️ Говори / Runā...';}
+function startRec(){isRec=true;document.getElementById('btnMic').classList.add('rec');document.getElementById('btnMic').textContent='⏹';document.getElementById('txt').placeholder='🎙️ Говори / Runā... (нажми снова чтобы остановить)';}
 function stopRec(){isRec=false;document.getElementById('btnMic').classList.remove('rec');document.getElementById('btnMic').textContent='🎤';document.getElementById('txt').placeholder='Raksti / Пиши...';}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 </script>
