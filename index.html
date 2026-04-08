@@ -270,6 +270,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
     <div class="ibar">
       <div class="irow">
         <div class="mbtn" id="btnMic" title="Нажми и говори / Nospied un runā">🎤</div>
+        <div id="btnLang" style="min-width:36px;height:36px;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:#e8b84b;font-family:'DM Sans',sans-serif;flex-shrink:0;">RU</div>
         <div style="flex:1"><textarea id="txt" placeholder="Raksti / Пиши..." rows="1"></textarea></div>
         <button class="sbtn" id="btnSend">➤</button>
       </div>
@@ -923,7 +924,7 @@ function doSpeak(text, speakSession, attempt){
 function initSpeech(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return;
-  recog=new SR();recog.lang=micLang;recog.continuous=false;recog.interimResults=false;
+  recog=new SR();recog.lang=micLang;recog.continuous=false;recog.interimResults=false;recog.maxAlternatives=1;
   recog.onresult=function(e){
     var t=e.results[0][0].transcript.trim();stopRec();
     if(!t)return;
@@ -955,7 +956,7 @@ function toggleMic(){
     stopAudio();
     if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
       navigator.mediaDevices.getUserMedia({audio:true})
-        .then(function(s){s.getTracks().forEach(function(t){t.stop();});try{recog.start();}catch(e){}startRec();})
+        .then(function(s){s.getTracks().forEach(function(t){t.stop();});recog.lang=micLang;try{recog.start();}catch(e){}startRec();})
         .catch(function(){alert('Микрофон заблокирован!\n\n1. Нажми 🔒 в адресной строке\n2. Найди «Микрофон»\n3. Выбери «Разрешить»\n4. Обнови страницу');});
     } else {try{recog.start();}catch(e){}startRec();}
   }
