@@ -227,20 +227,19 @@ posthog.init('phc_kUXXcosZkxjEjLgXB3nfXWPUC5MX3H4as8V2w6TCcRsV',{api_host:'https
   <div class="auth-box">
     <div class="auth-logo">🇱🇻</div>
     <div class="auth-title">Latviešu Skolotājs</div>
-    <div class="auth-sub">AI репетитор латышского языка · Bezmaksas</div>
+    <div class="auth-sub">AI репетитор латышского · Bezmaksas</div>
     <div class="auth-tabs">
-      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Войти</div>
-      <div class="auth-tab" id="tabRegister" onclick="switchTab('register')">Регистрация</div>
+      <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Войти</div>
+      <div class="auth-tab" id="tabReg" onclick="switchAuthTab('reg')">Регистрация</div>
     </div>
-    <input class="auth-inp" id="authEmail" type="email" placeholder="Email"/>
-    <input class="auth-inp" id="authPass" type="password" placeholder="Пароль (минимум 6 символов)"/>
-    <input class="auth-inp" id="authName" type="text" placeholder="Имя (для приветствия)" style="display:none;"/>
-    <button class="auth-btn" id="authSubmit" onclick="doAuth()">Войти →</button>
-    <div class="auth-err" id="authErr"></div>
+    <input class="auth-inp" id="aEmail" type="email" placeholder="Email" autocomplete="email"/>
+    <input class="auth-inp" id="aPass" type="password" placeholder="Пароль (минимум 6 символов)" autocomplete="current-password"/>
+    <input class="auth-inp" id="aName" type="text" placeholder="Имя" style="display:none;" autocomplete="name"/>
+    <button class="auth-btn" id="aBtn" onclick="doAuthSubmit()">Войти →</button>
+    <div id="aErr" class="auth-err"></div>
     <div class="auth-skip" onclick="skipAuth()">Продолжить без аккаунта</div>
   </div>
 </div>
-
 <div id="app">
   <!-- HEADER -->
   <div class="hdr">
@@ -1400,13 +1399,20 @@ var sb = null;
 var currentUser = null;
 
 function initSupabase(){
-  if(typeof window.supabase === 'undefined') return;
+  if(typeof window.supabase === 'undefined'){
+    // CDN not loaded - show auth anyway after delay
+    setTimeout(showAuth, 1500);
+    return;
+  }
   try {
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     sb.auth.getSession().then(function(res){
       if(res.data && res.data.session){
         currentUser = res.data.session.user;
         onUserLoggedIn();
+      } else {
+        // No session - show login after short delay
+        setTimeout(showAuth, 1500);
       }
     });
     sb.auth.onAuthStateChange(function(event, session){
@@ -1425,7 +1431,7 @@ function onUserLoggedIn(){
   var name = (currentUser.user_metadata||{}).name || currentUser.email.split('@')[0];
   var badge = document.getElementById('userBadge');
   if(badge){ badge.style.display='flex'; document.getElementById('userNameBadge').textContent=name; }
-  document.getElementById('hdrSub').textContent='AI · '+name;
+  var hs=document.getElementById('hdrSub'); if(hs) hs.textContent='AI · '+name;
   loadProgressFromCloud();
   track('login', {method:'email'});
 }
@@ -1434,41 +1440,63 @@ function onUserLoggedIn(){
 function showAuth(){ var o=document.getElementById('authOverlay'); if(o) o.style.display='flex'; }
 function hideAuth(){ var o=document.getElementById('authOverlay'); if(o) o.style.display='none'; }
 
-function switchTab(tab){
+function switchAuthTab(tab){
   var isReg = tab==='reg';
-  document.getElementById('tabLogin').style.cssText = isReg ? 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;color:#5a6e88;' : 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;background:linear-gradient(135deg,#c9a84c,#e8b84b);color:#060d1a;font-weight:500;';
-  document.getElementById('tabReg').style.cssText = isReg ? 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;background:linear-gradient(135deg,#c9a84c,#e8b84b);color:#060d1a;font-weight:500;' : 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;color:#5a6e88;';
-  document.getElementById('authNameWrap').style.display = isReg ? 'block' : 'none';
-  document.getElementById('authSubmit').textContent = isReg ? 'Зарегистрироваться →' : 'Войти →';
-  document.getElementById('authErr').textContent = '';
+  var tl=document.getElementById('tabLogin');
+  var tr=document.getElementById('tabReg');
+  if(tl) tl.className = 'auth-tab'+(isReg?'':' active');
+  if(tr) tr.className = 'auth-tab'+(isReg?' active':'');
+  var nameEl = document.getElementById('aName');
+  if(nameEl) nameEl.style.display = isReg?'block':'none';
+  var btn = document.getElementById('aBtn');
+  if(btn) btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
+  var err = document.getElementById('aErr');
+  if(err){ err.textContent=''; err.style.color='#e05a5a'; }
 }
 
-function doAuth(){
-  if(!sb){ skipAuth(); return; }
-  var email = document.getElementById('authEmail').value.trim();
-  var pass = document.getElementById('authPass').value;
-  var isReg = document.getElementById('authNameWrap').style.display !== 'none';
-  var errEl = document.getElementById('authErr');
-  errEl.textContent = ''; errEl.style.color = '#e05a5a';
-  if(!email||!pass){ errEl.textContent='Введи email и пароль'; return; }
+function doAuthSubmit(){
+  var email = (document.getElementById('aEmail')||{}).value||'';
+  var pass  = (document.getElementById('aPass')||{}).value||'';
+  var name  = (document.getElementById('aName')||{}).value||'';
+  var isReg = document.getElementById('tabReg').className.includes('active');
+  var errEl = document.getElementById('aErr');
+  var btn   = document.getElementById('aBtn');
+
+  errEl.textContent=''; errEl.style.color='#e05a5a';
+  if(!email.includes('@')){ errEl.textContent='Введи правильный email'; return; }
   if(pass.length<6){ errEl.textContent='Пароль минимум 6 символов'; return; }
-  var btn = document.getElementById('authSubmit');
-  btn.disabled=true; btn.textContent='⏳ Подождите...';
-  var name = (document.getElementById('authNameInp')||{}).value||email.split('@')[0];
+
+  if(!sb){
+    errEl.textContent='Сервис недоступен. Продолжи без аккаунта.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='⏳ Подождите...';
+
   var promise = isReg
-    ? sb.auth.signUp({email:email, password:pass, options:{data:{name:name}}})
-    : sb.auth.signInWithPassword({email:email, password:pass});
+    ? sb.auth.signUp({email:email.trim(), password:pass, options:{data:{name:name||email.split('@')[0]}}})
+    : sb.auth.signInWithPassword({email:email.trim(), password:pass});
+
   promise.then(function(res){
-    btn.disabled=false; btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
+    btn.disabled=false;
+    btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
     if(res.error){
-      var msg=res.error.message;
-      if(msg.includes('Invalid login')) msg='Неверный email или пароль';
-      if(msg.includes('already registered')) msg='Email уже зарегистрирован';
+      var msg = res.error.message||'Ошибка';
+      if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) msg='Неверный email или пароль';
+      if(msg.includes('already registered')||msg.includes('already been registered')) msg='Email уже зарегистрирован';
+      if(msg.includes('Password')) msg='Пароль минимум 6 символов';
+      if(msg.includes('valid email')) msg='Введи правильный email';
       errEl.textContent=msg;
-    } else if(isReg && !res.data.session){
+    } else if(isReg && res.data && !res.data.session){
       errEl.style.color='#5ab88a';
-      errEl.textContent='✅ Проверь email для подтверждения!';
+      errEl.textContent='✅ Письмо отправлено! Проверь email.';
     }
+    // If login success, onAuthStateChange will handle it
+  }).catch(function(e){
+    btn.disabled=false;
+    btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
+    errEl.textContent='Ошибка: '+e.message;
   });
 }
 
@@ -1526,7 +1554,6 @@ function track(event, props){
 setInterval(function(){ if(currentUser) syncProgressToCloud(); }, 30000);
 
 // Init
-initSupabase();
 track('app_open', {});
 
 </script>
