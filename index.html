@@ -518,7 +518,7 @@ if (true) {
 initSpeech();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
 // Init auth after DOM ready
-setTimeout(initAuth, 100);
+setTimeout(initSupabase, 100);
 
 // ── BIND BUTTONS ──────────────────────────────
 document.getElementById('btnSett').addEventListener('click', function(){ document.getElementById('sett').classList.add('open'); });
