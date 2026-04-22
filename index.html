@@ -706,7 +706,7 @@ function showAdvancedTopics(){
 function startBeginner(id){
   var t=BEGINNER_TOPICS.find(function(x){return x.id===id;});
   if(!t) return;
-  logEvent('start_lesson', {topic:id, mode:'beginner'});
+  track('start_lesson', {topic:id, mode:'beginner'});
   stopAudio(); chatActive=true;
   topic=id; isBeginner=true; chatHist=[]; sessPts=0;
   document.getElementById('cEmoji').textContent=t.e;
@@ -742,7 +742,7 @@ function startBeginner(id){
 function startAdvanced(id){
   var t=ADVANCED_TOPICS[id];
   if(!t) return;
-  logEvent('start_topic', {topic:id, level:level, mode:'advanced'});
+  track('start_topic', {topic:id, level:level, mode:'advanced'});
   stopAudio(); chatActive=true;
   topic=id; isBeginner=false; chatHist=[]; sessPts=0;
   document.getElementById('cEmoji').textContent=t.e;
@@ -1208,7 +1208,7 @@ function sendMsg(){
   document.getElementById('btnSend').disabled=true;
   document.getElementById('btnSend').textContent='⏳';
   addMsg('u',esc(txt));showTyping();
-  logEvent('message_sent', {topic:topic, mode:isBeginner?'beginner':'advanced', len:txt.length});
+  track('message_sent', {topic:topic, mode:isBeginner?'beginner':'advanced', len:txt.length});
   callGemini(txt,function(err,text){
     rmTyping();document.getElementById('btnSend').disabled=false;
     if(err){addMsg('b','❌ '+esc(err));return;}
