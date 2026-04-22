@@ -2,7 +2,7 @@
 <html lang="lv">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -57,7 +57,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .s-title em{font-style:italic;color:#c9a84c;}
 .s-sub{font-size:11px;color:#5a6e88;margin-bottom:16px;line-height:1.5;}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.tc{background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:16px 10px;cursor:pointer;text-align:center;-webkit-user-select:none;user-select:none;}
+.tc{background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:16px 10px;cursor:pointer;text-align:center;-webkit-user-select:none;user-select:none;position:relative;}
 .tc:active{background:#142540;border-color:rgba(201,168,76,.5);}
 .tc.beginner-topic{border-color:rgba(90,184,138,.25);}
 .te{font-size:28px;margin-bottom:6px;display:block;}
@@ -132,12 +132,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .mbtn{width:46px;height:46px;min-width:46px;border-radius:50%;background:#0f1e35;border:1px solid rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
 .mbtn.rec{background:rgba(224,90,90,.15);border-color:#e05a5a;animation:pr 1.5s ease infinite;}
 @keyframes pr{0%{box-shadow:0 0 0 0 rgba(224,90,90,.4);}70%{box-shadow:0 0 0 10px rgba(224,90,90,0);}100%{box-shadow:0 0 0 0 rgba(224,90,90,0);}}
-textarea{width:100%;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:12px 14px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;line-height:1.5;min-height:46px;max-height:110px;overflow-y:auto;display:block;-webkit-appearance:none;}
+textarea{width:100%;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:12px 14px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:16px;resize:none;outline:none;line-height:1.5;min-height:46px;max-height:110px;overflow-y:auto;display:block;-webkit-appearance:none;}
 textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76,.45);}
 .sbtn{width:46px;height:46px;min-width:46px;border-radius:50%;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#060d1a;}
 .sbtn:active{transform:scale(.93);}.sbtn:disabled{opacity:.4;}
 .hints{display:flex;gap:6px;margin-top:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
 .hint{font-size:11px;color:#9bacc4;background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:20px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.vocab-card{background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:14px;padding:14px;margin-bottom:8px;transition:border-color .2s;}
+.vocab-card:hover{border-color:rgba(201,168,76,.4);}
 .hint:active{border-color:rgba(201,168,76,.5);color:#c9a84c;}
 
 /* MODAL */
@@ -173,9 +175,32 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 
 /* DONATE */
 .donate-wrap{text-align:center;margin-top:24px;padding-bottom:8px;}
+/* AUTH */
+.auth-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,13,26,.98);display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-box{background:#0f1e35;border:1px solid rgba(201,168,76,.3);border-radius:24px;padding:32px 28px;max-width:380px;width:100%;}
+.auth-logo{text-align:center;font-size:40px;margin-bottom:8px;}
+.auth-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;text-align:center;margin-bottom:4px;}
+.auth-sub{font-size:12px;color:#5a6e88;text-align:center;margin-bottom:24px;}
+.auth-tabs{display:flex;background:#060d1a;border-radius:12px;padding:3px;margin-bottom:20px;}
+.auth-tab{flex:1;padding:8px;text-align:center;border-radius:10px;cursor:pointer;font-size:13px;color:#5a6e88;transition:all .2s;}
+.auth-tab.active{background:#0f1e35;color:#f0ead8;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.auth-inp{width:100%;background:#060d1a;border:1px solid rgba(201,168,76,.15);border-radius:12px;padding:12px 14px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;margin-bottom:10px;box-sizing:border-box;}
+.auth-inp:focus{border-color:rgba(201,168,76,.45);}
+.auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:#060d1a;margin-top:4px;}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
+.auth-err{font-size:12px;color:#e05a5a;text-align:center;margin-top:8px;min-height:16px;}
+.auth-skip{font-size:12px;color:#5a6e88;text-align:center;margin-top:12px;cursor:pointer;text-decoration:underline;}
+/* USER BADGE */
+.user-badge{display:flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:4px 10px;cursor:pointer;font-size:12px;}
+.user-badge-dot{width:6px;height:6px;border-radius:50%;background:#5ab88a;}
 .donate-btn{display:inline-flex;align-items:center;gap:8px;background:#FFDD00;color:#000;text-decoration:none;border-radius:12px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(255,221,0,.25);}
 .donate-note{font-size:11px;color:#5a6e88;margin-top:8px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('POSTHOG_KEY',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only'});
+</script>
 </head>
 <body>
 
@@ -197,6 +222,25 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
   <div class="side-ornament">✦</div>
 </div>
 
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" class="auth-overlay" style="display:none;">
+  <div class="auth-box">
+    <div class="auth-logo">🇱🇻</div>
+    <div class="auth-title">Latviešu Skolotājs</div>
+    <div class="auth-sub">AI репетитор латышского языка · Bezmaksas</div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Войти</div>
+      <div class="auth-tab" id="tabRegister" onclick="switchTab('register')">Регистрация</div>
+    </div>
+    <input class="auth-inp" id="authEmail" type="email" placeholder="Email"/>
+    <input class="auth-inp" id="authPass" type="password" placeholder="Пароль (минимум 6 символов)"/>
+    <input class="auth-inp" id="authName" type="text" placeholder="Имя (для приветствия)" style="display:none;"/>
+    <button class="auth-btn" id="authSubmit" onclick="doAuth()">Войти →</button>
+    <div class="auth-err" id="authErr"></div>
+    <div class="auth-skip" onclick="skipAuth()">Продолжить без аккаунта</div>
+  </div>
+</div>
+
 <div id="app">
   <!-- HEADER -->
   <div class="hdr">
@@ -204,16 +248,22 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
       <div class="hdr-ic">🇱🇻</div>
       <div>
         <div class="hdr-t">Latviešu Skolotājs</div>
-        <div class="hdr-s">AI · Bezmaksas · Latviski</div>
+        <div class="hdr-s" id="hdrSub">AI · Bezmaksas · Latviski</div>
       </div>
     </div>
     <div class="hdr-r">
       <div class="pts">⭐ <span id="pts">0</span></div>
+      <div class="user-badge" id="userBadge" onclick="showUserMenu()" style="display:none;">
+        <div class="user-badge-dot"></div>
+        <span id="userNameBadge">Гость</span>
+      </div>
+      <div class="ico-btn" id="btnVocab" title="Дневник слов">📝</div>
       <div class="ico-btn" id="btnSett">⚙️</div>
     </div>
   </div>
 
   <!-- HOME: choose mode -->
+  <div id="scr-vocab" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;"></div>
   <div id="scr-home">
     <div class="home-title">Sveicināti! <em>Labdien!</em></div>
     <div class="home-sub">Izvēlies savu līmeni / Выбери свой уровень</div>
@@ -237,13 +287,14 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
       <div class="mode-title-ru">Уже немного знаю латышский</div>
       <div class="mode-desc">
         Свободный разговор по темам.<br>
-        Исправление ошибок и оценка.<br>
+        Исправление ошибок с объяснением.<br>
         Уровни A1, A2, B1, B2.
       </div>
       <span class="mode-badge badge-gold">A1–B2</span>
     </div>
 
-    <div class="donate-wrap">
+    <!-- Achievements shown in settings -->
+<div class="donate-wrap">
       <a href="https://buymeacoffee.com/headymanner" target="_blank" class="donate-btn">☕ Buy me a coffee</a>
       <div class="donate-note">Atbalsti projektu · Поддержи проект</div>
     </div>
@@ -311,6 +362,14 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
         <option value="Puck">Puck — dzīvespriecīgs</option>
       </select></div>
     </div>
+    <div class="si">
+      <div class="sil"><span class="sico">🐢</span><div><div class="sname">Скорость голоса <span style="font-size:11px;color:#5a6e88;">/ Balss ātrums</span></div></div></div>
+      <div class="selw"><select id="selSpeed">
+        <option value="slow">🐢 Медленно (новичок)</option>
+        <option value="normal" selected>🚶 Нормально</option>
+        <option value="fast">🚀 Быстро (опытный)</option>
+      </select></div>
+    </div>
   </div>
   <div class="sgrp">
     <div class="sgl">Mācīšanās / Обучение</div>
@@ -328,6 +387,10 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
         <option value="B2">B2 Augstāks / Выше среднего</option>
       </select></div>
     </div>
+  </div>
+  <div class="sgrp" id="achievSection">
+    <div class="sgl">🏆 Достижения / Sasniegumi</div>
+    <div id="achievList" style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 0;"></div>
   </div>
   <div class="sgrp">
     <div class="sgl">API</div>
@@ -347,6 +410,20 @@ var gVoice   = localStorage.getItem('lv_gv')  || 'Aoede';
 var level    = localStorage.getItem('lv_lv')  || 'A2';
 var totalPts = parseInt(localStorage.getItem('lv_pts') || '0');
 var sessPts  = 0;
+var completedLessons = JSON.parse(localStorage.getItem('lv_done')||'[]');
+var vocabDiary = JSON.parse(localStorage.getItem('lv_vocab')||'[]');
+
+function saveVocabWord(lv, ru){
+  if(!lv||!ru) return;
+  var existing = vocabDiary.find(function(w){ return w.lv===lv; });
+  if(!existing){
+    vocabDiary.push({lv:lv.trim(), ru:ru.trim(), date:new Date().toLocaleDateString('ru-RU'), topic:topic||''});
+    localStorage.setItem('lv_vocab', JSON.stringify(vocabDiary));
+    // Debounce server save
+    clearTimeout(window._vocabSaveTimer);
+    window._vocabSaveTimer = setTimeout(saveUserProgress, 3000);
+  }
+}
 var topic    = '';
 var isBeginner = false;
 var chatHist = [];
@@ -382,6 +459,15 @@ var BEGINNER_TOPICS = [
   {id:'laiks_beg', e:'🕐', lv:'Урок 8: Время', ru:'Время и дни недели',
    h:['Šodien - сегодня','Rīt - завтра','Vakar - вчера'],
    greet:'Laiks skrien ātri! ⏰ Šodien mācīsimies par laiku. Šodien (сегодня), rīt (завтра), vakar (вчера), rīts (утро), vakars (вечер). Kāda šodien ir diena? Atbildi: Šodien ir...\n\nВремя летит быстро! Сегодня учим слова про время. Šodien (сегодня), rīt (завтра), vakar (вчера). Какой сегодня день? Ответь: Šodien ir...'},
+  {id:'dzivnieki', e:'🐾', lv:'Урок 9: Животные', ru:'Животные',
+   h:['Suns - собака','Kaķis - кошка','Putns - птица'],
+   greet:'Dzīvnieki ir ļoti interesanti! 🐾 Šodien mācīsimies dzīvnieku vārdus. Suns (собака), kaķis (кошка), putns (птица), zivs (рыба), zirgs (лошадь). Vai tev mājās ir dzīvnieki? Atbildi: Man ir... vai Man nav...\n\nЖивотные очень интересны! Сегодня учим слова про животных. У тебя есть домашние животные? Ответь: Man ir... или Man nav...'},
+  {id:'krasa2', e:'🌈', lv:'Урок 10: Природа', ru:'Природа',
+   h:['Saule - солнце','Lietus - дождь','Koks - дерево'],
+   greet:'Daba ir skaista! 🌿 Šodien mācīsimies dabas vārdus. Saule (солнце), lietus (дождь), koks (дерево), zieds (цветок), jūra (море). Kāds šodien ir laiks? Atbildi latviski!\n\nПрирода красива! Сегодня учим слова про природу. Какая сегодня погода? Ответь по-латышски!'},
+  {id:'profesijas', e:'👷', lv:'Урок 11: Профессии', ru:'Профессии',
+   h:['Ārsts - врач','Skolotājs - учитель','Šoferis - водитель'],
+   greet:'Profesijas ir svarīgas! 👷 Šodien mācīsimies profesiju vārdus. Ārsts (врач), skolotājs (учитель), šoferis (водитель), pavārs (повар), programmētājs (программист). Ko tu dari? Atbildi: Es esmu...\n\nПрофессии важны! Сегодня учим слова про профессии. Кем ты работаешь? Ответь: Es esmu...'},
 ];
 
 var ADVANCED_TOPICS = {
@@ -393,6 +479,11 @@ var ADVANCED_TOPICS = {
   'latvija':  {e:'🏰',  n:'Latvija',  ru:'Латвия',     h:['Rīga ir skaista pilsēta','Man patīk tradīcijas','Jāņi ir mani iecienītākie svētki'],lv:'B1 · Vidējs / Средне',badge:'lb1'},
   'daba':     {e:'🌲',  n:'Daba',     ru:'Природа',    h:['Latvijā ir skaisti meži','Man patīk peldēties','Ziema ir auksta'],  lv:'A2 · Pamata / Базово',   badge:'la2'},
   'ikdiena':  {e:'🌅',  n:'Ikdiena',  ru:'Каждый день',h:['Es ceļos septiņos','Brīvajā laikā es lasu','Man patīk rutīna'],    lv:'B1 · Vidējs / Средне',   badge:'lb1'},
+  'veseliba': {e:'🏥',  n:'Veselība',  ru:'Здоровье',   h:['Man sāp galva','Es eju pie ārsta','Esmu vesels'],    lv:'A2 · Pamata / Базово', badge:'la2'},
+  'iepirksanas':{e:'🛍️',n:'Iepirkšanās',ru:'Покупки',  h:['Cik tas maksā?','Es vēlos nopirkt...','Vai jums ir?'], lv:'A1 · Viegls / Легко',  badge:'la1'},
+  'laiks2':   {e:'🌤️', n:'Laiks',     ru:'Погода',     h:['Šodien ir silts','Līst lietus','Kāds laiks rīt?'],    lv:'A1 · Viegls / Легко',  badge:'la1'},
+  'hobbiji':  {e:'🎨',  n:'Hobiji',    ru:'Хобби',      h:['Man patīk zīmēt','Mans hobijs ir...','Brīvajā laikā'],lv:'A2 · Pamata / Базово', badge:'la2'},
+  'pilseta':  {e:'🏙️', n:'Pilsēta',   ru:'Город',      h:['Rīga ir galvaspilsēta','Kur atrodas...?','Es dzīvoju...'],lv:'B1 · Vidējs / Средне',badge:'lb1'},
 };
 
 // ── INIT ──────────────────────────────────────
@@ -401,14 +492,37 @@ document.getElementById('togE').classList.toggle('on', errorsOn);
 document.getElementById('selVoice').value = gVoice;
 document.getElementById('selLevel').value = level;
 document.getElementById('pts').textContent = totalPts;
+// Render achievements
+(function(){
+  var achievs = [
+    {id:'first',   icon:'🌱', name:'Первый урок',    check:function(){return completedLessons.length>=1;}},
+    {id:'five',    icon:'🎯', name:'5 уроков',       check:function(){return completedLessons.length>=5;}},
+    {id:'all_beg', icon:'🎓', name:'Все уроки A0',   check:function(){return completedLessons.length>=8;}},
+    {id:'pts100',  icon:'⭐', name:'100 звёзд',      check:function(){return totalPts>=100;}},
+    {id:'pts500',  icon:'🌟', name:'500 звёзд',      check:function(){return totalPts>=500;}},
+    {id:'streak',  icon:'🔥', name:'3 дня подряд',   check:function(){return false;}}
+  ];
+  var el = document.getElementById('achievList');
+  if(!el) return;
+  achievs.forEach(function(a){
+    var earned = a.check();
+    var d = document.createElement('div');
+    d.style.cssText='padding:6px 10px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:4px;'+(earned?'background:rgba(201,168,76,.15);color:#e8b84b;border:1px solid rgba(201,168,76,.3);':'background:#0f1e35;color:#5a6e88;border:1px solid rgba(255,255,255,.05);opacity:.6;');
+    d.innerHTML=a.icon+' '+a.name;
+    el.appendChild(d);
+  });
+})();
 if (true) {
   document.getElementById('keyStatus').textContent = 'Iestatīts ✓';
 }
 initSpeech();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+// Init auth after DOM ready
+setTimeout(initAuth, 100);
 
 // ── BIND BUTTONS ──────────────────────────────
 document.getElementById('btnSett').addEventListener('click', function(){ document.getElementById('sett').classList.add('open'); });
+document.getElementById('btnVocab').addEventListener('click', showVocabDiary);
 document.getElementById('btnCloseSett').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); });
 document.getElementById('btnBack').addEventListener('click', goBack);
 document.getElementById('btnSend').addEventListener('click', sendMsg);
@@ -419,12 +533,23 @@ document.getElementById('siVoice').addEventListener('click', function(){ togSet(
 document.getElementById('siErrors').addEventListener('click', function(){ togSet('errorsOn','lv_eo','togE'); });
 
 document.getElementById('selVoice').addEventListener('change', function(){ gVoice=this.value; localStorage.setItem('lv_gv',this.value); });
+document.getElementById('selSpeed').addEventListener('change', function(){ localStorage.setItem('lv_spd',this.value); });
+document.getElementById('selSpeed').value = localStorage.getItem('lv_spd')||'normal';
 document.getElementById('selLevel').addEventListener('change', function(){ level=this.value; localStorage.setItem('lv_lv',this.value); });
 document.getElementById('txt').addEventListener('keydown', function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
 document.getElementById('txt').addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,110)+'px'; });
 document.getElementById('txt').addEventListener('focus', function(){
   var self=this;
-  setTimeout(function(){ self.scrollIntoView({behavior:'smooth',block:'end'}); document.getElementById('msgs').scrollTop=999999; }, 350);
+  setTimeout(function(){
+    self.scrollIntoView({behavior:'smooth',block:'end'});
+    var msgs=document.getElementById('msgs');
+    if(msgs) msgs.scrollTop=msgs.scrollHeight;
+  }, 400);
+});
+// Handle iOS keyboard resize
+window.addEventListener('resize', function(){
+  var msgs=document.getElementById('msgs');
+  if(msgs) setTimeout(function(){msgs.scrollTop=msgs.scrollHeight;},100);
 });
 document.getElementById('btnBeginner').addEventListener('click', function(){ showBeginnerTopics(); });
 document.getElementById('btnAdvanced').addEventListener('click', function(){ showAdvancedTopics(); });
@@ -454,15 +579,90 @@ function togSet(key,lsKey,elId){
 }
 
 // ── SHOW TOPICS ───────────────────────────────
+function showVocabDiary(){
+  var el = document.getElementById('scr-vocab');
+  // Hide all screens
+  document.getElementById('scr-home').style.display='none';
+  document.getElementById('scr-topics').style.display='none';
+  document.getElementById('scr-chat').style.display='none';
+  el.style.display='block';
+
+  if(vocabDiary.length===0){
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;">'
+      +'<div style="font-size:48px;margin-bottom:16px;">📝</div>'
+      +'<div style="font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:8px;">Дневник пуст</div>'
+      +'<div style="font-size:13px;color:#5a6e88;line-height:1.6;">Слова появятся здесь<br>по мере изучения уроков</div>'
+      +'<div class="back-btn" style="margin:20px auto;width:fit-content;" onclick="closeVocab()">← Назад</div>'
+      +'</div>';
+    return;
+  }
+
+  var grouped = {};
+  vocabDiary.forEach(function(w){
+    var t = w.topic||'general';
+    if(!grouped[t]) grouped[t]=[];
+    grouped[t].push(w);
+  });
+
+  var h = '<div class="back-row"><div class="back-btn" onclick="closeVocab()">← Назад</div></div>';
+  h += '<div style="font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:4px;">📝 Мои слова <em>/ Mani vārdi</em></div>';
+  h += '<div style="font-size:12px;color:#5a6e88;margin-bottom:16px;">Всего слов: '+vocabDiary.length+' · <span style="cursor:pointer;color:#e05a5a;" onclick="clearVocab()">Очистить</span></div>';
+
+  // Search bar
+  h += '<input id="vocabSearch" placeholder="Поиск... / Meklēt..." style="width:100%;background:#0f1e35;border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:10px 14px;color:#f0ead8;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:16px;box-sizing:border-box;" oninput="filterVocab(this.value)"/>';
+
+  h += '<div id="vocabCards">';
+  vocabDiary.slice().reverse().forEach(function(w){
+    h += '<div class="vocab-card" data-lv="'+w.lv.toLowerCase()+'" data-ru="'+w.ru.toLowerCase()+'">';
+    h += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+    h += '<div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#e8b84b;">'+esc(w.lv)+'</div>';
+    h += '<div style="font-size:11px;color:#5a6e88;">'+esc(w.date||'')+'</div>';
+    h += '</div>';
+    h += '<div style="font-size:14px;color:#9bacc4;margin-top:2px;">'+esc(w.ru)+'</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+  el.innerHTML = h;
+}
+
+function closeVocab(){
+  document.getElementById('scr-vocab').style.display='none';
+  document.getElementById('scr-home').style.display='block';
+}
+
+function clearVocab(){
+  if(confirm('Очистить весь словарь?')){
+    vocabDiary=[];
+    localStorage.removeItem('lv_vocab');
+    showVocabDiary();
+  }
+}
+
+function filterVocab(q){
+  var cards = document.querySelectorAll('.vocab-card');
+  q = q.toLowerCase();
+  cards.forEach(function(c){
+    var match = !q || c.getAttribute('data-lv').includes(q) || c.getAttribute('data-ru').includes(q);
+    c.style.display = match?'':'none';
+  });
+}
+
 function showBeginnerTopics(){
   isBeginner=true;
   var c=document.getElementById('topics-content');
+  var done_count = BEGINNER_TOPICS.filter(function(t){return completedLessons.includes(t.id);}).length;
+  var pct = Math.round(done_count/BEGINNER_TOPICS.length*100);
   var html='<div class="s-title">Iesācējiem <em>/ Для новичков</em></div>';
   html+='<div class="s-sub">Выбери тему урока. Учитель объяснит всё по-русски 😊</div>';
+  html+='<div style="background:#0f1e35;border-radius:20px;height:8px;margin-bottom:16px;overflow:hidden;">';
+  html+='<div style="background:linear-gradient(90deg,#5ab88a,#c9a84c);height:100%;width:'+pct+'%;border-radius:20px;transition:width .5s;"></div></div>';
+  html+='<div style="font-size:12px;color:#5a6e88;margin-top:-12px;margin-bottom:12px;">Пройдено: '+done_count+'/'+BEGINNER_TOPICS.length+' уроков ('+pct+'%)</div>';
   html+='<div class="tgrid">';
   BEGINNER_TOPICS.forEach(function(t){
-    html+='<div class="tc beginner-topic" data-id="'+t.id+'">';
+    var done = completedLessons.includes(t.id);
+    html+='<div class="tc beginner-topic" data-id="'+t.id+'" style="'+(done?'border-color:rgba(90,184,138,.5);':'')+'">';
     html+='<span class="te">'+t.e+'</span>';
+    if(done) html+='<div style="font-size:14px;position:absolute;top:10px;right:10px;">✅</div>';
     html+='<div class="tn">'+t.lv+'</div>';
     html+='<div class="tn-ru">'+t.ru+'</div>';
     html+='<span class="tl la1">A0 · С нуля</span>';
@@ -506,6 +706,7 @@ function showAdvancedTopics(){
 function startBeginner(id){
   var t=BEGINNER_TOPICS.find(function(x){return x.id===id;});
   if(!t) return;
+  logEvent('start_lesson', {topic:id, mode:'beginner'});
   stopAudio(); chatActive=true;
   topic=id; isBeginner=true; chatHist=[]; sessPts=0;
   document.getElementById('cEmoji').textContent=t.e;
@@ -535,12 +736,13 @@ function startBeginner(id){
   var lvText=parts[0];
   var ruText=parts[1]||'';
   addMsgWithTranslation('b', esc(lvText), ruText.replace('',''));
-  if(voiceOn) speak(lvText.substring(0,180));
+  if(voiceOn) speak(lvText.substring(0,250));
 }
 
 function startAdvanced(id){
   var t=ADVANCED_TOPICS[id];
   if(!t) return;
+  logEvent('start_topic', {topic:id, level:level, mode:'advanced'});
   stopAudio(); chatActive=true;
   topic=id; isBeginner=false; chatHist=[]; sessPts=0;
   document.getElementById('cEmoji').textContent=t.e;
@@ -579,7 +781,7 @@ function startAdvanced(id){
   chatHist=[{role:'model',parts:[{text:greetText}]}];
   var p0=parseAdvResp(greetText);
   addMsg('b',esc(p0.reply||greetText),buildFb(p0)+(p0.razb||''),p0.translation);
-  if(voiceOn) speak((p0.reply||greetText).substring(0,180));
+  if(voiceOn) speak((p0.reply||greetText).substring(0,250));
 }
 
 function goBack(){
@@ -700,7 +902,7 @@ function buildAdvancedSys(){
 function callGemini(txt,cb){
   chatHist.push({role:'user',parts:[{text:txt}]});
   // Keep only last 8 messages to prevent context overflow
-  if(chatHist.length > 8) chatHist = chatHist.slice(-8);
+  if(chatHist.length > 6) chatHist = chatHist.slice(-6);
   var sys=isBeginner?buildBeginnerSys():buildAdvancedSys();
   fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
@@ -721,12 +923,161 @@ function callGemini(txt,cb){
     if(!t)throw new Error('Tukša atbilde');
     // If truncated due to token limit - log it
     if(finishReason==='MAX_TOKENS'){
-      console.warn('Response truncated! finishReason=MAX_TOKENS');
+      console.warn('Response truncated! Requesting completion...');
+      // Ask Gemini to complete the truncated sentence
+      var truncated = t;
+      fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({type:'chat',body:{
+          systemInstruction:{parts:[{text:'Продолжи оборванное предложение одним коротким завершением. Только окончание, без повторения начала.'}]},
+          contents:[{role:'user',parts:[{text:'Продолжи: '+truncated}]}],
+          generationConfig:{temperature:0.3,maxOutputTokens:100}
+        }})
+      }).then(function(r){return r.json();})
+      .then(function(d){
+        try{ var add=d.candidates[0].content.parts[0].text.trim();
+          if(add) t = truncated+' '+add;
+        }catch(e){}
+      }).catch(function(){})
+      .finally(function(){
+        chatHist.push({role:'model',parts:[{text:t}]});
+        cb(null,t);
+      });
+      return;
     }
     chatHist.push({role:'model',parts:[{text:t}]});
+    // After 4 exchanges offer quiz
+    if(isBeginner && chatHist.length===8 && !completedLessons.includes(topic)){
+      setTimeout(function(){ showQuizOffer(); }, 800);
+    }
+    // Mark complete after quiz or 6 exchanges
+    if(isBeginner && chatHist.length>=10 && !completedLessons.includes(topic)){
+      completedLessons.push(topic);
+      localStorage.setItem('lv_done',JSON.stringify(completedLessons));
+      updateProgressDisplay();
+    }
     cb(null,t);
   })
-  .catch(function(e){cb(e.message||'Kļūda',null);});
+  .catch(function(e){
+    var msg = e.message||'Kļūda';
+    if(msg.includes('Failed to fetch')||msg.includes('NetworkError')){
+      msg = '⚠️ Нет связи. Проверь интернет и попробуй снова.';
+    }
+    cb(msg,null);
+  });
+}
+
+// ── QUIZ SYSTEM ──────────────────────────────────
+function showQuizOffer(){
+  var msgs = document.getElementById('msgs');
+  var d = document.createElement('div');
+  d.className = 'msg b';
+  d.id = 'quizOffer';
+  d.innerHTML = '<div class="av">🎓</div><div class="mbody">'
+    +'<div style="background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.4);border-radius:16px;padding:16px;max-width:300px;">'
+    +'<div style="font-size:15px;font-weight:500;margin-bottom:8px;">🎯 Проверим знания?</div>'
+    +'<div style="font-size:12px;color:#9bacc4;margin-bottom:12px;">Небольшой тест по пройденному уроку</div>'
+    +'<div style="display:flex;gap:8px;">'
+    +'<button onclick="startQuiz()" style="flex:1;padding:8px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:#060d1a;">Да, давай!</button>'
+    +'<button onclick="skipQuiz()" style="flex:1;padding:8px;background:#0f1e35;border:1px solid rgba(201,168,76,.2);border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:#9bacc4;">Пропустить</button>'
+    +'</div></div>'
+    +'</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+var quizData = null;
+var quizIdx = 0;
+
+function startQuiz(){
+  var el = document.getElementById('quizOffer');
+  if(el) el.remove();
+  // Build quiz from vocab words learned in this session
+  var sessionWords = vocabDiary.filter(function(w){ return w.topic===topic; }).slice(-6);
+  if(sessionWords.length < 2){
+    // Ask Gemini for quiz questions
+    showTyping();
+    var quizPrompt = 'Составь 3 вопроса-теста по теме "'+topic+'" для урока латышского языка. Формат JSON: [{"q":"Как по-латышски ...?","options":["a","b","c","d"],"correct":0}]. Только JSON, без пояснений.';
+    fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:'chat',body:{
+        contents:[{role:'user',parts:[{text:quizPrompt}]}],
+        generationConfig:{temperature:0.5,maxOutputTokens:400}
+      }})
+    }).then(function(r){return r.json();}).then(function(d){
+      rmTyping();
+      var t=''; try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
+      t=t.replace(/```json|```/g,'').trim();
+      try{ quizData=JSON.parse(t); quizIdx=0; showQuizQuestion(); }
+      catch(e){ addMsg('b','😊 Урок завершён! Ты молодец!'); markLessonDone(); }
+    }).catch(function(){rmTyping(); markLessonDone();});
+    return;
+  }
+  // Build quiz from vocab
+  quizData = sessionWords.slice(0,3).map(function(w){
+    var wrong = vocabDiary.filter(function(x){return x.lv!==w.lv;}).slice(0,3).map(function(x){return x.ru;});
+    while(wrong.length<3) wrong.push(['красный','синий','белый','большой','маленький'][wrong.length]);
+    var opts = [w.ru, wrong[0], wrong[1], wrong[2]];
+    opts.sort(function(){return Math.random()-.5;});
+    return {q:'Что значит "'+w.lv+'"?', options:opts, correct:opts.indexOf(w.ru)};
+  });
+  quizIdx=0; showQuizQuestion();
+}
+
+function showQuizQuestion(){
+  if(!quizData || quizIdx>=quizData.length){ finishQuiz(); return; }
+  var q = quizData[quizIdx];
+  var msgs = document.getElementById('msgs');
+  var d = document.createElement('div');
+  d.className='msg b'; d.id='quizQ';
+  var optsHtml = q.options.map(function(o,i){
+    return '<button onclick="answerQuiz('+i+')" style="display:block;width:100%;text-align:left;padding:10px 12px;margin-bottom:6px;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:#f0ead8;">'+o+'</button>';
+  }).join('');
+  d.innerHTML='<div class="av">🎯</div><div class="mbody">'
+    +'<div style="background:#0f1e35;border:1px solid rgba(201,168,76,.25);border-radius:16px;padding:14px;max-width:300px;">'
+    +'<div style="font-size:11px;color:#5a6e88;margin-bottom:8px;">Вопрос '+(quizIdx+1)+'/'+quizData.length+'</div>'
+    +'<div style="font-size:14px;font-weight:500;margin-bottom:12px;">'+esc(q.q)+'</div>'
+    +optsHtml+'</div></div>';
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
+
+var quizScore = 0;
+function answerQuiz(idx){
+  var q = quizData[quizIdx];
+  var correct = idx === q.correct;
+  if(correct) quizScore++;
+  var qEl = document.getElementById('quizQ');
+  if(qEl){
+    var btns = qEl.querySelectorAll('button');
+    btns.forEach(function(b,i){
+      b.disabled=true;
+      if(i===q.correct) b.style.background='rgba(90,184,138,.2)';
+      else if(i===idx && !correct) b.style.background='rgba(224,90,90,.2)';
+    });
+  }
+  setTimeout(function(){ quizIdx++; showQuizQuestion(); }, 1000);
+}
+
+function finishQuiz(){
+  var pct = Math.round(quizScore/quizData.length*100);
+  var emoji = pct>=80?'🎉':pct>=60?'👍':'💪';
+  addMsg('b', emoji+' Тест завершён! Результат: '+quizScore+'/'+quizData.length+' ('+pct+'%)\n'+(pct>=80?'Отлично! Урок пройден!':'Продолжай практиковаться!'));
+  markLessonDone();
+  quizScore=0; quizData=null;
+}
+
+function skipQuiz(){ markLessonDone(); }
+
+function markLessonDone(){
+  if(!completedLessons.includes(topic)){
+    completedLessons.push(topic);
+    localStorage.setItem('lv_done',JSON.stringify(completedLessons));
+    updateProgressDisplay();
+    track('lesson_complete', {topic:topic, mode:'beginner'});
+    syncProgressToCloud();
+  }
+}
+
+function updateProgressDisplay(){
+  // Update progress bar if visible
 }
 
 // ── PARSE BEGINNER RESPONSE ───────────────────
@@ -739,8 +1090,17 @@ function parseBeginnerResp(text){
   // Get everything between ПЕРЕВОД and СЛОВА (or end)
   var tm=text.match(/ПЕРЕВОД[:\s]+([\s\S]+?)(?=\nСЛОВА|$)/i);
   if(tm) translation=tm[1].trim();
-  // Extract СЛОВА
+  // Extract СЛОВА and auto-save to diary
   var wm=text.match(/СЛОВА[:\s]+([^\n]+)/i);
+  if(wm){
+    wm[1].split('|').forEach(function(pair){
+      var p=pair.trim();
+      if(p.indexOf('=')>-1){
+        var pts2=p.split('=');
+        saveVocabWord(pts2[0].trim(), pts2[1].trim());
+      }
+    });
+  }
   if(wm){
     var wordsHtml='';
     wm[1].split('|').forEach(function(pair){
@@ -756,6 +1116,13 @@ function parseBeginnerResp(text){
   }
   reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
+  // If ends mid-word, add ellipsis
+  if(reply && reply.length>10){
+    var last=reply[reply.length-1];
+    if(last!=='.'&&last!=='?'&&last!=='!'&&last!=='"'&&last!=='…'&&last!==':'){
+      reply=reply+'…';
+    }
+  }
   return {reply:reply||text, translation:translation, words:words};
 }
 
@@ -770,6 +1137,13 @@ function parseAdvResp(text){
   if(tum) translation=tum[1].trim();
   // Extract РАЗБОР
   var rm=text.match(/РАЗБОР[:\s]+([^\n]+)/i);
+  // Auto-save any words from response to diary (from СЛОВА-like patterns)
+  var wm2=text.match(/([a-zāčēģīķļņšūž]+)\s*[=—]\s*([а-яёА-ЯЁ][а-яёА-ЯЁ\s]+)/gi);
+  if(wm2) wm2.slice(0,3).forEach(function(pair){
+    var sep=pair.indexOf('=')>-1?'=':'—';
+    var parts=pair.split(sep);
+    if(parts.length>=2) saveVocabWord(parts[0].trim(),parts[1].trim());
+  });
   if(rm) razb='<div style="margin-top:5px;font-size:11px;color:#9bacc4;font-style:italic;">📖 '+esc(rm[1].trim())+'</div>';
   // Extract PAREIZI (corrected sentence)
   var pareizi='';
@@ -788,6 +1162,13 @@ function parseAdvResp(text){
   // Score removed
   reply=reply.replace(/KĀ BŪS PAREIZI[:\s]*/gi,'').trim();
   reply=reply.replace(/\[[^\]]{0,300}\]/g,'').replace(/\*\*/g,'').trim();
+  // If ends mid-word, add ellipsis
+  if(reply && reply.length>10){
+    var last=reply[reply.length-1];
+    if(last!=='.'&&last!=='?'&&last!=='!'&&last!=='"'&&last!=='…'&&last!==':'){
+      reply=reply+'…';
+    }
+  }
   return {reply:reply||text,errors:errors,score:score,razb:razb,translation:translation,pareizi:pareizi};
 }
 
@@ -825,7 +1206,9 @@ function sendMsg(){
   if(!txt)return;
   el.value='';el.style.height='auto';
   document.getElementById('btnSend').disabled=true;
+  document.getElementById('btnSend').textContent='⏳';
   addMsg('u',esc(txt));showTyping();
+  logEvent('message_sent', {topic:topic, mode:isBeginner?'beginner':'advanced', len:txt.length});
   callGemini(txt,function(err,text){
     rmTyping();document.getElementById('btnSend').disabled=false;
     if(err){addMsg('b','❌ '+esc(err));return;}
@@ -833,7 +1216,7 @@ function sendMsg(){
       var p=parseBeginnerResp(text);
       var replyHtml=esc(p.reply);
       addMsgWithTranslation('b',replyHtml,p.translation,p.words);
-      if(voiceOn) speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
+      if(voiceOn) speak((p.reply||text).replace(/<br>/g,' ').substring(0,250));
     } else {
       var p2=parseAdvResp(text);
       var fb2=buildFb(p2)+(p2.razb||'');addMsg('b',esc(p2.reply||text),fb2,p2.translation);
@@ -884,7 +1267,7 @@ function doSpeak(text, speakSession, attempt){
   fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
     signal:ctrl.signal,
-    body:JSON.stringify({type:'tts',text:text,voice:gVoice})
+    body:JSON.stringify({type:'tts',text:text,voice:gVoice,speed:localStorage.getItem('lv_spd')||'normal'})
   })
   .then(function(r){
     if(r.status===429 && attempt<2){
@@ -982,17 +1365,19 @@ function sendAudioToGemini(blob, mimeType){
       stopAudio();
       addMsg('u', esc(t));
       callGemini(t, function(err,text){
-        rmTyping();document.getElementById('btnSend').disabled=false;
+        rmTyping();
+        document.getElementById('btnSend').disabled=false;
+        document.getElementById('btnSend').textContent='➤';
         if(err){addMsg('b','❌ '+esc(err));return;}
         if(isBeginner){
           var p=parseBeginnerResp(text);
           addMsgWithTranslation('b',esc(p.reply),p.translation,p.words);
-          if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,180));
+          if(voiceOn)speak((p.reply||text).replace(/<br>/g,' ').substring(0,250));
         } else {
           var p2=parseAdvResp(text);
           var fb2=buildFb(p2)+(p2.razb||'');
           addMsg('b',esc(p2.reply||text),fb2,p2.translation);
-          if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,180));
+          if(voiceOn)speak((p2.reply||text).replace(/<br>/g,' ').substring(0,250));
         }
       });
     })
@@ -1006,6 +1391,144 @@ function sendAudioToGemini(blob, mimeType){
 function startRec(){isRec=true;document.getElementById('btnMic').classList.add('rec');document.getElementById('btnMic').textContent='⏹';document.getElementById('txt').placeholder='🎙️ Говори / Runā... (нажми снова чтобы остановить)';}
 function stopRec(){isRec=false;document.getElementById('btnMic').classList.remove('rec');document.getElementById('btnMic').textContent='🎤';document.getElementById('txt').placeholder='Raksti / Пиши...';}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+
+// ── SUPABASE AUTH ─────────────────────────────
+// ── SUPABASE CONFIG ──────────────────────────────
+var SUPABASE_URL = 'YOUR_SUPABASE_URL';
+var SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+var sb = null;
+var currentUser = null;
+
+function initSupabase(){
+  if(typeof window.supabase === 'undefined') return;
+  try {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sb.auth.getSession().then(function(res){
+      if(res.data && res.data.session){
+        currentUser = res.data.session.user;
+        onUserLoggedIn();
+      }
+    });
+    sb.auth.onAuthStateChange(function(event, session){
+      if(event==='SIGNED_IN' && session){
+        currentUser = session.user;
+        onUserLoggedIn();
+      } else if(event==='SIGNED_OUT'){
+        currentUser = null;
+      }
+    });
+  } catch(e){ console.warn('Supabase init failed:', e); }
+}
+
+function onUserLoggedIn(){
+  document.getElementById('authOverlay').style.display='none';
+  var name = (currentUser.user_metadata||{}).name || currentUser.email.split('@')[0];
+  var badge = document.getElementById('userBadge');
+  if(badge){ badge.style.display='flex'; document.getElementById('userNameBadge').textContent=name; }
+  document.getElementById('hdrSub').textContent='AI · '+name;
+  loadProgressFromCloud();
+  track('login', {method:'email'});
+}
+
+// ── AUTH UI ───────────────────────────────────────
+function showAuth(){ var o=document.getElementById('authOverlay'); if(o) o.style.display='flex'; }
+function hideAuth(){ var o=document.getElementById('authOverlay'); if(o) o.style.display='none'; }
+
+function switchTab(tab){
+  var isReg = tab==='reg';
+  document.getElementById('tabLogin').style.cssText = isReg ? 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;color:#5a6e88;' : 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;background:linear-gradient(135deg,#c9a84c,#e8b84b);color:#060d1a;font-weight:500;';
+  document.getElementById('tabReg').style.cssText = isReg ? 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;background:linear-gradient(135deg,#c9a84c,#e8b84b);color:#060d1a;font-weight:500;' : 'flex:1;text-align:center;padding:8px;border-radius:10px;cursor:pointer;font-size:14px;color:#5a6e88;';
+  document.getElementById('authNameWrap').style.display = isReg ? 'block' : 'none';
+  document.getElementById('authSubmit').textContent = isReg ? 'Зарегистрироваться →' : 'Войти →';
+  document.getElementById('authErr').textContent = '';
+}
+
+function doAuth(){
+  if(!sb){ skipAuth(); return; }
+  var email = document.getElementById('authEmail').value.trim();
+  var pass = document.getElementById('authPass').value;
+  var isReg = document.getElementById('authNameWrap').style.display !== 'none';
+  var errEl = document.getElementById('authErr');
+  errEl.textContent = ''; errEl.style.color = '#e05a5a';
+  if(!email||!pass){ errEl.textContent='Введи email и пароль'; return; }
+  if(pass.length<6){ errEl.textContent='Пароль минимум 6 символов'; return; }
+  var btn = document.getElementById('authSubmit');
+  btn.disabled=true; btn.textContent='⏳ Подождите...';
+  var name = (document.getElementById('authNameInp')||{}).value||email.split('@')[0];
+  var promise = isReg
+    ? sb.auth.signUp({email:email, password:pass, options:{data:{name:name}}})
+    : sb.auth.signInWithPassword({email:email, password:pass});
+  promise.then(function(res){
+    btn.disabled=false; btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
+    if(res.error){
+      var msg=res.error.message;
+      if(msg.includes('Invalid login')) msg='Неверный email или пароль';
+      if(msg.includes('already registered')) msg='Email уже зарегистрирован';
+      errEl.textContent=msg;
+    } else if(isReg && !res.data.session){
+      errEl.style.color='#5ab88a';
+      errEl.textContent='✅ Проверь email для подтверждения!';
+    }
+  });
+}
+
+function skipAuth(){
+  hideAuth();
+  track('auth_skipped',{});
+}
+
+function showUserMenu(){
+  if(sb&&currentUser&&confirm('Выйти из аккаунта?')){ sb.auth.signOut(); track('sign_out',{}); }
+}
+
+// ── PROGRESS SYNC ─────────────────────────────────
+function syncProgressToCloud(){
+  if(!sb||!currentUser) return;
+  sb.from('user_progress').upsert({
+    user_id:currentUser.id,
+    completed_lessons:completedLessons,
+    total_pts:totalPts,
+    vocab:vocabDiary.slice(-200),
+    updated_at:new Date().toISOString()
+  });
+}
+
+function loadProgressFromCloud(){
+  if(!sb||!currentUser) return;
+  sb.from('user_progress').select('*').eq('user_id',currentUser.id).single()
+    .then(function(res){
+      if(res.data){
+        completedLessons=res.data.completed_lessons||[];
+        totalPts=res.data.total_pts||0;
+        vocabDiary=res.data.vocab||[];
+        localStorage.setItem('lv_done',JSON.stringify(completedLessons));
+        localStorage.setItem('lv_pts',totalPts);
+        localStorage.setItem('lv_vocab',JSON.stringify(vocabDiary));
+        document.getElementById('pts').textContent=totalPts;
+      }
+    });
+}
+
+// ── ANALYTICS ─────────────────────────────────────
+function track(event, props){
+  if(!sb) return;
+  sb.from('analytics').insert({
+    user_id:currentUser?currentUser.id:'anon',
+    event:event,
+    props:props||{},
+    url:window.location.href,
+    platform:/mobile|android|iphone/i.test(navigator.userAgent)?'mobile':'desktop',
+    created_at:new Date().toISOString()
+  });
+}
+
+// Auto-save progress every 30 seconds if logged in
+setInterval(function(){ if(currentUser) syncProgressToCloud(); }, 30000);
+
+// Init
+initSupabase();
+track('app_open', {});
+
 </script>
 </body>
 </html>
