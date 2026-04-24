@@ -245,10 +245,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .donate-note{font-size:11px;color:#5a6e88;margin-top:8px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script>
-window._ph_key='phc_kUXXcosZkxjEjLgXB3nfXWPUC5MX3H4as8V2w6TCcRsV';
-window._ph_host='https://us.i.posthog.com';
-</script>
+
 </head>
 <body>
 
@@ -630,7 +627,7 @@ function togSet(key,lsKey,elId){
 
 // ── SHOW TOPICS ───────────────────────────────
 // ── EXAM PREP ─────────────────────────────────
-var examTab = 'levels';
+var examTab = 'vvpp';
 
 var EXAM_LEVELS = [
   {id:'a1', badge:'A1', cls:'lv-a1', name:'Начальный уровень', lv:'Iesācēju līmenis', desc:'Простые фразы о себе, семье. Понимание медленной чёткой речи.', bar:16, barColor:'#5ab88a', use:'Для получения ВНЖ', pct:'5–29%'},
@@ -639,6 +636,59 @@ var EXAM_LEVELS = [
   {id:'b2', badge:'B2', cls:'lv-b2', name:'Выше среднего', lv:'Vidējais 2.pakāpe', desc:'Свободное общение. Новости, фильмы. Деловые документы.', bar:67, barColor:'#4a90d9', use:'Гос. служба, управление', pct:'68–84%'},
   {id:'c1', badge:'C1', cls:'lv-c1', name:'Продвинутый уровень', lv:'Augstākais 1.pakāpe', desc:'Речь без подбора слов. Сложные тексты. Официальные письма.', bar:83, barColor:'#c9a84c', use:'Медицина, право, педагогика', pct:'85–94%'},
   {id:'c2', badge:'C2', cls:'lv-c2', name:'Уровень мастерства', lv:'Augstākais 2.pakāpe', desc:'Как носитель языка. Любой темп речи, подтексты, нюансы.', bar:100, barColor:'#c9a84c', use:'Журналистика, переводы', pct:'95–100%'},
+];
+
+var VVPP_LEVELS = [
+  {
+    id:'a2', badge:'A2', cls:'lv-a2',
+    name:'2-й уровень / A2',
+    old:'Старая 1-я категория',
+    desc:'Базовое владение. Короткие диалоги на знакомые темы.',
+    cost:'52 €', minScore:'60% в каждом навыке',
+    use:'ВНЖ, ПМЖ ЕС, гражданство, простые профессии',
+    profs:'Уборщики, разнорабочие, личный персонал',
+    color:'#5ab88a'
+  },
+  {
+    id:'b1', badge:'B1', cls:'lv-b1',
+    name:'3-й уровень / B1',
+    old:'Частично соответствует старой 2-й категории',
+    desc:'Общение на бытовые и рабочие темы. Понимание радио/ТВ.',
+    cost:'52 €', minScore:'60% в каждом навыке',
+    use:'Большинство рабочих профессий',
+    profs:'Продавцы, водители, строители, сфера услуг, склад',
+    color:'#4a90d9'
+  },
+  {
+    id:'b2', badge:'B2', cls:'lv-b2',
+    name:'4-й уровень / B2',
+    old:'Старая 2-я категория (vidējā)',
+    desc:'Свободное общение, деловые документы, новости.',
+    cost:'52 €', minScore:'60% в каждом навыке',
+    use:'Государственная служба, руководящие должности',
+    profs:'Госслужащие, менеджеры, бухгалтеры, IT-специалисты',
+    color:'#4a90d9'
+  },
+  {
+    id:'c1', badge:'C1', cls:'lv-c1',
+    name:'5-й уровень / C1',
+    old:'Старая 3-я категория (augstākā)',
+    desc:'Свободная речь без подбора слов. Сложные тексты.',
+    cost:'52 €', minScore:'60% в каждом навыке',
+    use:'Профессии с высокими требованиями к языку',
+    profs:'Врачи, юристы, учителя, нотариусы, руководители госорганов',
+    color:'#c9a84c'
+  },
+  {
+    id:'c2', badge:'C2', cls:'lv-c2',
+    name:'6-й уровень / C2',
+    old:'Высший уровень — как носитель языка',
+    desc:'Полное владение. Любой темп речи, подтексты, нюансы.',
+    cost:'52 €', minScore:'60% в каждом навыке',
+    use:'Работа непосредственно с текстами на латышском',
+    profs:'Журналисты, переводчики, редакторы, высшие чиновники',
+    color:'#c9a84c'
+  }
 ];
 
 var EXAM_PROFESSIONS = [
@@ -666,106 +716,135 @@ function closeExam(){
 function renderExamScreen(){
   var el = document.getElementById('scr-exam');
   var h = '';
+
   // Hero
   h += '<div class="exam-hero">';
   h += '<div style="display:flex;align-items:center;justify-content:space-between;">';
-  h += '<div class="exam-hero-badge">🎓 VIAA · 2025/2026</div>';
-  h += '<div onclick="closeExam()" style="cursor:pointer;font-size:20px;color:#5a6e88;">←</div>';
+  h += '<div class="exam-hero-badge">&#127979; VIAA · 2025/2026</div>';
+  h += '<div class="exam-back-btn" style="cursor:pointer;font-size:20px;color:#5a6e88;padding:4px 8px;">&#8592;</div>';
   h += '</div>';
-  h += '<h2>Подготовка к экзамену по латышскому</h2>';
-  h += '<p>Государственный экзамен (CE) и проверка владения языком (VVPP). Уровни A1–C2 по стандарту CEFR.</p>';
+  h += '<h2>&#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072; &#1082; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1091;</h2>';
+  h += '<p>&#1043;&#1086;&#1089;&#1091;&#1076;&#1072;&#1088;&#1089;&#1090;&#1074;&#1077;&#1085;&#1085;&#1099;&#1 ; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085; (CE) &#1080; &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072; &#1074;&#1083;&#1072;&#1076;&#1077;&#1085;&#1080;&#1103; &#1103;&#1079;&#1099;&#1082;&#1086;&#1084; (VVPP).</p>';
   h += '<div class="exam-stats">';
-  h += '<div class="exam-stat"><div class="exam-stat-n">6</div><div class="exam-stat-l">Уровней</div></div>';
-  h += '<div class="exam-stat"><div class="exam-stat-n">4</div><div class="exam-stat-l">Навыка</div></div>';
-  h += '<div class="exam-stat"><div class="exam-stat-n">май 2026</div><div class="exam-stat-l">Сессия</div></div>';
+  h += '<div class="exam-stat"><div class="exam-stat-n">6</div><div class="exam-stat-l">&#1059;&#1088;&#1086;&#1074;&#1085;&#1077;&#1081;</div></div>';
+  h += '<div class="exam-stat"><div class="exam-stat-n">4</div><div class="exam-stat-l">&#1053;&#1072;&#1074;&#1099;&#1082;&#1072;</div></div>';
+  h += '<div class="exam-stat"><div class="exam-stat-n">&#1084;&#1072;&#1081; 2026</div><div class="exam-stat-l">&#1057;&#1077;&#1089;&#1089;&#1080;&#1103;</div></div>';
   h += '</div></div>';
 
   // Tabs
   h += '<div class="exam-section">';
   h += '<div class="exam-tab-row">';
-  ['levels','structure','timeline','professions'].forEach(function(t){
-    var names = {levels:'📊 Уровни', structure:'📋 Структура', timeline:'📅 График', professions:'💼 Профессии'};
-    h += '<div class="exam-tab'+(examTab===t?' active':'')+'" onclick="switchExamTab(\"'+t+'\")">' + names[t] + '</div>';
-  });
+  var tabs = [{id:'levels',label:'&#128202; &#1059;&#1088;&#1086;&#1074;&#1085;&#1080;'},{id:'structure',label:'&#128203; &#1057;&#1090;&#1088;&#1091;&#1082;&#1090;&#1091;&#1088;&#1072;'},{id:'timeline',label:'&#128197; &#1043;&#1088;&#1072;&#1092;&#1080;&#1082;'},{id:'professions',label:'&#128188; &#1055;&#1088;&#1086;&#1092;&#1077;&#1089;&#1089;&#1080;&#1080;}'}];
+
+  // Actually use simple approach with data attributes
+  h += '<div class="exam-tab'+(examTab==='vvpp'?' active':'')+'" data-tab="vvpp" style="'+(examTab==='vvpp'?'':'')+'">&#127979; VVPP</div>';
+  h += '<div class="exam-tab'+(examTab==='levels'?' active':'')+'" data-tab="levels">&#128202; &#1059;&#1088;&#1086;&#1074;&#1085;&#1080;</div>';
+  h += '<div class="exam-tab'+(examTab==='structure'?' active':'')+'" data-tab="structure">&#128203; &#1057;&#1090;&#1088;&#1091;&#1082;&#1090;&#1091;&#1088;&#1072;</div>';
+  h += '<div class="exam-tab'+(examTab==='timeline'?' active':'')+'" data-tab="timeline">&#128197; &#1043;&#1088;&#1072;&#1092;&#1080;&#1082;</div>';
+  h += '<div class="exam-tab'+(examTab==='professions'?' active':'')+'" data-tab="professions">&#128188; &#1055;&#1088;&#1086;&#1092;&#1077;&#1089;&#1089;&#1080;&#1080;</div>';
   h += '</div>';
 
-  if(examTab==='levels'){
-    h += '<div class="exam-section-title">Уровни CEFR</div>';
-    EXAM_LEVELS.forEach(function(l){
-      h += '<div class="level-card-ex" onclick="startExamPractice(\"'+l.id+'\")">';
+  if(examTab==='vvpp'){
+    h += '<div style="font-family:Cormorant Garamond,serif;font-size:18px;font-weight:600;margin-bottom:4px;">&#1059;&#1088;&#1086;&#1074;&#1085;&#1080; &#1083;&#1072;&#1090;&#1099;&#1096;&#1089;&#1082;&#1086;&#1075;&#1086; &#1103;&#1079;&#1099;&#1082;&#1072; &#1074; &#1051;&#1072;&#1090;&#1074;&#1080;&#1080;</div>';
+    h += '<p style="font-size:12px;color:#9bacc4;margin-bottom:14px;line-height:1.5;">VVPP — &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072; &#1074;&#1083;&#1072;&#1076;&#1077;&#1085;&#1080;&#1103; &#1075;&#1086;&#1089;&#1103;&#1079;&#1099;&#1082;&#1086;&#1084;. &#1054;&#1088;&#1075;&#1072;&#1085;&#1080;&#1079;&#1091;&#1077;&#1090; VIAA. &#1062;&#1077;&#1085;&#1072;: <strong style="color:#c9a84c;">52 &#1077;&#1074;&#1088;&#1086;</strong>. &#1052;&#1080;&#1085;. 60% &#1074; &#1082;&#1072;&#1078;&#1076;&#1086;&#1084; &#1085;&#1072;&#1074;&#1099;&#1082;&#1077;.</p>';
+    h += '<div class="exam-warn" style="margin-bottom:14px;">&#9432; &#1057;&#1090;&#1072;&#1088;&#1099;&#1077; &#1082;&#1072;&#1090;&#1077;&#1075;&#1086;&#1088;&#1080;&#1080; (1-&#1103;, 2-&#1103;, 3-&#1103;) &#1074;&#1089;&#1077; &#1077;&#1097;&#1105; &#1076;&#1077;&#1081;&#1089;&#1090;&#1074;&#1080;&#1090;&#1077;&#1083;&#1100;&#1085;&#1099; &#1080; &#1089;&#1086;&#1086;&#1090;&#1074;&#1077;&#1090;&#1089;&#1090;&#1074;&#1091;&#1102;&#1090; &#1085;&#1086;&#1074;&#1099;&#1084; &#1091;&#1088;&#1086;&#1074;&#1085;&#1103;&#1084;.</div>';
+    VVPP_LEVELS.forEach(function(l){
+      h += '<div class="level-card-ex" data-level="'+l.id+'">';
       h += '<div class="level-row">';
       h += '<div class="level-badge-ex '+l.cls+'">'+l.badge+'</div>';
       h += '<div class="level-info">';
-      h += '<div class="level-name-ex">'+l.name+'</div>';
-      h += '<div class="level-name-lv">'+l.lv+'</div>';
-      h += '<div class="level-desc-ex">'+l.desc+'</div>';
+      h += '<div class="level-name-ex">'+esc(l.name)+'</div>';
+      h += '<div class="level-name-lv" style="color:#5a6e88;">'+esc(l.old)+'</div>';
+      h += '<div class="level-desc-ex">'+esc(l.desc)+'</div>';
       h += '</div>';
-      h += '<div style="font-size:11px;color:#5a6e88;text-align:right;flex-shrink:0;">'+l.pct+'<br>баллов</div>';
+      h += '<div style="font-size:11px;color:#c9a84c;text-align:right;flex-shrink:0;">'+l.cost+'</div>';
+      h += '</div>';
+      h += '<div style="margin-top:8px;padding:8px;background:#060d1a;border-radius:8px;">';
+      h += '<div style="font-size:10px;color:#5a6e88;margin-bottom:3px;">&#128188; &#1055;&#1088;&#1086;&#1092;&#1077;&#1089;&#1089;&#1080;&#1080;:</div>';
+      h += '<div style="font-size:11px;color:#9bacc4;">'+esc(l.profs)+'</div>';
+      h += '</div></div>';
+    });
+    h += '<div class="exam-info-box" style="margin-top:12px;">';
+    h += '<h4>&#128197; &#1043;&#1076;&#1077; &#1089;&#1076;&#1072;&#1090;&#1100; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;?</h4>';
+    h += '<p>&#1056;&#1080;&#1075;&#1072;, &#1044;&#1072;&#1091;&#1075;&#1072;&#1074;&#1087;&#1080;&#1083;&#1089;, &#1051;&#1080;&#1077;&#1087;&#257;&#1103;, &#1056;&#1077;&#1079;&#1077;&#1082;&#1085;&#1077;, &#1042;&#1077;&#1085;&#1090;&#1089;&#1087;&#1080;&#1083;&#1089;</p>';
+    h += '<p style="margin-top:4px;">&#1056;&#1077;&#1075;&#1080;&#1089;&#1090;&#1088;&#1072;&#1094;&#1080;&#1103;: vvpp@viaa.gov.lv · &#1058;&#1077;&#1083;: 67216500</p>';
+    h += '</div>';
+    h += '<button class="start-exam-btn exam-diag-btn" style="margin-top:12px;">&#127919; &#1055;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1080;&#1090;&#1100;&#1089;&#1103; &#1082; VVPP</button>';
+  }
+  else if(examTab==='levels'){
+    h += '<div style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:600;margin-bottom:12px;">&#1059;&#1088;&#1086;&#1074;&#1085;&#1080; CEFR</div>';
+    EXAM_LEVELS.forEach(function(l){
+      h += '<div class="level-card-ex" data-level="'+l.id+'">';
+      h += '<div class="level-row">';
+      h += '<div class="level-badge-ex '+l.cls+'">'+l.badge+'</div>';
+      h += '<div class="level-info">';
+      h += '<div class="level-name-ex">'+esc(l.name)+'</div>';
+      h += '<div class="level-name-lv">'+esc(l.lv)+'</div>';
+      h += '<div class="level-desc-ex">'+esc(l.desc)+'</div>';
+      h += '</div>';
+      h += '<div style="font-size:11px;color:#5a6e88;text-align:right;flex-shrink:0;">'+l.pct+'<br>&#1073;&#1072;&#1083;&#1083;&#1086;&#1074;</div>';
       h += '</div>';
       h += '<div class="level-bar"><div class="level-bar-fill" style="width:'+l.bar+'%;background:'+l.barColor+';"></div></div>';
       h += '<div style="font-size:10px;color:#5a6e88;margin-top:4px;">'+esc(l.use)+'</div>';
       h += '</div>';
     });
-    h += '<button class="start-exam-btn" onclick="startDiagnosticTest()">🎯 Пройти диагностический тест</button>';
-    h += '<div style="font-size:11px;color:#5a6e88;text-align:center;">Определим твой уровень за 5 минут</div>';
+    h += '<button class="start-exam-btn exam-diag-btn" style="margin-top:8px;">&#127919; &#1055;&#1088;&#1086;&#1081;&#1090;&#1080; &#1076;&#1080;&#1072;&#1075;&#1085;&#1086;&#1089;&#1090;&#1080;&#1095;&#1077;&#1089;&#1082;&#1080;&#1081; &#1090;&#1077;&#1089;&#1090;</button>';
+    h += '<div style="font-size:11px;color:#5a6e88;text-align:center;margin-top:4px;">&#1054;&#1087;&#1088;&#1077;&#1076;&#1077;&#1083;&#1080;&#1084; &#1090;&#1074;&#1086;&#1081; &#1091;&#1088;&#1086;&#1074;&#1077;&#1085;&#1100; &#1079;&#1072; 5 &#1084;&#1080;&#1085;&#1091;&#1090;</div>';
   }
-
   else if(examTab==='structure'){
-    h += '<div class="exam-section-title">4 компетенции экзамена</div>';
-    var comps = [
-      {icon:'👂', name:'Klausīšanās', ru:'Аудирование', desc:'Понимание устной речи — диалоги, радио, ТВ, публичные выступления.'},
-      {icon:'📖', name:'Lasītprasme', ru:'Чтение', desc:'Понимание письменных текстов — от вывесок до технических руководств.'},
-      {icon:'💬', name:'Runāšana', ru:'Говорение', desc:'Диалоги, монологи, описание ситуации, аргументация позиции.'},
-      {icon:'✍️', name:'Rakstīšana', ru:'Письмо', desc:'От заполнения форм до написания эссе и официальных документов.'},
+    h += '<div style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:600;margin-bottom:12px;">4 &#1082;&#1086;&#1084;&#1087;&#1077;&#1090;&#1077;&#1085;&#1094;&#1080;&#1080; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1072;</div>';
+    var comps=[
+      {icon:'&#128372;',name:'Klau&#353;&#299;&#353;an&#257;s',ru:'&#1040;&#1091;&#1076;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077;',desc:'&#1055;&#1086;&#1085;&#1080;&#1084;&#1072;&#1085;&#1080;&#1077; &#1091;&#1089;&#1090;&#1085;&#1086;&#1081; &#1088;&#1077;&#1095;&#1080; — &#1076;&#1080;&#1072;&#1083;&#1086;&#1075;&#1080;, &#1088;&#1072;&#1076;&#1080;&#1086;, &#1058;&#1042;.'},
+      {icon:'&#128218;',name:'Las&#299;tprasme',ru:'&#1063;&#1090;&#1077;&#1085;&#1080;&#1077;',desc:'&#1055;&#1086;&#1085;&#1080;&#1084;&#1072;&#1085;&#1080;&#1077; &#1090;&#1077;&#1082;&#1089;&#1090;&#1086;&#1074; — &#1086;&#1090; &#1074;&#1099;&#1074;&#1077;&#1089;&#1086;&#1082; &#1076;&#1086; &#1089;&#1090;&#1072;&#1090;&#1077;&#1081;.'},
+      {icon:'&#128172;',name:'Run&#257;&#353;ana',ru:'&#1043;&#1086;&#1074;&#1086;&#1088;&#1077;&#1085;&#1080;&#1077;',desc:'&#1044;&#1080;&#1072;&#1083;&#1086;&#1075;&#1080;, &#1084;&#1086;&#1085;&#1086;&#1083;&#1086;&#1075;&#1080;, &#1086;&#1087;&#1080;&#1089;&#1072;&#1085;&#1080;&#1077; &#1089;&#1080;&#1090;&#1091;&#1072;&#1094;&#1080;&#1080;.'},
+      {icon:'&#9999;',name:'Raks&#299;&#353;ana',ru:'&#1055;&#1080;&#1089;&#1100;&#1084;&#1086;',desc:'&#1054;&#1090; &#1079;&#1072;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1092;&#1086;&#1088;&#1084; &#1076;&#1086; &#1086;&#1092;&#1080;&#1094;&#1080;&#1072;&#1083;&#1100;&#1085;&#1099;&#1093; &#1087;&#1080;&#1089;&#1077;&#1084;.'}
     ];
     comps.forEach(function(c){
-      h += '<div class="exam-info-box">';
-      h += '<h4>'+c.icon+' '+c.name+' — '+c.ru+'</h4>';
-      h += '<p>'+c.desc+'</p>';
-      h += '</div>';
+      h+='<div class="exam-info-box"><h4>'+c.icon+' '+c.name+' — '+c.ru+'</h4><p>'+c.desc+'</p></div>';
     });
-    h += '<div class="exam-warn">ℹ️ Экзамен VVPP проверяет все 4 компетенции. Каждая оценивается отдельно, результат суммируется в итоговый процент.</div>';
-    h += '<div style="margin-top:12px;" class="exam-info-box">';
-    h += '<h4>📚 Уровни в школе 2025/2026</h4>';
-    h += '<ul>';
-    h += '<li>9 класс: Латышский — 19 мая 2026 (мин. 15%)</li>';
-    h += '<li>12 класс: Обязательный мин. оптимальный уровень</li>';
-    h += '<li>12 класс: Минимум 1 предмет на высший уровень</li>';
-    h += '</ul></div>';
+    h+='<div class="exam-warn">&#1069;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085; VVPP &#1087;&#1088;&#1086;&#1074;&#1077;&#1088;&#1103;&#1077;&#1090; &#1074;&#1089;&#1077; 4 &#1082;&#1086;&#1084;&#1087;&#1077;&#1090;&#1077;&#1085;&#1094;&#1080;&#1080;. &#1052;&#1080;&#1085;&#1080;&#1084;&#1072;&#1083;&#1100;&#1085;&#1099;&#1081; &#1087;&#1086;&#1088;&#1086;&#1075; &#1076;&#1083;&#1103; 9 &#1082;&#1083;&#1072;&#1089;&#1089;&#1072; — 15%.</div>';
   }
-
   else if(examTab==='timeline'){
-    h += '<div class="exam-section-title">График экзаменов</div>';
-    var events = [
-      {date:'До 15 янв. 2026', title:'Регистрация на экзамены', desc:'Срок подачи заявлений через образовательное учреждение.'},
-      {date:'22–24 апр. 2026', title:'Иностранный язык (9 кл.)', desc:'Мониторинговая работа — английский, французский или немецкий.'},
-      {date:'11 мая 2026', title:'Старт сессии (12 кл.)', desc:'Начало с экзамена по социальным наукам высшего уровня.'},
-      {date:'19 мая 2026', title:'Латышский язык (9 кл.)', desc:'Главный экзамен. Минимальный порог — 15%.'},
-      {date:'26 мая 2026', title:'Математика (9 кл.)', desc:'Второй обязательный централизованный экзамен.'},
+    h+='<div style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:600;margin-bottom:12px;">&#1043;&#1088;&#1072;&#1092;&#1080;&#1082; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1086;&#1074; 2026</div>';
+    var evs=[
+      {d:'&#1044;&#1086; 15 &#1103;&#1085;&#1074;. 2026',t:'&#1056;&#1077;&#1075;&#1080;&#1089;&#1090;&#1088;&#1072;&#1094;&#1080;&#1103; &#1085;&#1072; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1099;',desc:'&#1057;&#1088;&#1086;&#1082; &#1087;&#1086;&#1076;&#1072;&#1095;&#1080; &#1079;&#1072;&#1103;&#1074;&#1083;&#1077;&#1085;&#1080;&#1081;.'},
+      {d:'22–24 &#1072;&#1087;&#1088;. 2026',t:'&#1048;&#1085;&#1086;&#1089;&#1090;&#1088;&#1072;&#1085;&#1085;&#1099;&#1081; &#1103;&#1079;&#1099;&#1082; (9 &#1082;&#1083;.)',desc:'&#1052;&#1086;&#1085;&#1080;&#1090;&#1086;&#1088;&#1080;&#1085;&#1075;&#1086;&#1074;&#1072;&#1103; &#1088;&#1072;&#1073;&#1086;&#1090;&#1072;.'},
+      {d:'19 &#1084;&#1072;&#1103; 2026',t:'&#1051;&#1072;&#1090;&#1099;&#1096;&#1089;&#1082;&#1080;&#1081; &#1103;&#1079;&#1099;&#1082; (9 &#1082;&#1083;.)',desc:'&#1043;&#1083;&#1072;&#1074;&#1085;&#1099;&#1081; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;. &#1052;&#1080;&#1085;. &#1087;&#1086;&#1088;&#1086;&#1075; — 15%.'},
+      {d:'26 &#1084;&#1072;&#1103; 2026',t:'&#1052;&#1072;&#1090;&#1077;&#1084;&#1072;&#1090;&#1080;&#1082;&#1072; (9 &#1082;&#1083;.)',desc:'&#1042;&#1090;&#1086;&#1088;&#1086;&#1081; &#1086;&#1073;&#1103;&#1079;&#1072;&#1090;&#1077;&#1083;&#1100;&#1085;&#1099;&#1081; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;.'}
     ];
-    events.forEach(function(e, i){
-      h += '<div class="exam-timeline-item">';
-      h += '<div><div class="exam-tl-dot"></div>'+(i<events.length-1?'<div class="exam-tl-line" style="height:60px;"></div>':'')+'</div>';
-      h += '<div><div class="exam-tl-date">'+e.date+'</div><div class="exam-tl-title">'+e.title+'</div><div class="exam-tl-desc">'+e.desc+'</div></div>';
-      h += '</div>';
+    evs.forEach(function(e){
+      h+='<div class="exam-timeline-item"><div><div class="exam-tl-dot"></div></div>';
+      h+='<div><div class="exam-tl-date">'+e.d+'</div><div class="exam-tl-title">'+e.t+'</div><div class="exam-tl-desc">'+e.desc+'</div></div></div>';
     });
   }
-
   else if(examTab==='professions'){
-    h += '<div class="exam-section-title">Уровень языка по профессиям</div>';
-    h += '<p style="font-size:12px;color:#9bacc4;margin-bottom:12px;">По постановлению КМ Латвии №157 (2022) — минимальные требования к латышскому языку:</p>';
+    h+='<div style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:600;margin-bottom:8px;">&#1059;&#1088;&#1086;&#1074;&#1077;&#1085;&#1100; &#1103;&#1079;&#1099;&#1082;&#1072; &#1087;&#1086; &#1087;&#1088;&#1086;&#1092;&#1077;&#1089;&#1089;&#1080;&#1103;&#1084;</div>';
+    h+='<p style="font-size:12px;color:#9bacc4;margin-bottom:12px;">&#1055;&#1086; &#1087;&#1086;&#1089;&#1090;&#1072;&#1085;&#1086;&#1074;&#1083;&#1077;&#1085;&#1080;&#1102; &#1050;&#1052; &#1051;&#1072;&#1090;&#1074;&#1080;&#1080; &numero;157 (2022):</p>';
     EXAM_PROFESSIONS.forEach(function(p){
-      h += '<div class="prof-row">';
-      h += '<div class="level-badge-ex '+p.cls+' prof-badge">'+p.badge+'</div>';
-      h += '<div style="font-size:12px;color:#9bacc4;line-height:1.5;">'+p.profs+'</div>';
-      h += '</div>';
+      h+='<div class="prof-row"><div class="level-badge-ex '+p.cls+' prof-badge">'+p.badge+'</div>';
+      h+='<div style="font-size:12px;color:#9bacc4;line-height:1.5;">'+esc(p.profs)+'</div></div>';
     });
-    h += '<div style="margin-top:12px;" class="exam-warn">💡 Выбери свою профессию и практикуй нужный уровень прямо в приложении!</div>';
-    h += '<button class="start-exam-btn" style="margin-top:12px;" onclick="closeExam()">🚀 Начать практику</button>';
+    h+='<button class="start-exam-btn exam-practice-btn" style="margin-top:12px;">&#128640; &#1053;&#1072;&#1095;&#1072;&#1090;&#1100; &#1087;&#1088;&#1072;&#1082;&#1090;&#1080;&#1082;&#1091;</button>';
   }
-
   h += '</div>';
   el.innerHTML = h;
+
+  // Bind events using event delegation
+  el.onclick = function(e){
+    var t = e.target;
+    // Tab click
+    var tabEl = t.closest('[data-tab]');
+    if(tabEl){ examTab=tabEl.getAttribute('data-tab'); renderExamScreen(); return; }
+    // Level card click
+    var lvEl = t.closest('[data-level]');
+    if(lvEl){ startExamPractice(lvEl.getAttribute('data-level')); return; }
+    // Back button
+    if(t.classList.contains('exam-back-btn')||t.closest('.exam-back-btn')){ closeExam(); return; }
+    // Diagnostic test button
+    if(t.classList.contains('exam-diag-btn')){ startDiagnosticTest(); return; }
+    // Practice button
+    if(t.classList.contains('exam-practice-btn')){ closeExam(); showAdvancedTopics(); return; }
+  };
 }
 
 function switchExamTab(tab){
@@ -800,6 +879,7 @@ function startDiagnosticTest(){
   document.getElementById('hints').innerHTML='';
   document.getElementById('scr-home').style.display='none';
   document.getElementById('scr-chat').style.display='flex';
+  chatActive = true;
   // Special diagnostic greeting
   var diagText = 'Labdien! Es tagad novērtēšu jūsu latviešu valodas līmeni. Pastāstiet par sevi — kādēļ jūs mācāties latviešu valodu?';
   chatHist=[{role:'model',parts:[{text:diagText}]}];
@@ -1440,8 +1520,8 @@ function sendMsg(){
   var el=document.getElementById('txt'),txt=el.value.trim();
   if(!txt)return;
   el.value='';el.style.height='auto';
-  document.getElementById('btnSend').disabled=true;
-  document.getElementById('btnSend').textContent='⏳';
+  var btnS=document.getElementById('btnSend');
+  if(btnS){btnS.disabled=true; btnS.textContent='⏳';}
   addMsg('u',esc(txt));showTyping();
   track('message_sent', {topic:topic, mode:isBeginner?'beginner':'advanced', len:txt.length});
   callGemini(txt,function(err,text){
@@ -1790,17 +1870,6 @@ function track(event, props){
 // Auto-save progress every 30 seconds if logged in
 setInterval(function(){ if(currentUser) syncProgressToCloud(); }, 30000);
 
-// Init PostHog lazily
-(function(){
-  var s=document.createElement('script');
-  s.async=true;
-  s.src=window._ph_host+'/static/array.js';
-  s.onload=function(){
-    window.posthog.init(window._ph_key,{api_host:window._ph_host,person_profiles:'identified_only'});
-    posthog.capture('app_open',{});
-  };
-  document.head.appendChild(s);
-})();
 track('app_open', {});
 
 </script>
