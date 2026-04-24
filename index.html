@@ -175,6 +175,54 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 
 /* DONATE */
 .donate-wrap{text-align:center;margin-top:24px;padding-bottom:8px;}
+/* EXAM PREP */
+.exam-screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0;display:none;}
+.exam-hero{background:linear-gradient(135deg,#0a1628 0%,#0f2a4a 60%,rgba(201,168,76,.15) 100%);padding:24px 20px 20px;border-bottom:1px solid rgba(201,168,76,.15);}
+.exam-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.15);color:#c9a84c;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.exam-hero h2{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600;margin-bottom:6px;}
+.exam-hero p{font-size:12px;color:#9bacc4;line-height:1.5;margin-bottom:14px;}
+.exam-stats{display:flex;gap:16px;flex-wrap:wrap;}
+.exam-stat{text-align:center;}
+.exam-stat-n{font-family:"Cormorant Garamond",serif;font-size:22px;color:#c9a84c;font-weight:700;line-height:1;}
+.exam-stat-l{font-size:9px;color:#5a6e88;text-transform:uppercase;letter-spacing:.06em;}
+.exam-section{padding:16px 20px;}
+.exam-section-title{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.level-card-ex{background:#0f1e35;border:1px solid rgba(201,168,76,.12);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s;}
+.level-card-ex:active{border-color:rgba(201,168,76,.4);}
+.level-badge-ex{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;font-weight:700;font-size:13px;flex-shrink:0;}
+.lv-a1{background:rgba(90,184,138,.15);color:#5ab88a;}
+.lv-a2{background:rgba(90,184,138,.12);color:#5ab88a;}
+.lv-b1{background:rgba(74,144,217,.15);color:#4a90d9;}
+.lv-b2{background:rgba(74,144,217,.12);color:#4a90d9;}
+.lv-c1{background:rgba(201,168,76,.15);color:#c9a84c;}
+.lv-c2{background:rgba(201,168,76,.12);color:#c9a84c;}
+.level-row{display:flex;align-items:center;gap:12px;}
+.level-info{flex:1;}
+.level-name-ex{font-size:14px;font-weight:600;margin-bottom:2px;}
+.level-name-lv{font-size:11px;color:#5a6e88;margin-bottom:4px;}
+.level-desc-ex{font-size:11px;color:#9bacc4;line-height:1.5;}
+.level-bar{height:4px;background:#060d1a;border-radius:4px;margin-top:8px;overflow:hidden;}
+.level-bar-fill{height:100%;border-radius:4px;}
+.exam-tab-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+.exam-tab{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;background:#0f1e35;border:1px solid rgba(201,168,76,.15);color:#9bacc4;flex-shrink:0;}
+.exam-tab.active{background:rgba(201,168,76,.15);color:#c9a84c;border-color:rgba(201,168,76,.4);}
+.exam-info-box{background:#0a1628;border:1px solid rgba(74,144,217,.2);border-radius:12px;padding:14px;margin-bottom:10px;}
+.exam-info-box h4{font-size:13px;font-weight:600;margin-bottom:6px;color:#4a90d9;}
+.exam-info-box p,.exam-info-box li{font-size:12px;color:#9bacc4;line-height:1.6;}
+.exam-info-box ul{list-style:none;padding:0;}
+.exam-info-box ul li::before{content:"— ";color:#5a6e88;}
+.exam-warn{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:12px 14px;font-size:12px;color:#c9a84c;line-height:1.6;}
+.exam-timeline-item{display:flex;gap:12px;margin-bottom:14px;}
+.exam-tl-dot{width:10px;height:10px;border-radius:50%;background:#c9a84c;flex-shrink:0;margin-top:4px;}
+.exam-tl-date{font-size:10px;color:#c9a84c;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;}
+.exam-tl-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.exam-tl-desc{font-size:11px;color:#9bacc4;line-height:1.5;}
+.exam-tl-line{width:2px;background:rgba(201,168,76,.15);margin-left:4px;}
+.start-exam-btn{width:100%;padding:14px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:14px;cursor:pointer;font-family:"DM Sans",sans-serif;font-size:15px;font-weight:600;color:#060d1a;margin-bottom:8px;}
+.prof-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(201,168,76,.08);}
+.prof-row:last-child{border-bottom:none;}
+.prof-badge{flex-shrink:0;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;}
+
 /* AUTH */
 .auth-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,13,26,.98);display:flex;align-items:center;justify-content:center;padding:20px;}
 .auth-box{background:#0f1e35;border:1px solid rgba(201,168,76,.3);border-radius:24px;padding:32px 28px;max-width:380px;width:100%;}
@@ -257,12 +305,14 @@ posthog.init('phc_kUXXcosZkxjEjLgXB3nfXWPUC5MX3H4as8V2w6TCcRsV',{api_host:'https
         <span id="userNameBadge">Гость</span>
       </div>
       <div class="ico-btn" id="btnVocab" title="Дневник слов">📝</div>
+      <div class="ico-btn" id="btnExam" title="Подготовка к экзамену">🎓</div>
       <div class="ico-btn" id="btnSett">⚙️</div>
     </div>
   </div>
 
   <!-- HOME: choose mode -->
-  <div id="scr-vocab" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;"></div>
+  <div id="scr-exam" class="exam-screen"></div>
+<div id="scr-vocab" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;"></div>
   <div id="scr-home">
     <div class="home-title">Sveicināti! <em>Labdien!</em></div>
     <div class="home-sub">Izvēlies savu līmeni / Выбери свой уровень</div>
@@ -522,6 +572,7 @@ setTimeout(initSupabase, 100);
 // ── BIND BUTTONS ──────────────────────────────
 document.getElementById('btnSett').addEventListener('click', function(){ document.getElementById('sett').classList.add('open'); });
 document.getElementById('btnVocab').addEventListener('click', showVocabDiary);
+document.getElementById('btnExam').addEventListener('click', showExamPrep);
 document.getElementById('btnCloseSett').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); });
 document.getElementById('btnBack').addEventListener('click', goBack);
 document.getElementById('btnSend').addEventListener('click', sendMsg);
@@ -578,6 +629,185 @@ function togSet(key,lsKey,elId){
 }
 
 // ── SHOW TOPICS ───────────────────────────────
+// ── EXAM PREP ─────────────────────────────────
+var examTab = 'levels';
+
+var EXAM_LEVELS = [
+  {id:'a1', badge:'A1', cls:'lv-a1', name:'Начальный уровень', lv:'Iesācēju līmenis', desc:'Простые фразы о себе, семье. Понимание медленной чёткой речи.', bar:16, barColor:'#5ab88a', use:'Для получения ВНЖ', pct:'5–29%'},
+  {id:'a2', badge:'A2', cls:'lv-a2', name:'Элементарный уровень', lv:'Elementārais līmenis', desc:'Общение на знакомые темы, короткие тексты, простые документы.', bar:33, barColor:'#5ab88a', use:'Постоянный ВНЖ / ПМЖ ЕС', pct:'30–49%'},
+  {id:'b1', badge:'B1', cls:'lv-b1', name:'Пороговый уровень', lv:'Vidējais 1.pakāpe', desc:'Диалог на бытовые темы. Понимание радио/ТВ. Простые документы.', bar:50, barColor:'#4a90d9', use:'Большинство профессий', pct:'50–67%'},
+  {id:'b2', badge:'B2', cls:'lv-b2', name:'Выше среднего', lv:'Vidējais 2.pakāpe', desc:'Свободное общение. Новости, фильмы. Деловые документы.', bar:67, barColor:'#4a90d9', use:'Гос. служба, управление', pct:'68–84%'},
+  {id:'c1', badge:'C1', cls:'lv-c1', name:'Продвинутый уровень', lv:'Augstākais 1.pakāpe', desc:'Речь без подбора слов. Сложные тексты. Официальные письма.', bar:83, barColor:'#c9a84c', use:'Медицина, право, педагогика', pct:'85–94%'},
+  {id:'c2', badge:'C2', cls:'lv-c2', name:'Уровень мастерства', lv:'Augstākais 2.pakāpe', desc:'Как носитель языка. Любой темп речи, подтексты, нюансы.', bar:100, barColor:'#c9a84c', use:'Журналистика, переводы', pct:'95–100%'},
+];
+
+var EXAM_PROFESSIONS = [
+  {badge:'A2', cls:'lv-a2', profs:'Личный обслуживающий персонал, уборщики, разнорабочие'},
+  {badge:'B1', cls:'lv-b1', profs:'Торговля, услуги, строительство, водители, склад'},
+  {badge:'B2', cls:'lv-b2', profs:'Гос. служащие, менеджеры, IT, финансы, бухгалтеры'},
+  {badge:'C1', cls:'lv-c1', profs:'Медики, юристы, педагоги, нотариусы, руководители'},
+  {badge:'C2', cls:'lv-c2', profs:'Журналисты, переводчики, редакторы, высшие чиновники'},
+];
+
+function showExamPrep(){
+  var screens = ['scr-home','scr-topics','scr-chat','scr-vocab'];
+  screens.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  var el = document.getElementById('scr-exam');
+  el.style.display='block';
+  renderExamScreen();
+  track('exam_prep_open',{});
+}
+
+function closeExam(){
+  document.getElementById('scr-exam').style.display='none';
+  document.getElementById('scr-home').style.display='block';
+}
+
+function renderExamScreen(){
+  var el = document.getElementById('scr-exam');
+  var h = '';
+  // Hero
+  h += '<div class="exam-hero">';
+  h += '<div style="display:flex;align-items:center;justify-content:space-between;">';
+  h += '<div class="exam-hero-badge">🎓 VIAA · 2025/2026</div>';
+  h += '<div onclick="closeExam()" style="cursor:pointer;font-size:20px;color:#5a6e88;">←</div>';
+  h += '</div>';
+  h += '<h2>Подготовка к экзамену по латышскому</h2>';
+  h += '<p>Государственный экзамен (CE) и проверка владения языком (VVPP). Уровни A1–C2 по стандарту CEFR.</p>';
+  h += '<div class="exam-stats">';
+  h += '<div class="exam-stat"><div class="exam-stat-n">6</div><div class="exam-stat-l">Уровней</div></div>';
+  h += '<div class="exam-stat"><div class="exam-stat-n">4</div><div class="exam-stat-l">Навыка</div></div>';
+  h += '<div class="exam-stat"><div class="exam-stat-n">май 2026</div><div class="exam-stat-l">Сессия</div></div>';
+  h += '</div></div>';
+
+  // Tabs
+  h += '<div class="exam-section">';
+  h += '<div class="exam-tab-row">';
+  ['levels','structure','timeline','professions'].forEach(function(t){
+    var names = {levels:'📊 Уровни', structure:'📋 Структура', timeline:'📅 График', professions:'💼 Профессии'};
+    h += '<div class="exam-tab'+(examTab===t?' active':'')+'" onclick="switchExamTab(\"'+t+'\")">' + names[t] + '</div>';
+  });
+  h += '</div>';
+
+  if(examTab==='levels'){
+    h += '<div class="exam-section-title">Уровни CEFR</div>';
+    EXAM_LEVELS.forEach(function(l){
+      h += '<div class="level-card-ex" onclick="startExamPractice(\"'+l.id+'\")">';
+      h += '<div class="level-row">';
+      h += '<div class="level-badge-ex '+l.cls+'">'+l.badge+'</div>';
+      h += '<div class="level-info">';
+      h += '<div class="level-name-ex">'+l.name+'</div>';
+      h += '<div class="level-name-lv">'+l.lv+'</div>';
+      h += '<div class="level-desc-ex">'+l.desc+'</div>';
+      h += '</div>';
+      h += '<div style="font-size:11px;color:#5a6e88;text-align:right;flex-shrink:0;">'+l.pct+'<br>баллов</div>';
+      h += '</div>';
+      h += '<div class="level-bar"><div class="level-bar-fill" style="width:'+l.bar+'%;background:'+l.barColor+';"></div></div>';
+      h += '<div style="font-size:10px;color:#5a6e88;margin-top:4px;">'+esc(l.use)+'</div>';
+      h += '</div>';
+    });
+    h += '<button class="start-exam-btn" onclick="startDiagnosticTest()">🎯 Пройти диагностический тест</button>';
+    h += '<div style="font-size:11px;color:#5a6e88;text-align:center;">Определим твой уровень за 5 минут</div>';
+  }
+
+  else if(examTab==='structure'){
+    h += '<div class="exam-section-title">4 компетенции экзамена</div>';
+    var comps = [
+      {icon:'👂', name:'Klausīšanās', ru:'Аудирование', desc:'Понимание устной речи — диалоги, радио, ТВ, публичные выступления.'},
+      {icon:'📖', name:'Lasītprasme', ru:'Чтение', desc:'Понимание письменных текстов — от вывесок до технических руководств.'},
+      {icon:'💬', name:'Runāšana', ru:'Говорение', desc:'Диалоги, монологи, описание ситуации, аргументация позиции.'},
+      {icon:'✍️', name:'Rakstīšana', ru:'Письмо', desc:'От заполнения форм до написания эссе и официальных документов.'},
+    ];
+    comps.forEach(function(c){
+      h += '<div class="exam-info-box">';
+      h += '<h4>'+c.icon+' '+c.name+' — '+c.ru+'</h4>';
+      h += '<p>'+c.desc+'</p>';
+      h += '</div>';
+    });
+    h += '<div class="exam-warn">ℹ️ Экзамен VVPP проверяет все 4 компетенции. Каждая оценивается отдельно, результат суммируется в итоговый процент.</div>';
+    h += '<div style="margin-top:12px;" class="exam-info-box">';
+    h += '<h4>📚 Уровни в школе 2025/2026</h4>';
+    h += '<ul>';
+    h += '<li>9 класс: Латышский — 19 мая 2026 (мин. 15%)</li>';
+    h += '<li>12 класс: Обязательный мин. оптимальный уровень</li>';
+    h += '<li>12 класс: Минимум 1 предмет на высший уровень</li>';
+    h += '</ul></div>';
+  }
+
+  else if(examTab==='timeline'){
+    h += '<div class="exam-section-title">График экзаменов</div>';
+    var events = [
+      {date:'До 15 янв. 2026', title:'Регистрация на экзамены', desc:'Срок подачи заявлений через образовательное учреждение.'},
+      {date:'22–24 апр. 2026', title:'Иностранный язык (9 кл.)', desc:'Мониторинговая работа — английский, французский или немецкий.'},
+      {date:'11 мая 2026', title:'Старт сессии (12 кл.)', desc:'Начало с экзамена по социальным наукам высшего уровня.'},
+      {date:'19 мая 2026', title:'Латышский язык (9 кл.)', desc:'Главный экзамен. Минимальный порог — 15%.'},
+      {date:'26 мая 2026', title:'Математика (9 кл.)', desc:'Второй обязательный централизованный экзамен.'},
+    ];
+    events.forEach(function(e, i){
+      h += '<div class="exam-timeline-item">';
+      h += '<div><div class="exam-tl-dot"></div>'+(i<events.length-1?'<div class="exam-tl-line" style="height:60px;"></div>':'')+'</div>';
+      h += '<div><div class="exam-tl-date">'+e.date+'</div><div class="exam-tl-title">'+e.title+'</div><div class="exam-tl-desc">'+e.desc+'</div></div>';
+      h += '</div>';
+    });
+  }
+
+  else if(examTab==='professions'){
+    h += '<div class="exam-section-title">Уровень языка по профессиям</div>';
+    h += '<p style="font-size:12px;color:#9bacc4;margin-bottom:12px;">По постановлению КМ Латвии №157 (2022) — минимальные требования к латышскому языку:</p>';
+    EXAM_PROFESSIONS.forEach(function(p){
+      h += '<div class="prof-row">';
+      h += '<div class="level-badge-ex '+p.cls+' prof-badge">'+p.badge+'</div>';
+      h += '<div style="font-size:12px;color:#9bacc4;line-height:1.5;">'+p.profs+'</div>';
+      h += '</div>';
+    });
+    h += '<div style="margin-top:12px;" class="exam-warn">💡 Выбери свою профессию и практикуй нужный уровень прямо в приложении!</div>';
+    h += '<button class="start-exam-btn" style="margin-top:12px;" onclick="closeExam()">🚀 Начать практику</button>';
+  }
+
+  h += '</div>';
+  el.innerHTML = h;
+}
+
+function switchExamTab(tab){
+  examTab = tab;
+  renderExamScreen();
+}
+
+function startExamPractice(levelId){
+  // Set level and go to advanced topics
+  var levelMap = {a1:'A1',a2:'A2',b1:'B1',b2:'B2',c1:'B2',c2:'B2'};
+  level = levelMap[levelId]||'A2';
+  localStorage.setItem('lv_lv', level);
+  document.getElementById('selLevel').value = level;
+  track('exam_level_selected',{level:levelId});
+  closeExam();
+  showAdvancedTopics();
+}
+
+function startDiagnosticTest(){
+  // Start a diagnostic chat
+  closeExam();
+  isBeginner = false;
+  topic = 'diagnostic';
+  chatHist = [];
+  sessPts = 0;
+  document.getElementById('cEmoji').textContent='🎯';
+  document.getElementById('cTitle').textContent='Диагностика уровня';
+  document.getElementById('cMode').textContent='Тест';
+  document.getElementById('cMode').className='cmode adv';
+  document.getElementById('cPts').textContent='0 pts';
+  document.getElementById('msgs').innerHTML='';
+  document.getElementById('hints').innerHTML='';
+  document.getElementById('scr-home').style.display='none';
+  document.getElementById('scr-chat').style.display='flex';
+  // Special diagnostic greeting
+  var diagText = 'Labdien! Es tagad novērtēšu jūsu latviešu valodas līmeni. Pastāstiet par sevi — kādēļ jūs mācāties latviešu valodu?';
+  chatHist=[{role:'model',parts:[{text:diagText}]}];
+  addMsg('b', esc(diagText), '', 'Добрый день! Я сейчас определю ваш уровень латышского. Расскажите о себе — почему вы учите латышский?');
+  if(voiceOn) speak(diagText.substring(0,180));
+  track('diagnostic_test_start',{});
+}
+
 function showVocabDiary(){
   var el = document.getElementById('scr-vocab');
   // Hide all screens
@@ -774,9 +1004,15 @@ function startAdvanced(id){
     'ēdiens':   'Sveiki! Latvijas virtuve ir ļoti garšīga un daudzveidīga. Kāds ir jūsu iecienītākais ēdiens?\nTULKOJUMS: Привет! Латышская кухня очень вкусная и разнообразная. Какое ваше любимое блюдо?',
     'latvija':  'Labdien! Latvija ir skaista valsts ar bagātu kultūru un vēsturi. Ko jūs zināt par Latviju?\nTULKOJUMS: Добрый день! Латвия — красивая страна с богатой культурой и историей. Что вы знаете о Латвии?',
     'daba':     'Sveiki! Latvijā ir brīnišķīga daba — meži, ezeri un jūra. Kāds ir jūsu iecienītākais gadalaiks?\nTULKOJUMS: Привет! В Латвии замечательная природа — леса, озёра и море. Какое ваше любимое время года?',
-    'ikdiena':  'Labdien! Ikdienā mēs visi esam dažādi. Kā izskatās jūsu tipiskā diena?\nTULKOJUMS: Добрый день! В повседневной жизни мы все разные. Как выглядит ваш типичный день?'
+    'ikdiena':  'Labdien! Ikdienā mēs visi esam dažādi. Kā izskatās jūsu tipiskā diena?\nTULKOJUMS: Добрый день! В повседневной жизни мы все разные. Как выглядит ваш типичный день?',
+    'veseliba': 'Sveiki! Veselība ir ļoti svarīga. Kā jūs jūtaties šodien?\nTULKOJUMS: Привет! Здоровье очень важно. Как вы себя чувствуете сегодня?',
+    'iepirksanas': 'Labdien! Iepirkšanās ir ikdienas daļa. Ko jūs parasti pērkat?\nTULKOJUMS: Добрый день! Покупки — часть каждого дня. Что вы обычно покупаете?',
+    'laiks2':   'Sveiki! Runāsim par laiku! Kāds šodien ir laiks jūsu pilsētā?\nTULKOJUMS: Привет! Поговорим о погоде! Какая сегодня погода в вашем городе?',
+    'hobbiji':  'Labdien! Hobiji padara dzīvi interesantāku. Kāds ir jūsu hobijs?\nTULKOJUMS: Добрый день! Хобби делают жизнь интереснее. Какое у вас хобби?',
+    'pilseta':  'Sveiki! Runāsim par pilsētām. Kurā pilsētā jūs dzīvojat?\nTULKOJUMS: Привет! Поговорим о городах. В каком городе вы живёте?',
+    'diagnostic':'Labdien! Es novērtēšu jūsu latviešu valodas līmeni. Pastāstiet par sevi!\nTULKOJUMS: Добрый день! Я определю ваш уровень латышского. Расскажите о себе!'
   };
-  var greetText=greetings[id]||'Sveiki! Sāksim sarunu!';
+  var greetText=greetings[id]||'Sveiki! Labprāt parunāsim par šo tēmu. Kā jums iet?\nTULKOJUMS: Привет! Рад поговорить на эту тему. Как дела?';
   chatHist=[{role:'model',parts:[{text:greetText}]}];
   var p0=parseAdvResp(greetText);
   addMsg('b',esc(p0.reply||greetText),buildFb(p0)+(p0.razb||''),p0.translation);
