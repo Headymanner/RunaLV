@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!-- v2.4 -->
 <html lang="lv">
 <head>
 <meta charset="UTF-8"/>
@@ -246,8 +246,8 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('phc_kUXXcosZkxjEjLgXB3nfXWPUC5MX3H4as8V2w6TCcRsV',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only'});
+window._ph_key='phc_kUXXcosZkxjEjLgXB3nfXWPUC5MX3H4as8V2w6TCcRsV';
+window._ph_host='https://us.i.posthog.com';
 </script>
 </head>
 <body>
@@ -1497,11 +1497,12 @@ function speak(text){
   }, delay);
 }
 function doSpeak(text, speakSession, attempt){
-  var ctrl=new AbortController();
-  var ttsTimeout=setTimeout(function(){ctrl.abort();rmWave();ttsLock=false;},30000);
+  var ctrl=null;
+  try{ ctrl=new AbortController(); }catch(e){ ctrl={signal:null,abort:function(){}}; }
+  var ttsTimeout=setTimeout(function(){try{ctrl.abort();}catch(e){}rmWave();ttsLock=false;},30000);
   fetch('/api/proxy',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    signal:ctrl.signal,
+    signal:(ctrl&&ctrl.signal)||undefined,
     body:JSON.stringify({type:'tts',text:text,voice:gVoice,speed:localStorage.getItem('lv_spd')||'normal'})
   })
   .then(function(r){
@@ -1789,7 +1790,17 @@ function track(event, props){
 // Auto-save progress every 30 seconds if logged in
 setInterval(function(){ if(currentUser) syncProgressToCloud(); }, 30000);
 
-// Init
+// Init PostHog lazily
+(function(){
+  var s=document.createElement('script');
+  s.async=true;
+  s.src=window._ph_host+'/static/array.js';
+  s.onload=function(){
+    window.posthog.init(window._ph_key,{api_host:window._ph_host,person_profiles:'identified_only'});
+    posthog.capture('app_open',{});
+  };
+  document.head.appendChild(s);
+})();
 track('app_open', {});
 
 </script>
