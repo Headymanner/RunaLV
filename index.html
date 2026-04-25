@@ -223,6 +223,26 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
 .prof-row:last-child{border-bottom:none;}
 .prof-badge{flex-shrink:0;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;}
 
+/* FEEDBACK */
+.feedback-overlay{position:fixed;inset:0;z-index:150;background:rgba(6,13,26,.97);display:none;align-items:center;justify-content:center;padding:20px;}
+.feedback-overlay.open{display:flex;}
+.feedback-box{background:#0f1e35;border:1px solid rgba(201,168,76,.3);border-radius:22px;padding:28px 24px;max-width:400px;width:100%;}
+.feedback-title{font-family:Cormorant Garamond,serif;font-size:22px;font-weight:600;text-align:center;margin-bottom:6px;}
+.feedback-sub{font-size:12px;color:#5a6e88;text-align:center;margin-bottom:20px;line-height:1.5;}
+.stars-row{display:flex;justify-content:center;gap:8px;margin-bottom:20px;}
+.star-btn{font-size:32px;cursor:pointer;opacity:.4;transition:opacity .15s,transform .15s;background:none;border:none;padding:0;}
+.star-btn.active,.star-btn:hover{opacity:1;transform:scale(1.2);}
+.feedback-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.feedback-cat{padding:6px 12px;border-radius:20px;border:1px solid rgba(201,168,76,.2);background:#060d1a;color:#9bacc4;font-size:12px;cursor:pointer;transition:all .15s;}
+.feedback-cat.sel{background:rgba(201,168,76,.15);color:#c9a84c;border-color:rgba(201,168,76,.5);}
+.feedback-textarea{width:100%;background:#060d1a;border:1px solid rgba(201,168,76,.15);border-radius:12px;padding:12px 14px;color:#f0ead8;font-family:DM Sans,sans-serif;font-size:14px;resize:none;outline:none;height:90px;margin-bottom:12px;box-sizing:border-box;}
+.feedback-textarea:focus{border-color:rgba(201,168,76,.45);}
+.feedback-submit{width:100%;padding:13px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:13px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:15px;font-weight:600;color:#060d1a;}
+.feedback-submit:disabled{opacity:.5;}
+.feedback-success{text-align:center;padding:20px 0;}
+.feedback-success-icon{font-size:48px;margin-bottom:12px;}
+.feedback-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#5a6e88;font-size:22px;cursor:pointer;}
+
 /* AUTH */
 .auth-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,13,26,.98);display:flex;align-items:center;justify-content:center;padding:20px;}
 .auth-box{background:#0f1e35;border:1px solid rgba(201,168,76,.3);border-radius:24px;padding:32px 28px;max-width:380px;width:100%;}
@@ -303,6 +323,7 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
       </div>
       <div class="ico-btn" id="btnVocab" title="Дневник слов">📝</div>
       <div class="ico-btn" id="btnExam" title="Подготовка к экзамену">🎓</div>
+      <div class="ico-btn" id="btnFeedback" title="Оставить отзыв">💬</div>
       <div class="ico-btn" id="btnSett">⚙️</div>
     </div>
   </div>
@@ -367,11 +388,39 @@ textarea::placeholder{color:#5a6e88;}textarea:focus{border-color:rgba(201,168,76
     <div class="ibar">
       <div class="irow">
         <div class="mbtn" id="btnMic" title="Нажми и говори / Nospied un runā">🎤</div>
-        <div id="btnLang" style="min-width:36px;height:36px;background:#0f1e35;border:1px solid rgba(201,168,76,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:#e8b84b;font-family:DM Sans,sans-serif;flex-shrink:0;">RU</div>
+        <div id="btnLang" class="mbtn" style="font-size:13px;font-weight:700;color:#e8b84b;">RU</div>
         <div style="flex:1"><textarea id="txt" placeholder="Raksti / Пиши..." rows="1"></textarea></div>
         <button class="sbtn" id="btnSend">➤</button>
       </div>
       <div class="hints" id="hints"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="feedback-overlay" id="feedbackOverlay">
+  <div class="feedback-box" style="position:relative;">
+    <button class="feedback-close" id="feedbackClose">✕</button>
+    <div id="feedbackContent">
+      <div class="feedback-title">Ваш отзыв</div>
+      <div class="feedback-sub">Помогите нам стать лучше!<br>Оценка · Пожелания · Замечания</div>
+      <div class="stars-row" id="starsRow">
+        <button class="star-btn" data-star="1">⭐</button>
+        <button class="star-btn" data-star="2">⭐</button>
+        <button class="star-btn" data-star="3">⭐</button>
+        <button class="star-btn" data-star="4">⭐</button>
+        <button class="star-btn" data-star="5">⭐</button>
+      </div>
+      <div class="feedback-cats" id="feedbackCats">
+        <div class="feedback-cat" data-cat="Всё отлично! 👍">Всё отлично! 👍</div>
+        <div class="feedback-cat" data-cat="Голос не работает 🔇">Голос не работает 🔇</div>
+        <div class="feedback-cat" data-cat="Бот не понимает 🤖">Бот не понимает 🤖</div>
+        <div class="feedback-cat" data-cat="Хочу больше тем 📚">Хочу больше тем 📚</div>
+        <div class="feedback-cat" data-cat="Сложно для новичка 😕">Сложно для новичка 😕</div>
+        <div class="feedback-cat" data-cat="Микрофон не работает 🎤">Микрофон не работает 🎤</div>
+      </div>
+      <textarea class="feedback-textarea" id="feedbackText" placeholder="Напишите подробнее... (необязательно)"></textarea>
+      <button class="feedback-submit" id="feedbackSubmit">Отправить отзыв →</button>
     </div>
   </div>
 </div>
@@ -570,6 +619,13 @@ setTimeout(initSupabase, 100);
 document.getElementById('btnSett').addEventListener('click', function(){ document.getElementById('sett').classList.add('open'); });
 document.getElementById('btnVocab').addEventListener('click', showVocabDiary);
 document.getElementById('btnExam').addEventListener('click', showExamPrep);
+// Bind lang button globally
+document.getElementById('btnLang').addEventListener('click', function(){
+  micLang = micLang === 'ru-RU' ? 'lv-LV' : 'ru-RU';
+  this.textContent = micLang === 'ru-RU' ? 'RU' : 'LV';
+  this.style.color = micLang === 'ru-RU' ? '#e8b84b' : '#5ab88a';
+  if(recog) recog.lang = micLang;
+});
 document.getElementById('btnCloseSett').addEventListener('click', function(){ document.getElementById('sett').classList.remove('open'); });
 document.getElementById('btnBack').addEventListener('click', goBack);
 document.getElementById('btnSend').addEventListener('click', sendMsg);
@@ -1161,28 +1217,23 @@ function buildBeginnerSys(){
     +'\n'
     +'КАК ТЫ РАБОТАЕШЬ:\n'
     +'1. Ученик пишет на любом языке — ты понимаешь смысл\n'
-    +'2. Если написал по-русски — показываешь как это по-латышски\n'
-    +'3. Если написал по-латышски — проверяешь правильность и хвалишь или мягко исправляешь\n'
-    +'4. Если написал случайные буквы или бессмыслицу — вежливо просишь повторить\n'
-    +'5. Если написал не по теме урока — мягко возвращаешь к теме\n'
-    +'6. ВСЕГДА исправляй ошибки — это главная задача репетитора!\n'
+    +'2. Если написал по-русски — показываешь как это по-латышски и задаёшь вопрос\n'
+    +'3. Если написал по-латышски — хвалишь/исправляешь и задаёшь следующий вопрос\n'
+    +'4. ТЫ УЧИТЕЛЬ — ты всегда ведёшь урок, всегда задаёшь вопросы!\n'
+    +'5. Каждый твой ответ ОБЯЗАТЕЛЬНО заканчивается вопросом к ученику\n'
+    +'6. Вопросы простые, понятные, по теме урока\n'
     +'\n'
     +'СТИЛЬ: тёплый, поддерживающий, как хороший репетитор. Хвали за любую попытку!\n'
     +'\n'
-    +'ФОРМАТ ОТВЕТА:\n'
-    +'Сначала напиши по-латышски (1-2 предложения).\n'
-    +'Потом с новой строки: ПЕРЕВОД: [русский перевод]\n'
-    +'Потом: СЛОВА: слово = перевод | слово = перевод\n'
-    +'НЕЛЬЗЯ: использовать --- маркеры, скобки с переводом внутри латышского!';
+    +'ФОРМАТ ОТВЕТА (СТРОГО!):\n'
+    +'1. Пиши по-латышски (1-2 предложения)\n'
+    +'2. ОБЯЗАТЕЛЬНО задай вопрос ученику! Без вопроса НЕЛЬЗЯ!\n'
+    +'3. ПЕРЕВОД: [русский перевод всего текста]\n'
+    +'4. СЛОВА: слово = перевод | слово = перевод\n'
+    +'Учитель ВСЕГДА ведёт урок, задаёт вопросы — это его главная роль!';
 }
 
 function buildAdvancedSys(){
-  var levelDesc={
-    'A1':'Iesācējs. Lieto TIKAI vienkāršus vārdus un īsus teikumus.',
-    'A2':'Pamata līmenis. Vienkārša valoda, īsi teikumi.',
-    'B1':'Vidējs līmenis. Normāla saruna.',
-    'B2':'Augstāks līmenis. Bagāta valoda.'
-  };
   var levelDesc = {
     'A1': 'Начинающий. Используй простые слова и короткие предложения.',
     'A2': 'Базовый уровень. Простые предложения, знакомые темы.',
@@ -1193,22 +1244,23 @@ function buildAdvancedSys(){
     +'Тема: "'+topic+'".\n'
     +'\n'
     +'КАК ТЫ РАБОТАЕШЬ:\n'
-    +'1. Если ученик написал ПО-РУССКИ — сначала скажи "По-латышски это: [перевод]", потом продолжи диалог\n'
-    +'2. Если ученик написал ПО-ЛАТЫШСКИ — проверь грамматику, похвали или мягко исправь, продолжи диалог\n'
-    +'3. Если бессмыслица — вежливо попроси повторить\n'
-    +'4. Всегда веди живой интересный диалог, задавай вопросы\n'
-    +'5. Твой латышский всегда грамматически идеален\n'
+    +'1. Если ученик написал ПО-РУССКИ — скажи как это по-латышски, задай вопрос по теме\n'
+    +'2. Если ученик написал ПО-ЛАТЫШСКИ — похвали/исправь и задай следующий вопрос\n'
+    +'3. Если бессмыслица — попроси повторить и задай вопрос\n'
+    +'4. ТЫ ВСЕГДА ВЕДЁШЬ РАЗГОВОР — каждый ответ должен заканчиваться вопросом!\n'
+    +'5. Вопросы должны быть интересными и развивать тему\n'
     +'\n'
     +'ФОРМАТ ОТВЕТА — СТРОГО:\n'
     +'[1-2 предложения по-латышски + 1 вопрос. Всё в одном блоке.]\n'
+    +'[1-2 предложения по-латышски]\n'
+    +'[ВОПРОС по-латышски в конце — ОБЯЗАТЕЛЕН, без вопроса нельзя!]\n'
     +'TULKOJUMS: [перевод на русский]\n'
-    +'ЗАПРЕЩЕНО: писать "KĀ BŪS PAREIZI", "Pareizi būtu", заголовки секций!\n';
-    if(errorsOn) s+='Если есть грамматическая ошибка — добавь после TULKOJUMS:\n'
+    +'БОТ ВСЕГДА ВЕДЁТ РАЗГОВОР — каждый ответ заканчивается вопросом!\n';
+  if(errorsOn) s+='Если есть ошибка — добавь:\n'
     +'KĻŪDAS:\n'
-    +'❌ [неверное слово] → ✅ [правильное слово] (объяснение по-русски одной строкой)\n'
-    +'PAREIZI: [полное исправленное предложение целиком]\n'
-    +'ВАЖНО: исправляй ТОЛЬКО реальные ошибки! Если слово правильное — не исправляй!\n'
-    +'Например "grubas" (крупа/гречка) — правильное слово, не исправляй на griķi!\n';
+    +'❌ [неверное слово] → ✅ [правильное] (объяснение по-русски)\n'
+    +'PAREIZI: [исправленное предложение целиком]\n'
+    +'Исправляй ТОЛЬКО реальные ошибки!';
   // Score removed
   return s;
 }
@@ -1320,7 +1372,7 @@ function startQuiz(){
     }).then(function(r){return r.json();}).then(function(d){
       rmTyping();
       var t=''; try{t=d.candidates[0].content.parts[0].text.trim();}catch(e){}
-      t=t.replace(/```json|```/g,'').trim();
+      t=t.split('\x60\x60\x60json').join('').split('\x60\x60\x60').join('').trim();
       try{ quizData=JSON.parse(t); quizIdx=0; showQuizQuestion(); }
       catch(e){ addMsg('b','😊 Урок завершён! Ты молодец!'); markLessonDone(); }
     }).catch(function(){rmTyping(); markLessonDone();});
@@ -1470,7 +1522,7 @@ function parseAdvResp(text){
     if(em) em[0].split('\n').forEach(function(l){
       if(l.indexOf('→')>-1){
         var p=l.replace(/[❌✅]/g,'').split('→');
-        if(p.length>=2){var w=p[0].replace(/["""]/g,'').trim(),rest=p[1].trim();errors.push({w:w,c:rest});}
+        if(p.length>=2){var w=p[0].replace(/[^a-zA-ZāčēģīķļņšūžĀČĒĢĪĶĻŅŠŪŽ\s]/g,'').trim(),rest=p[1].trim();errors.push({w:w,c:rest});}
       }
     });
   }
@@ -1869,6 +1921,92 @@ function track(event, props){
 
 // Auto-save progress every 30 seconds if logged in
 setInterval(function(){ if(currentUser) syncProgressToCloud(); }, 30000);
+
+// ── FEEDBACK ──────────────────────────────────
+var feedbackRating = 0;
+var feedbackCats = [];
+
+function openFeedback(){
+  feedbackRating = 0;
+  feedbackCats = [];
+  document.getElementById('feedbackText').value = '';
+  document.getElementById('feedbackContent').innerHTML = document.getElementById('feedbackContent').innerHTML;
+  // Reset stars
+  document.querySelectorAll('.star-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('feedbackOverlay').classList.add('open');
+  track('feedback_opened',{});
+}
+
+function closeFeedback(){
+  document.getElementById('feedbackOverlay').classList.remove('open');
+}
+
+// Bind feedback events
+document.getElementById('btnFeedback').addEventListener('click', openFeedback);
+document.getElementById('feedbackClose').addEventListener('click', closeFeedback);
+
+document.getElementById('starsRow').addEventListener('click', function(e){
+  var btn = e.target.closest('[data-star]');
+  if(!btn) return;
+  feedbackRating = parseInt(btn.getAttribute('data-star'));
+  document.querySelectorAll('.star-btn').forEach(function(b){
+    b.classList.toggle('active', parseInt(b.getAttribute('data-star')) <= feedbackRating);
+  });
+});
+
+document.getElementById('feedbackCats').addEventListener('click', function(e){
+  var cat = e.target.closest('[data-cat]');
+  if(!cat) return;
+  var val = cat.getAttribute('data-cat');
+  cat.classList.toggle('sel');
+  if(cat.classList.contains('sel')){
+    feedbackCats.push(val);
+  } else {
+    feedbackCats = feedbackCats.filter(function(c){ return c !== val; });
+  }
+});
+
+document.getElementById('feedbackSubmit').addEventListener('click', function(){
+  var text = document.getElementById('feedbackText').value.trim();
+  if(!feedbackRating){ alert('Пожалуйста, поставьте оценку ⭐'); return; }
+
+  var btn = document.getElementById('feedbackSubmit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Отправка...';
+
+  var data = {
+    rating: feedbackRating,
+    categories: feedbackCats,
+    text: text,
+    user: currentUser ? currentUser.email : 'anonymous',
+    page: topic || 'home',
+    date: new Date().toISOString()
+  };
+
+  // Save to Supabase
+  var saved = false;
+  if(sb){
+    sb.from('feedback').insert(data).then(function(res){
+      if(!res.error) saved = true;
+    });
+  }
+
+  // Track in PostHog
+  track('feedback_submitted', {rating: feedbackRating, cats: feedbackCats.join(',')});
+
+  // Show success after 800ms
+  setTimeout(function(){
+    document.getElementById('feedbackContent').innerHTML =
+      '<div class="feedback-success">'
+      +'<div class="feedback-success-icon">'+(feedbackRating>=4?'🎉':'🙏')+'</div>'
+      +'<div style="font-family:Cormorant Garamond,serif;font-size:22px;font-weight:600;margin-bottom:8px;">'
+      +(feedbackRating>=4?'Спасибо большое!':'Спасибо за честность!')+'</div>'
+      +'<div style="font-size:13px;color:#9bacc4;line-height:1.6;margin-bottom:20px;">'
+      +(feedbackRating>=4?'Рады что вам нравится! Продолжаем развивать приложение.':'Мы учтём ваше мнение и постараемся стать лучше.')+'</div>'
+      +'<button onclick="closeFeedback()" style="padding:10px 24px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;color:#060d1a;">Закрыть</button>'
+      +'</div>';
+  }, 800);
+});
 
 track('app_open', {});
 
