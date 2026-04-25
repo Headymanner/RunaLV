@@ -340,6 +340,7 @@ textarea:focus{border-color:var(--border2);}
     </div>
     <div class="hdr-r">
       <div class="pts">⭐ <span id="pts">0</span></div>
+      <div class="pts" id="streakBadge" style="display:none;background:rgba(224,120,50,.1);border-color:rgba(224,120,50,.3);color:#e07832;">🔥 <span id="streakCount">1</span></div>
       <div class="user-badge" id="userBadge" onclick="showUserMenu()" style="display:none;">
         <div class="user-badge-dot"></div>
         <span id="userNameBadge">Гость</span>
@@ -530,6 +531,36 @@ var totalPts = parseInt(localStorage.getItem('lv_pts') || '0');
 var sessPts  = 0;
 var completedLessons = JSON.parse(localStorage.getItem('lv_done')||'[]');
 var vocabDiary = JSON.parse(localStorage.getItem('lv_vocab')||'[]');
+var topicSessions = JSON.parse(localStorage.getItem('lv_tsess')||'{}');
+var TOPIC_MASTERY = 3; // sessions to consider a topic mastered
+var streakCount = 0;
+
+// ── STREAK ────────────────────────────────────
+function initStreak(){
+  var today = new Date().toDateString();
+  var lastDate = localStorage.getItem('lv_streak_date');
+  var saved = parseInt(localStorage.getItem('lv_streak_count')||'0');
+  if(!lastDate){
+    streakCount = 1;
+  } else if(lastDate === today){
+    streakCount = saved; // already visited today
+  } else {
+    var diff = Math.round((new Date(today) - new Date(lastDate)) / 86400000);
+    streakCount = diff === 1 ? saved + 1 : 1;
+  }
+  localStorage.setItem('lv_streak_date', today);
+  localStorage.setItem('lv_streak_count', streakCount);
+  if(streakCount >= 2){
+    document.getElementById('streakBadge').style.display='flex';
+    document.getElementById('streakCount').textContent = streakCount;
+  }
+}
+
+// ── FLASHCARDS ────────────────────────────────
+var flashDeck = [];
+var flashIdx = 0;
+var flashKnown = 0;
+var flashAgain = [];
 
 function saveVocabWord(lv, ru){
   if(!lv||!ru) return;
@@ -618,7 +649,7 @@ document.getElementById('pts').textContent = totalPts;
     {id:'all_beg', icon:'🎓', name:'Все уроки A0',   check:function(){return completedLessons.length>=8;}},
     {id:'pts100',  icon:'⭐', name:'100 звёзд',      check:function(){return totalPts>=100;}},
     {id:'pts500',  icon:'🌟', name:'500 звёзд',      check:function(){return totalPts>=500;}},
-    {id:'streak',  icon:'🔥', name:'3 дня подряд',   check:function(){return false;}}
+    {id:'streak',  icon:'🔥', name:'3 дня подряд',   check:function(){return streakCount>=3;}}
   ];
   var el = document.getElementById('achievList');
   if(!el) return;
@@ -634,6 +665,7 @@ if (true) {
   document.getElementById('keyStatus').textContent = 'Iestatīts ✓';
 }
 initSpeech();
+initStreak();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
 // Init auth after DOM ready
 setTimeout(initSupabase, 100);
@@ -913,7 +945,10 @@ function showVocabDiary(){
 
   var h = '<div class="back-row"><div class="back-btn" onclick="closeVocab()">← Назад</div></div>';
   h += '<div style="font-family:Cormorant Garamond,serif;font-size:24px;margin-bottom:4px;">📝 Мои слова <em>/ Mani vārdi</em></div>';
-  h += '<div style="font-size:12px;color:#5a6e88;margin-bottom:16px;">Всего слов: '+vocabDiary.length+' · <span style="cursor:pointer;color:#e05a5a;" onclick="clearVocab()">Очистить</span></div>';
+  h += '<div style="font-size:12px;color:#5a6e88;margin-bottom:12px;">Всего слов: '+vocabDiary.length+' · <span style="cursor:pointer;color:#e05a5a;" onclick="clearVocab()">Очистить</span></div>';
+
+  // Flashcard launch button
+  h += '<button onclick="startFlashcards()" style="width:100%;padding:12px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.35);border-radius:14px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;color:#e8b84b;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;">🃏 Учить карточки · Mācīties</button>';
 
   // Search bar
   h += '<input id="vocabSearch" placeholder="Поиск... / Meklēt..." style="width:100%;background:#0f1e35;border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:10px 14px;color:#f0ead8;font-family:DM Sans,sans-serif;font-size:14px;outline:none;margin-bottom:16px;box-sizing:border-box;" oninput="filterVocab(this.value)"/>';
@@ -952,6 +987,85 @@ function filterVocab(q){
     var match = !q || c.getAttribute('data-lv').includes(q) || c.getAttribute('data-ru').includes(q);
     c.style.display = match?'':'none';
   });
+}
+
+// ── FLASHCARDS ────────────────────────────────
+function startFlashcards(){
+  if(vocabDiary.length === 0) return;
+  flashDeck = vocabDiary.slice().sort(function(){ return Math.random()-.5; });
+  flashIdx = 0; flashKnown = 0; flashAgain = [];
+  renderFlashcard();
+}
+
+function renderFlashcard(){
+  var el = document.getElementById('scr-vocab');
+  var total = flashDeck.length;
+  var remaining = total - flashIdx;
+
+  if(flashIdx >= flashDeck.length){
+    // Round done — add "again" words back for another pass
+    if(flashAgain.length > 0){
+      flashDeck = flashAgain.slice().sort(function(){ return Math.random()-.5; });
+      flashAgain = []; flashIdx = 0;
+      renderFlashcard();
+      return;
+    }
+    // All done
+    var pct = Math.round(flashKnown / total * 100);
+    var emoji = pct>=80?'🎉':pct>=50?'👍':'💪';
+    el.innerHTML = '<div style="padding:20px;">'
+      +'<div class="back-row"><div class="back-btn" onclick="showVocabDiary()">← Назад</div></div>'
+      +'<div style="text-align:center;padding:40px 20px;">'
+      +'<div style="font-size:56px;margin-bottom:16px;">'+emoji+'</div>'
+      +'<div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:600;margin-bottom:8px;">Готово!</div>'
+      +'<div style="font-size:15px;color:#9bacc4;margin-bottom:6px;">Знал: <strong style="color:#e8b84b;">'+flashKnown+' / '+total+'</strong> ('+pct+'%)</div>'
+      +'<div style="font-size:13px;color:#5a6e88;margin-bottom:28px;">'+(pct>=80?'Отлично! Продолжай в том же духе.':pct>=50?'Хороший результат, повторяй регулярно.':'Не сдавайся — повторение помогает!')+'</div>'
+      +'<button onclick="startFlashcards()" style="padding:12px 28px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:12px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;color:#060d1a;margin-bottom:10px;width:100%;">🔄 Повторить снова</button>'
+      +'<button onclick="showVocabDiary()" style="padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;color:#9bacc4;width:100%;">← В дневник</button>'
+      +'</div></div>';
+    return;
+  }
+
+  var w = flashDeck[flashIdx];
+  var progress = Math.round(flashIdx / flashDeck.length * 100);
+  el.innerHTML = '<div style="padding:20px;display:flex;flex-direction:column;height:100%;box-sizing:border-box;">'
+    // Header
+    +'<div class="back-row"><div class="back-btn" onclick="showVocabDiary()">← Дневник</div><div style="font-size:12px;color:#5a6e88;margin-left:auto;">'+flashIdx+'/'+flashDeck.length+' · ✓ '+flashKnown+'</div></div>'
+    // Progress bar
+    +'<div style="background:#0f1e35;border-radius:10px;height:4px;margin-bottom:20px;overflow:hidden;"><div style="height:100%;width:'+progress+'%;background:linear-gradient(90deg,#c9a84c,#e8b84b);border-radius:10px;transition:width .3s;"></div></div>'
+    // Card
+    +'<div id="flashCard" onclick="flipFlashcard()" style="flex:1;min-height:200px;background:linear-gradient(135deg,var(--surface),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.2);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer;text-align:center;margin-bottom:16px;">'
+    +'<div style="font-size:11px;color:#5a6e88;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;">Латышский</div>'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:34px;font-weight:600;color:#e8b84b;margin-bottom:8px;">'+esc(w.lv)+'</div>'
+    +'<div id="flashRu" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);width:100%;">'
+    +'<div style="font-size:11px;color:#5a6e88;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Перевод</div>'
+    +'<div style="font-size:22px;color:#9bacc4;">'+esc(w.ru)+'</div>'
+    +'</div>'
+    +'<div id="flashTip" style="font-size:12px;color:#5a6e88;margin-top:20px;">👆 Нажми чтобы показать перевод</div>'
+    +'</div>'
+    // Buttons (hidden until flip)
+    +'<div id="flashBtns" style="display:none;display:none;gap:10px;">'
+    +'<button onclick="flashAnswer(false)" style="flex:1;padding:14px;background:rgba(224,90,90,.1);border:1px solid rgba(224,90,90,.3);border-radius:14px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;color:#e05a5a;">✗ Ещё раз</button>'
+    +'<button onclick="flashAnswer(true)" style="flex:1;padding:14px;background:rgba(90,184,138,.1);border:1px solid rgba(90,184,138,.3);border-radius:14px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;color:#5ab88a;">✓ Знаю</button>'
+    +'</div>'
+    +'</div>';
+}
+
+function flipFlashcard(){
+  var ru = document.getElementById('flashRu');
+  var tip = document.getElementById('flashTip');
+  var btns = document.getElementById('flashBtns');
+  if(!ru || ru.style.display === 'block') return;
+  ru.style.display = 'block';
+  if(tip) tip.style.display = 'none';
+  if(btns){ btns.style.display = 'flex'; }
+}
+
+function flashAnswer(knew){
+  if(knew){ flashKnown++; }
+  else { flashAgain.push(flashDeck[flashIdx]); }
+  flashIdx++;
+  renderFlashcard();
 }
 
 function showBeginnerTopics(){
@@ -993,16 +1107,36 @@ function showBeginnerTopics(){
 function showAdvancedTopics(){
   isBeginner=false;
   var c=document.getElementById('topics-content');
+  var topicKeys = Object.keys(ADVANCED_TOPICS);
+  var masteredCount = topicKeys.filter(function(k){ return (topicSessions[k]||0) >= TOPIC_MASTERY; }).length;
+  var totalTopics = topicKeys.length;
+  var pct = Math.round(masteredCount / totalTopics * 100);
+
   var html='<div class="s-title">Izvēlies <em>tēmu</em></div>';
   html+='<div class="s-sub">Runā latviski ar AI skolotāju · Говори с AI учителем</div>';
+
+  // Overall progress bar
+  html+='<div style="background:#0f1e35;border-radius:20px;height:8px;margin-bottom:10px;overflow:hidden;">';
+  html+='<div style="background:linear-gradient(90deg,#4a90d9,#c9a84c);height:100%;width:'+pct+'%;border-radius:20px;transition:width .5s;"></div></div>';
+  html+='<div style="font-size:12px;color:#5a6e88;margin-top:-6px;margin-bottom:14px;">Освоено тем: '+masteredCount+'/'+totalTopics+' · '+pct+'%</div>';
+
   html+='<div class="tgrid">';
-  Object.keys(ADVANCED_TOPICS).forEach(function(k){
+  topicKeys.forEach(function(k){
     var t=ADVANCED_TOPICS[k];
-    html+='<div class="tc" data-id="'+k+'">';
+    var sess = topicSessions[k]||0;
+    var mastered = sess >= TOPIC_MASTERY;
+    var barPct = Math.min(100, Math.round(sess / TOPIC_MASTERY * 100));
+
+    html+='<div class="tc" data-id="'+k+'" style="'+(mastered?'border-color:rgba(74,144,217,.5);':'')+'">';
+    if(mastered) html+='<div style="font-size:13px;position:absolute;top:8px;right:8px;">✅</div>';
     html+='<span class="te">'+t.e+'</span>';
     html+='<div class="tn">'+t.n+'</div>';
     html+='<div class="tn-ru">'+t.ru+'</div>';
     html+='<span class="tl '+t.badge+'">'+t.lv+'</span>';
+    // Mini progress bar
+    html+='<div style="margin-top:8px;background:#060d1a;border-radius:10px;height:3px;overflow:hidden;">';
+    html+='<div style="height:100%;width:'+barPct+'%;background:'+(mastered?'#4a90d9':'#c9a84c')+';border-radius:10px;transition:width .4s;"></div></div>';
+    if(sess > 0) html+='<div style="font-size:10px;color:'+(mastered?'#4a90d9':'#5a6e88')+';margin-top:3px;">'+sess+'/'+TOPIC_MASTERY+' сессий</div>';
     html+='</div>';
   });
   html+='</div>';
@@ -1033,16 +1167,9 @@ function startBeginner(id){
   }).join('');
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-chat').style.display='flex';
-  // Bind lang button after chat is visible
+  // Set mic language for beginner mode (Russian by default)
   var lb=document.getElementById('btnLang');
-  if(lb){
-    lb.onclick=function(){
-      micLang=micLang==='ru-RU'?'lv-LV':'ru-RU';
-      this.textContent=micLang==='ru-RU'?'RU':'LV';
-      this.style.color=micLang==='ru-RU'?'#e8b84b':'#5ab88a';
-      if(recog)recog.lang=micLang;
-    };
-  }
+  if(lb){ lb.textContent='RU'; lb.style.color='#e8b84b'; micLang='ru-RU'; }
   // Show greeting
   chatHist=[{role:'model',parts:[{text:t.greet}]}];
   var parts=t.greet.split('\n\n');
@@ -1055,6 +1182,9 @@ function startBeginner(id){
 function startAdvanced(id){
   var t=ADVANCED_TOPICS[id];
   if(!t) return;
+  // Track session count for this topic
+  topicSessions[id] = (topicSessions[id]||0) + 1;
+  localStorage.setItem('lv_tsess', JSON.stringify(topicSessions));
   track('start_topic', {topic:id, level:level, mode:'advanced'});
   stopAudio(); chatActive=true;
   topic=id; isBeginner=false; chatHist=[]; sessPts=0;
@@ -1069,17 +1199,9 @@ function startAdvanced(id){
   }).join('');
   document.getElementById('scr-topics').style.display='none';
   document.getElementById('scr-chat').style.display='flex';
+  // Set mic language for advanced mode (Latvian by default)
   var lb2=document.getElementById('btnLang');
-  if(lb2){
-    lb2.textContent='LV'; lb2.style.color='#5ab88a';
-    micLang='lv-LV'; if(recog)recog.lang='lv-LV';
-    lb2.onclick=function(){
-      micLang=micLang==='ru-RU'?'lv-LV':'ru-RU';
-      this.textContent=micLang==='ru-RU'?'RU':'LV';
-      this.style.color=micLang==='ru-RU'?'#e8b84b':'#5ab88a';
-      if(recog)recog.lang=micLang;
-    };
-  }
+  if(lb2){ lb2.textContent='LV'; lb2.style.color='#5ab88a'; micLang='lv-LV'; }
   var greetings={
     'ģimene':   'Sveiki! Ļoti priecājos ar jums tikties. Pastāstiet, cik cilvēku ir jūsu ģimenē?\nTULKOJUMS: Привет! Очень рад встрече. Расскажите, сколько человек в вашей семье?',
     'ceļošana': 'Labdien! Ceļošana ir brīnišķīga iespēja iepazīt pasauli. Kuru valsti jūs visvairāk vēlaties apmeklēt?\nTULKOJUMS: Добрый день! Путешествия — это замечательная возможность познать мир. Какую страну вы больше всего хотите посетить?',
@@ -1836,6 +1958,9 @@ function syncProgressToCloud(){
     completed_lessons:completedLessons,
     total_pts:totalPts,
     vocab:vocabDiary.slice(-200),
+    topic_sessions:topicSessions,
+    streak_count:streakCount,
+    streak_date:localStorage.getItem('lv_streak_date')||'',
     updated_at:new Date().toISOString()
   }).then(function(res){
     if(res.error) console.warn('Progress sync error:', res.error.message);
@@ -1850,9 +1975,11 @@ function loadProgressFromCloud(){
         completedLessons=res.data.completed_lessons||[];
         totalPts=res.data.total_pts||0;
         vocabDiary=res.data.vocab||[];
+        topicSessions=res.data.topic_sessions||{};
         localStorage.setItem('lv_done',JSON.stringify(completedLessons));
         localStorage.setItem('lv_pts',totalPts);
         localStorage.setItem('lv_vocab',JSON.stringify(vocabDiary));
+        localStorage.setItem('lv_tsess',JSON.stringify(topicSessions));
         document.getElementById('pts').textContent=totalPts;
       }
     });
