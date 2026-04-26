@@ -827,7 +827,7 @@ function renderExamScreen(){
       {icon:'&#128372;',name:'Klau&#353;&#299;&#353;an&#257;s',ru:'&#1040;&#1091;&#1076;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077;',desc:'&#1055;&#1086;&#1085;&#1080;&#1084;&#1072;&#1085;&#1080;&#1077; &#1091;&#1089;&#1090;&#1085;&#1086;&#1081; &#1088;&#1077;&#1095;&#1080; — &#1076;&#1080;&#1072;&#1083;&#1086;&#1075;&#1080;, &#1088;&#1072;&#1076;&#1080;&#1086;, &#1058;&#1042;.'},
       {icon:'&#128218;',name:'Las&#299;tprasme',ru:'&#1063;&#1090;&#1077;&#1085;&#1080;&#1077;',desc:'&#1055;&#1086;&#1085;&#1080;&#1084;&#1072;&#1085;&#1080;&#1077; &#1090;&#1077;&#1082;&#1089;&#1090;&#1086;&#1074; — &#1086;&#1090; &#1074;&#1099;&#1074;&#1077;&#1089;&#1086;&#1082; &#1076;&#1086; &#1089;&#1090;&#1072;&#1090;&#1077;&#1081;.'},
       {icon:'&#128172;',name:'Run&#257;&#353;ana',ru:'&#1043;&#1086;&#1074;&#1086;&#1088;&#1077;&#1085;&#1080;&#1077;',desc:'&#1044;&#1080;&#1072;&#1083;&#1086;&#1075;&#1080;, &#1084;&#1086;&#1085;&#1086;&#1083;&#1086;&#1075;&#1080;, &#1086;&#1087;&#1080;&#1089;&#1072;&#1085;&#1080;&#1077; &#1089;&#1080;&#1090;&#1091;&#1072;&#1094;&#1080;&#1080;.'},
-      {icon:'&#9999;',name:'Raks&#299;&#353;ana',ru:'&#1055;&#1080;&#1089;&#1100;&#1084;&#1086;',desc:'&#1054;&#1090; &#1079;&#1072;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1092;&#1086;&#1088;&#1084; &#1076;&#1086; &#1086;&#1092;&#1080;&#1094;&#1080;&#1072;&#1083;&#1100;&#1085;&#1099;&#1093; &#1087;&#1080;&#1089;&#1077;&#1084;.'}
+      {icon:'&#9999;',name:'Rakst&#299;&#353;ana',ru:'&#1055;&#1080;&#1089;&#1100;&#1084;&#1086;',desc:'&#1054;&#1090; &#1079;&#1072;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1092;&#1086;&#1088;&#1084; &#1076;&#1086; &#1086;&#1092;&#1080;&#1094;&#1080;&#1072;&#1083;&#1100;&#1085;&#1099;&#1093; &#1087;&#1080;&#1089;&#1077;&#1084;.'}
     ];
     comps.forEach(function(c){
       h+='<div class="exam-info-box"><h4>'+c.icon+' '+c.name+' — '+c.ru+'</h4><p>'+c.desc+'</p></div>';
@@ -1905,40 +1905,77 @@ function doAuthSubmit(){
 
   errEl.textContent=''; errEl.style.color='#e05a5a';
   if(!email.includes('@')){ errEl.textContent='Введи правильный email'; return; }
-  if(pass.length<6){ errEl.textContent='Пароль минимум 6 символов'; return; }
+  if(pass.length<6){ errEl.textContent='Пароль — минимум 6 символов'; return; }
 
   if(!sb){
-    errEl.textContent='Сервис недоступен. Продолжи без аккаунта.';
+    errEl.textContent='Нет соединения с сервером. Продолжи без аккаунта.';
     return;
   }
 
   btn.disabled=true;
   btn.textContent='⏳ Подождите...';
 
-  var promise = isReg
-    ? sb.auth.signUp({email:email.trim(), password:pass, options:{data:{name:name||email.split('@')[0]}}})
-    : sb.auth.signInWithPassword({email:email.trim(), password:pass});
+  if(isReg){
+    // REGISTRATION
+    sb.auth.signUp({
+      email: email.trim(),
+      password: pass,
+      options: { data: { name: name || email.split('@')[0] } }
+    }).then(function(res){
+      btn.disabled=false;
+      btn.textContent='Зарегистрироваться →';
+      if(res.error){
+        var msg = res.error.message||'Ошибка';
+        if(msg.includes('already registered')||msg.includes('already been registered')||msg.includes('unique')) msg='Этот email уже зарегистрирован. Попробуй войти.';
+        else if(msg.includes('valid email')) msg='Введи правильный email';
+        else if(msg.includes('Password')||msg.includes('password')) msg='Пароль — минимум 6 символов';
+        else if(msg.includes('rate limit')||msg.includes('too many')) msg='Слишком много попыток. Подожди минуту.';
+        errEl.style.color='#e05a5a';
+        errEl.textContent=msg;
+        return;
+      }
+      if(res.data && res.data.session){
+        // Email confirmation disabled — logged in immediately
+        return; // onAuthStateChange handles it
+      }
+      // Email confirmation required — show clear instructions
+      var box = document.querySelector('.auth-box');
+      box.innerHTML = '<div style="text-align:center;padding:10px 0;">'
+        +'<div style="font-size:48px;margin-bottom:16px;">📬</div>'
+        +'<div style="font-family:Cormorant Garamond,serif;font-size:22px;font-weight:600;margin-bottom:10px;">Проверь почту!</div>'
+        +'<div style="font-size:13px;color:#9bacc4;line-height:1.7;margin-bottom:6px;">Мы отправили письмо на<br><strong style="color:#e8b84b;">'+esc(email.trim())+'</strong></div>'
+        +'<div style="font-size:12px;color:#5a6e88;line-height:1.6;margin-bottom:20px;">Нажми на ссылку в письме чтобы активировать аккаунт.<br>Не видишь? Проверь папку <strong>Спам</strong>.</div>'
+        +'<button onclick="skipAuth()" style="width:100%;padding:12px;background:linear-gradient(135deg,#c9a84c,#e8b84b);border:none;border-radius:12px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;color:#060d1a;margin-bottom:10px;">Продолжить без аккаунта</button>'
+        +'<div style="font-size:12px;color:#5a6e88;cursor:pointer;padding:6px;" onclick="switchAuthTab(\'login\');showAuth();">← Войти в уже существующий аккаунт</div>'
+        +'</div>';
+    }).catch(function(e){
+      btn.disabled=false;
+      btn.textContent='Зарегистрироваться →';
+      errEl.textContent='Ошибка: '+(e.message||'попробуй ещё раз');
+    });
 
-  promise.then(function(res){
-    btn.disabled=false;
-    btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
-    if(res.error){
-      var msg = res.error.message||'Ошибка';
-      if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) msg='Неверный email или пароль';
-      if(msg.includes('already registered')||msg.includes('already been registered')) msg='Email уже зарегистрирован';
-      if(msg.includes('Password')) msg='Пароль минимум 6 символов';
-      if(msg.includes('valid email')) msg='Введи правильный email';
-      errEl.textContent=msg;
-    } else if(isReg && res.data && !res.data.session){
-      errEl.style.color='#5ab88a';
-      errEl.textContent='✅ Письмо отправлено! Проверь email.';
-    }
-    // If login success, onAuthStateChange will handle it
-  }).catch(function(e){
-    btn.disabled=false;
-    btn.textContent = isReg?'Зарегистрироваться →':'Войти →';
-    errEl.textContent='Ошибка: '+e.message;
-  });
+  } else {
+    // LOGIN
+    sb.auth.signInWithPassword({email:email.trim(), password:pass})
+    .then(function(res){
+      btn.disabled=false;
+      btn.textContent='Войти →';
+      if(res.error){
+        var msg = res.error.message||'Ошибка';
+        if(msg.includes('Invalid login')||msg.includes('invalid_credentials')||msg.includes('Invalid email or password')) msg='Неверный email или пароль';
+        else if(msg.includes('Email not confirmed')) msg='Email не подтверждён. Проверь папку Спам.';
+        else if(msg.includes('rate limit')||msg.includes('too many')) msg='Слишком много попыток. Подожди минуту.';
+        else if(msg.includes('valid email')) msg='Введи правильный email';
+        errEl.style.color='#e05a5a';
+        errEl.textContent=msg;
+      }
+      // Success handled by onAuthStateChange
+    }).catch(function(e){
+      btn.disabled=false;
+      btn.textContent='Войти →';
+      errEl.textContent='Ошибка соединения: '+(e.message||'попробуй ещё раз');
+    });
+  }
 }
 
 function skipAuth(){
